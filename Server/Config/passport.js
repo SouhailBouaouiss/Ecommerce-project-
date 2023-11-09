@@ -14,7 +14,14 @@ passport.use(
       User.findOne({ email, pwd })
         .then((data) => {
           if (!data) {
-            done(null, false, { message: "Not found", stataus: 401 });
+            Customers.findOne({ email, pwd }).then((data) => {
+              if (!data) {
+                done(null, false, { message: "Not found", stataus: 401 });
+                return;
+              }
+              console.log(data);
+              done(null, data);
+            });
             return;
           }
           console.log(data);

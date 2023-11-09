@@ -8,38 +8,9 @@ const tokenGenration = (req, res, next) => {
       return res.status(401).json(err);
     }
     if (user) {
-      // Destruct data from req.user
-
-      const {
-        _id,
-        email,
-        firstName,
-        lastName,
-        userName,
-        role,
-        creationDate,
-        lastLogin,
-        lastUpdate,
-        active,
-      } = req.user;
-
       // Genrate a token to the authenticated User
 
-      const generatedToken = sign(
-        JSON.stringify({
-          _id,
-          email,
-          firstName,
-          lastName,
-          userName,
-          role,
-          creationDate,
-          lastLogin,
-          lastUpdate,
-          active,
-        }),
-        jwtSecret
-      );
+      const generatedToken = sign(JSON.stringify(req.user), jwtSecret);
       req.jwt = generatedToken;
       next();
     } else {
@@ -66,6 +37,7 @@ const verifyAuth = (req, res, next) => {
   if (!token) return next({ status: 401, message: "Invalid JWT token" });
   try {
     const decodedUserData = verify(token, jwtSecret);
+    delete decodedUserData?.pwd;
     req.data = decodedUserData;
 
     next();

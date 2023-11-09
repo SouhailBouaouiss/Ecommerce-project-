@@ -30,7 +30,7 @@ usersRouter.post(
 );
 
 usersRouter.post(
-  "/",
+  "/?page=1&sort=DESC",
   verifyAuth,
   verifyAdmin,
   body("email").isEmail().withMessage("Invalid email address").normalizeEmail(),
