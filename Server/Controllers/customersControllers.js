@@ -2,10 +2,9 @@
 
 const signin = (req, res, next) => {
   const { generatedAccessToken, generatedRefreshToken } = req.jwt;
-  const { _id } = req.customer;
+  const { _id } = req.user;
 
-  customers
-    .findOne({ _id })
+  Customers.findOne({ _id })
     .select("-pwd")
     .then((data) => {
       if (!data) {
@@ -44,12 +43,13 @@ const signin = (req, res, next) => {
 
 const creatCustomer = (req, res, next) => {
   const { email, first_name, last_name, pwd } = req.body;
+  const now = new Date().toString();
 
   const newCustomer = new Customer({
     first_name,
     last_name,
     email,
-    creation_date,
+    creation_date: now,
     last_login: "",
     valid_account,
     active: true,

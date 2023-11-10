@@ -4,12 +4,15 @@ import { Users } from "../Models/User.js";
 
 const localStrategy = local.Strategy;
 
+// - Passport has many strategies
 passport.use(
   new localStrategy(
     {
       usernameField: "email",
       passwordField: "pwd",
     },
+    // req.body.email
+    // req.body.pwd
     (email, pwd, done) => {
       Users.findOne({ email })
         .then((data) => {
@@ -42,24 +45,24 @@ passport.use(
             return;
           }
           console.log("Customer ", data);
-          Users.findOne({ email, pwd }).then((data) => {
-            if (!data) {
-              done(null, false, {
-                message: "Wrong password",
-                status: 401,
-              });
-            } else {
-              if (data?.active == false) {
-                done(null, false, {
-                  message: "Banned Account",
-                  stataus: 401,
-                });
-                return;
-              } else {
-                done(null, data);
-              }
-            }
-          });
+          // User found
+          if (pwd !== data.pwd) {
+            done(null, false, {
+              message: "Wrong password",
+              status: 401,
+            });
+            return;
+          }
+
+          if (data?.active == false) {
+            done(null, false, {
+              message: "Banned Account",
+              stataus: 401,
+            });
+            return;
+          } else {
+            done(null, data);
+          }
         })
         .catch((err) => {
           done(err);

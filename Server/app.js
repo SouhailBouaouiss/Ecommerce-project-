@@ -10,6 +10,7 @@ import dotenv from "dotenv";
 import { usersRouter } from "./Routes/userRouter.js";
 import { PORT } from "./Config/env.js";
 import { connecting } from "./Config/database.js";
+import { Users } from "./Models/User.js";
 
 dotenv.config();
 app.use(cookieParser());
@@ -31,7 +32,9 @@ app.use(passport.session());
 import("./Config/passport.js");
 
 app.use("/v1/users", usersRouter);
-connecting();
+connecting().then(() => {
+  Users.find().then((data) => console.log(data));
+});
 
 app.use((err, req, res, next) => {
   console.log(err);
