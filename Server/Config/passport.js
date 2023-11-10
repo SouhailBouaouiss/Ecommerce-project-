@@ -1,6 +1,6 @@
 import passport from "passport";
 import local from "passport-local";
-import User from "../Models/User";
+import { Users } from "../Models/User.js";
 
 const localStrategy = local.Strategy;
 
@@ -11,7 +11,7 @@ passport.use(
       passwordField: "pwd",
     },
     (email, pwd, done) => {
-      User.findOne({ email, pwd })
+      Users.findOne({ email, pwd })
         .then((data) => {
           if (!data) {
             Customers.findOne({ email, pwd }).then((data) => {
@@ -24,7 +24,7 @@ passport.use(
             });
             return;
           }
-          console.log(data);
+          console.log("Customer ", data);
           done(null, data);
         })
         .catch((err) => {

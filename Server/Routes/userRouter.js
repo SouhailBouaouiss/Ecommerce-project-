@@ -1,4 +1,5 @@
-import { Router } from "express";
+import express from "express";
+import passport from "passport";
 
 import {
   expressValidatorCheck,
@@ -6,7 +7,7 @@ import {
   verifyAuth,
   verifyAdmin,
   verifyManagerOrAdmin,
-} from "../Middelwares/authMiddelware";
+} from "../Middelwares/authMiddelware.js";
 
 import {
   creatUser,
@@ -16,20 +17,28 @@ import {
   getUsersData,
   signin,
   updateUserData,
-} from "../Controllers/userControllers";
+} from "../Controllers/userControllers.js";
 
-const usersRouter = Router();
+import validate from "express-validator";
+
+const usersRouter = express.Router();
 
 // Athentication
 
 usersRouter.post(
   "/login",
-  body("email").isEmail().withMessage("Invalid email address").normalizeEmail(),
-  body("password")
-    .isStrongPassword.isString()
+  validate
+    .body("email")
+    .isEmail()
+    .withMessage("Invalid email address")
+    .normalizeEmail(),
+  validate
+    .body("pwd")
+    .isStrongPassword()
+    .isString()
     .withMessage("Password must be at least 6 characters long"),
   expressValidatorCheck,
-  // passport.authenticate("local", { failureRedirect: "" }), // Create
+
   tokenGenration,
   signin
 );
@@ -40,9 +49,15 @@ usersRouter.post(
   "/",
   verifyAuth,
   verifyAdmin,
-  body("email").isEmail().withMessage("Invalid email address").normalizeEmail(),
-  body("password")
-    .isStrongPassword.isString()
+  validate
+    .body("email")
+    .isEmail()
+    .withMessage("Invalid email address")
+    .normalizeEmail(),
+  validate
+    .body("password")
+    .isStrongPassword()
+    .isString()
     .withMessage("Password must be at least 6 characters long"),
   expressValidatorCheck,
   creatUser
@@ -66,9 +81,15 @@ usersRouter.put(
   "/:id",
   verifyAuth,
   verifyAdmin,
-  body("email").isEmail().withMessage("Invalid email address").normalizeEmail(),
-  body("password")
-    .isStrongPassword.isString()
+  validate
+    .body("email")
+    .isEmail()
+    .withMessage("Invalid email address")
+    .normalizeEmail(),
+  validate
+    .body("password")
+    .isStrongPassword()
+    .isString()
     .withMessage("Password must be at least 6 characters long"),
   expressValidatorCheck,
   updateUserData
@@ -77,3 +98,5 @@ usersRouter.put(
 // Delete a user document
 
 usersRouter.delete("/:id", verifyAuth, verifyAdmin, deleteUser);
+
+export { usersRouter };

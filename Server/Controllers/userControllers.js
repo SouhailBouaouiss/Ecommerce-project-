@@ -1,8 +1,12 @@
 // Send the access token and the user data
 
+import { Users } from "../Models/User.js";
+
 const signin = (req, res, next) => {
   const { generatedAccessToken, generatedRefreshToken } = req.jwt;
-  const now = new Date().toLocaleDateString();
+  const now = new Date().toString();
+
+  console.log(req.user);
   const { _id } = req.user;
 
   Users.findOneAndUpdate({ _id }, { last_login: now }, { new: true })
@@ -13,7 +17,7 @@ const signin = (req, res, next) => {
       }
       res
         .status(200)
-        .cookies(
+        .cookie(
           {
             access_token: generatedAccessToken,
             path: "/",
@@ -36,6 +40,7 @@ const signin = (req, res, next) => {
         });
     })
     .catch((err) => {
+      console.log("In updating err: ", err);
       res.status(500).send({ message: " Internal Server Error", ...err });
     });
 };
@@ -70,7 +75,7 @@ const creatUser = (req, res, next) => {
 
 const getUsersData = (req, res, next) => {
   const page = req.query.page || 1;
-  User.find({})
+  Users.find({})
     .select("-pwd")
     .skip((page - 1) * 10)
     .limit(10)
@@ -91,7 +96,7 @@ const getUsersData = (req, res, next) => {
 
 const getOneUserData = (req, res, next) => {
   const { id } = req.params;
-  User.findOne({ id })
+  Users.findOne({ id })
     .select("-pwd")
     .then((data) => {
       if (!data) {
@@ -124,7 +129,7 @@ const getUserSearch = (req, res, next) => {
 const updateUserData = (req, res, next) => {
   const { id } = req.params;
   const DataToUpdate = req.body;
-  User.findOneAndUpdate({ id }, { DataToUpdate })
+  Users.findOneAndUpdate({ id }, { DataToUpdate })
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: "invalid user id" });
@@ -140,7 +145,7 @@ const updateUserData = (req, res, next) => {
 
 const deleteUser = (req, res, next) => {
   const { id } = req.params;
-  User.deleteOne({ id })
+  Users.deleteOne({ id })
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: "invalid user id" });
