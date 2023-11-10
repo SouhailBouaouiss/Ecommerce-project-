@@ -1,6 +1,10 @@
 import { Router } from "express";
 import passport from "passport";
-import { credentialsValidation, signin } from "../Middelwares/authMiddelware";
+import {
+  expressValidatorCheck,
+  tokenGenration,
+} from "../Middelwares/authMiddelware";
+import { signin, creatCustomer } from "../Controllers/customersControllers";
 
 const customersRouter = Router();
 
@@ -11,7 +15,9 @@ customerRouters.post(
     .isStrongPassword()
     .isString()
     .withMessage("Password must be at least 6 characters long"),
-  credentialsValidation,
-  passport.authenticate("local"),
+  expressValidatorCheck,
+  tokenGenration,
   signin
 );
+
+customerRouter.post("/customers, ");

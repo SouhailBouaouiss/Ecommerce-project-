@@ -1,46 +1,59 @@
 // Send the access token and the customer data
 
 const signin = (req, res, next) => {
-  const generatedToken = req.jwt;
-  const {
-    _id,
-    firstName,
-    lastName,
-    email,
-    creationDate,
-    lastLogin,
-    validAccount,
-    active,
-  } = req.customer;
+  const { generatedAccessToken, generatedRefreshToken } = req.jwt;
+  const { _id } = req.customer;
 
-  res.statuts(200).send({
-    access_token: generatedToken,
-    customer: {
-      _id,
-      firstName,
-      lastName,
-      email,
-      creationDate,
-      lastLogin,
-      validAccount,
-      active,
-    },
-  });
+  customers
+    .findOne({ _id })
+    .select("-pwd")
+    .then((data) => {
+      if (!data) {
+        return res.status(404).send({ message: "invalid customer id" });
+      }
+      res
+        .status(200)
+        .cookie(
+          {
+            access_token: generatedAccessToken,
+            path: "/",
+            domaine: "localhost",
+            httpOnly: true,
+            secure: false,
+          },
+          {
+            refresh_token: generatedRefreshToken,
+            path: "/",
+            domaine: "localhost",
+            httpOnly: true,
+            secure: false,
+          }
+        )
+        .send({
+          access_token: generatedAccessToken,
+          refresh_token: generatedRefreshToken,
+          customer: data,
+        });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: " Internal Server Error", ...err });
+    });
 };
 
 // Creat a customer document
 
 const creatCustomer = (req, res, next) => {
-  const { email, firstName, lastName } = req.body;
+  const { email, first_name, last_name, pwd } = req.body;
 
   const newCustomer = new Customer({
-    firstName,
-    lastName,
+    first_name,
+    last_name,
     email,
-    creationDate,
-    lastLogin,
-    validAccount,
-    active,
+    creation_date,
+    last_login: "",
+    valid_account,
+    active: true,
+    pwd,
   });
 
   newCustomer.save
@@ -49,3 +62,5 @@ const creatCustomer = (req, res, next) => {
     )
     .catch((err) => res.status(400).send(err));
 };
+
+export { signin, creatCustomer };
