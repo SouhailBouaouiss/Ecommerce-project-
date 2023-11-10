@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
-import { v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 const Schema = mongoose.Schema;
 
 const userschema = new Schema({
   id: {
     type: String,
-    default: v4(),
+    default: uuidv4,
   },
   first_name: {
     type: String,
@@ -51,6 +51,10 @@ const userschema = new Schema({
   },
 });
 
+userschema.index({ first_name: "text", last_name: "text", user_name: "text" });
+
 const Users = mongoose.model("user", userschema, "users");
+
+Users.createIndexes();
 
 export { Users };

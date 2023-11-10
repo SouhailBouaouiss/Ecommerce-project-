@@ -48,7 +48,8 @@ const signin = (req, res, next) => {
 // Creat a user document
 
 const creatUser = (req, res, next) => {
-  const { email, firstName, lastName, userName, role, pwd } = req.body;
+  const { email, first_name, last_name, user_name, role, pwd } = req.body;
+  const now = new Date().toDateString();
 
   const newUser = new User({
     email,
@@ -57,7 +58,7 @@ const creatUser = (req, res, next) => {
     user_name,
     role,
     active: true,
-    creationDate,
+    creationDate: now,
     last_login: "",
     last_update: "",
     pwd,
