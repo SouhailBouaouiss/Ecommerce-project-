@@ -1,22 +1,28 @@
-import { sign, verify } from "jsonwebtoken";
-import { jwtSecret, refSecret } from "../Config/env";
-import { body, validationResult } from "express-validator";
-import { allowedRoles } from "../utils";
+import jwt from "jsonwebtoken";
+import { jwtSecret, refSecret } from "../Config/env.js";
+import validate from "express-validator";
+import { allowedRoles } from "../utils.js";
+import passport from "passport";
 
 const tokenGenration = (req, res, next) => {
+  console.log("here");
   passport.authenticate("local", function (err, user, info) {
     if (err) {
+      console.log("err", err);
       return res.status(401).json(err);
     }
     if (user) {
       // Genrate a token to the authenticated User
 
-      const generatedAccessToken = sign(JSON.stringify(req.user), jwtSecret, {
+      const generatedAccessToken = jwt.sign({ ...user }, jwtSecret, {
         expiresIn: "2h",
       });
-      const generatedRefreshToken = sign(JSON.stringify(req.user), refSecret, {
+      const generatedRefreshToken = jwt.sign({ ...user }, refSecret, {
         expiresIn: "2d",
       });
+      req.user = user;
+
+      console.log(req.user);
 
       req.jwt = { generatedAccessToken, generatedRefreshToken };
       next();
@@ -27,13 +33,13 @@ const tokenGenration = (req, res, next) => {
 };
 
 const expressValidatorCheck = (req, res, next) => {
-  const errors = validationResult(req);
+  const errors = validate.validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
   // Process the request if validation passes
-  console.log(`Registered user: ${email}`);
+  // console.log(`Registered user: ${email}`);
   next();
 };
 
@@ -43,7 +49,7 @@ const verifyAuth = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return next({ status: 401, message: "Invalid JWT token" });
   try {
-    const decodedUserData = verify(token, jwtSecret);
+    const decodedUserData = jwt.verify(token, jwtSecret);
     delete decodedUserData?.pwd;
     req.data = decodedUserData;
 
