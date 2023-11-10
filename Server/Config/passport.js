@@ -11,21 +11,55 @@ passport.use(
       passwordField: "pwd",
     },
     (email, pwd, done) => {
-      Users.findOne({ email, pwd })
+      Users.findOne({ email })
         .then((data) => {
           if (!data) {
-            Customers.findOne({ email, pwd }).then((data) => {
+            Customers.findOne({ email }).then((data) => {
               if (!data) {
-                done(null, false, { message: "Not found", stataus: 401 });
+                done(null, false, { message: "Not found", status: 401 });
                 return;
+              } else {
+                Customers.findOne({ email, pwd }).then((data) => {
+                  if (!data) {
+                    done(null, false, {
+                      message: "Wrong password",
+                      status: 401,
+                    });
+                  } else {
+                    if (data?.active == false) {
+                      done(null, false, {
+                        message: "Banned Account",
+                        stataus: 401,
+                      });
+                      return;
+                    } else {
+                      done(null, data);
+                    }
+                  }
+                });
               }
-              console.log(data);
-              done(null, data);
             });
             return;
           }
           console.log("Customer ", data);
-          done(null, data);
+          Users.findOne({ email, pwd }).then((data) => {
+            if (!data) {
+              done(null, false, {
+                message: "Wrong password",
+                status: 401,
+              });
+            } else {
+              if (data?.active == false) {
+                done(null, false, {
+                  message: "Banned Account",
+                  stataus: 401,
+                });
+                return;
+              } else {
+                done(null, data);
+              }
+            }
+          });
         })
         .catch((err) => {
           done(err);
