@@ -1,6 +1,7 @@
 import { sign, verify } from "jsonwebtoken";
-import { jwtSecret } from "../Config/env";
+import { jwtSecret, refSecret } from "../Config/env";
 import { body, validationResult } from "express-validator";
+import { allowedRoles } from "../utils";
 
 const tokenGenration = (req, res, next) => {
   passport.authenticate("local", function (err, user, info) {
@@ -10,8 +11,14 @@ const tokenGenration = (req, res, next) => {
     if (user) {
       // Genrate a token to the authenticated User
 
-      const generatedToken = sign(JSON.stringify(req.user), jwtSecret);
-      req.jwt = generatedToken;
+      const generatedAccessToken = sign(JSON.stringify(req.user), jwtSecret, {
+        expiresIn: "2h",
+      });
+      const generatedRefreshToken = sign(JSON.stringify(req.user), refSecret, {
+        expiresIn: "2d",
+      });
+
+      req.jwt = { generatedAccessToken, generatedRefreshToken };
       next();
     } else {
       res.status(401).json(info);
@@ -60,7 +67,7 @@ const verifyAdmin = (req, res, next) => {
 // Verify wether the user is an admin or manager
 const verifyManagerOrAdmin = (req, res, next) => {
   const { role } = req.data;
-  if (role == "admin" || role == "manager") {
+  if (allowedRoles.includes(role)) {
     return next();
   }
   res.status(403).send({ message: "you don't have enough privilege" });
