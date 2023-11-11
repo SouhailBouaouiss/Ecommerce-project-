@@ -38,7 +38,6 @@ usersRouter.post(
     .isString()
     .withMessage("Password must be at least 6 characters long"),
   expressValidatorCheck,
-
   tokenGenration,
   signin
 );

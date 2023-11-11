@@ -5,18 +5,17 @@ import { allowedRoles } from "../utils.js";
 import passport from "passport";
 
 const tokenGenration = (req, res, next) => {
-  console.log("here");
   passport.authenticate("local", function (err, user, info) {
     if (err) {
       console.log("err", err);
-      return res.status(401).json(err);
+      return res.status(401).send(err);
     }
     if (user) {
-      // Genrate a token to the authenticated User
-
+      // Genrate an access token to the authenticated User
       const generatedAccessToken = jwt.sign({ ...user }, jwtSecret, {
         expiresIn: "2h",
       });
+      // Genrate an refresh token to the authenticated User
       const generatedRefreshToken = jwt.sign({ ...user }, refSecret, {
         expiresIn: "2d",
       });
@@ -46,7 +45,8 @@ const expressValidatorCheck = (req, res, next) => {
 // Verify authentication by verifying the token sent in head of request
 
 const verifyAuth = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token =
+    req.headers.authorization?.split(" ")[1] ?? req.cookies.access_token; // Grab it from Cookies
   if (!token) return next({ status: 401, message: "Invalid JWT token" });
   try {
     const decodedUserData = jwt.verify(token, jwtSecret);
