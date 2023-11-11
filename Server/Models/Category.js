@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
-import { v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 const Schema = mongoose.Schema;
 
 const categorySchema = new Schema({
   id: {
     type: String,
-    default: v4(),
+    default: uuidv4,
   },
   category_name: {
     type: String,
@@ -18,8 +18,8 @@ const categorySchema = new Schema({
   },
   subCategories: [
     {
-      type: Types.ObjectId,
-      ref: "Subcategory",
+      type: mongoose.Types.ObjectId,
+      ref: "subcategory",
     },
   ],
 });

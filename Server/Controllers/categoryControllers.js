@@ -82,7 +82,7 @@ const updateCategory = (req, res, next) => {
 
 const deleteCategory = (req, res, next) => {
   const { id } = req.body;
-  categoryRouter.findOne({ id }).then((data) => {
+  Category.findOne({ id }).then((data) => {
     if (!data) {
       res.status(404).send({ message: "invalid category id" });
       return;
@@ -96,7 +96,14 @@ const deleteCategory = (req, res, next) => {
         });
         return;
       } else {
-        Category.deleteOne(data);
+        Category.deleteOne(data).then((data) => {
+          if (!data) {
+            res.status(500).send({ message: "Internal Server" });
+            return;
+          } else {
+            res.status(200).send({ message: "category deleted successfully" });
+          }
+        });
         return;
       }
     }
