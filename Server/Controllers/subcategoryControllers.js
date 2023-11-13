@@ -3,18 +3,14 @@ import { Subcategory } from "../Models/Subcategogy";
 // Create new subcategory
 
 const createNewSubcategory = (req, res, next) => {
-  const { subcategory_name } = req.body;
-
-  Subcategory.create({ subcategory_name, category_id, products: [] }).then(
-    (data) => {
-      if (!data) {
-        res.status(400).send({ message: "subcategory name already exists" });
-        return;
-      }
-      res.status(201).send({ message: "subcategory created successfully" });
+  Subcategory.create(req.body).then((data) => {
+    if (!data) {
+      res.status(400).send({ message: "subcategory name already exists" });
       return;
     }
-  );
+    res.status(201).send({ message: "subcategory created successfully" });
+    return;
+  });
 };
 
 // List all subcategories
@@ -73,11 +69,7 @@ const getSubcategoryById = (req, res, next) => {
 // Update a specific category
 
 const updateSubcategory = (req, res, next) => {
-  const { id, subcategory_name, category_id, active } = req.body;
-  Subcategory.findOneAndUpdate(
-    { id },
-    { subcategory_name, category_id, active }
-  ).then((data) => {
+  Subcategory.findOneAndUpdate({ id }, req.body, { new: true }).then((data) => {
     if (!data) {
       res.status(404).send({ message: "invalid subcategory id" });
       return;

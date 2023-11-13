@@ -18,7 +18,11 @@ const getAllOrders = (req, res, next) => {
   Order.find()
     .populate({
       path: "customer_id",
-      options: { limit: 10, skip: (page - 1) * 10, select: "-pwd " },
+      options: {
+        limit: 10,
+        skip: (page - 1) * 10,
+        select: "-pwd first-name last-name",
+      },
     })
     .then((data) => {
       if (!data) {
@@ -29,4 +33,25 @@ const getAllOrders = (req, res, next) => {
     });
 };
 
-export { addOrder };
+// Get a specific order using id
+
+const getOrderById = (req, res, next) => {
+  const { id } = req.body;
+  Order.findOne({ id })
+    .populate({
+      path: "customer_id",
+      options: {
+        select: "-pwd first-name last-name",
+      },
+    })
+    .populate(" order_items")
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({ message: "No orders found", data: [] });
+        return;
+      }
+      res.status(200).send({ data });
+    });
+};
+
+export { addOrder, getAllOrders, getOrderById };

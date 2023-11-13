@@ -80,10 +80,33 @@ const verifyManagerOrAdmin = (req, res, next) => {
   return;
 };
 
+// Verify customer
+const verifyCustomer = (req, res, next) => {
+  const { role } = req.data;
+  if (role) {
+    res.status(403).send({ message: "you are not a customer" });
+    return;
+  }
+
+  return next();
+};
+
+// Verify email validation
+const checkValidation = (req, res, next) => {
+  const { valid_account } = req.data;
+  if (valid_account == false) {
+    res.status(403).send({ message: "you don't have enough privilege" });
+    return;
+  }
+  next();
+};
+
 export {
   tokenGenration,
   expressValidatorCheck,
   verifyAuth,
   verifyAdmin,
   verifyManagerOrAdmin,
+  verifyCustomer,
+  checkValidation,
 };
