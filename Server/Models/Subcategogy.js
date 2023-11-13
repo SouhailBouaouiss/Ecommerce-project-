@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const subcategorySchema = new Schema({
   id: {
     type: String,
-    default: uuidv4,
+    default: uuidv4(),
   },
   subcategory_name: {
     type: String,

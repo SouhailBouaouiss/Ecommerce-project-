@@ -1,5 +1,7 @@
 import express from "express";
+import validate from "express-validator";
 import {
+  expressValidatorCheck,
   verifyAuth,
   verifyManagerOrAdmin,
 } from "../Middelwares/authMiddelware.js";
@@ -18,6 +20,8 @@ const subcategoryRouter = express.Router();
 
 subcategoryRouter.post(
   "/",
+  validate.body("subcategory_name").notEmpty(),
+  expressValidatorCheck,
   verifyAuth,
   verifyManagerOrAdmin,
   createNewSubcategory
@@ -29,7 +33,7 @@ subcategoryRouter.get("/", getAllSubcategories);
 
 // List all subcategories  based on  query search
 
-subcategoryRouter.get("/", getSearchedSubcategories);
+subcategoryRouter.get("/search", getSearchedSubcategories);
 
 // Get a specific category using id
 

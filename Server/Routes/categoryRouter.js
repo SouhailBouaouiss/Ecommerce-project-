@@ -1,5 +1,7 @@
 import express from "express";
+import validate from "express-validator";
 import {
+  expressValidatorCheck,
   verifyAuth,
   verifyManagerOrAdmin,
 } from "../Middelwares/authMiddelware.js";
@@ -16,7 +18,14 @@ const categoryRouter = express.Router();
 
 // Create new category
 
-categoryRouter.post("/", verifyAuth, verifyManagerOrAdmin, createNewCategory);
+categoryRouter.post(
+  "/",
+  validate.body("category_name").notEmpty(),
+  expressValidatorCheck,
+  verifyAuth,
+  verifyManagerOrAdmin,
+  createNewCategory
+);
 
 // List all categories
 
@@ -24,7 +33,7 @@ categoryRouter.get("/", getAllCategories);
 
 // List all categories  based on  query search
 
-categoryRouter.get("/", getSearchedCategories);
+categoryRouter.get("/search", getSearchedCategories);
 
 // Get a specific category using id
 
