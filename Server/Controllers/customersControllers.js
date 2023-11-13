@@ -44,19 +44,7 @@ const signin = (req, res, next) => {
 // Creat a customer document
 
 const creatCustomer = (req, res, next) => {
-  const { email, first_name, last_name, pwd } = req.body;
-  const now = new Date().toString();
-
-  const newCustomer = new Customer({
-    first_name,
-    last_name,
-    email,
-    creation_date: now,
-    last_login: "",
-    valid_account,
-    active: true,
-    pwd,
-  });
+  const newCustomer = new Customer(req.body);
 
   newCustomer
     .save()
@@ -70,7 +58,7 @@ const creatCustomer = (req, res, next) => {
 
 const getCustomersData = (req, res, next) => {
   const page = req.query.page || 1;
-  Customers.find({})
+  Customers.find()
     .select("-pwd")
     .skip((page - 1) * 10)
     .limit(10)
