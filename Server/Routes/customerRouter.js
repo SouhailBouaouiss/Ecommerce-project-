@@ -33,7 +33,7 @@ customerRouter.post(
     .withMessage("Invalid email adress")
     .normalizeEmail(),
   validate
-    .body("password")
+    .body("pwd")
     .isStrongPassword()
     .withMessage("Password must be at least 6 characters long"),
   expressValidatorCheck,

@@ -44,9 +44,19 @@ const signin = (req, res, next) => {
 // Creat a customer document
 
 const creatCustomer = (req, res, next) => {
+  const { email, first_name, last_name, pwd } = req.body;
   const now = new Date().toString();
 
-  const newCustomer = new Customer(req.body);
+  const newCustomer = new Customer({
+    first_name,
+    last_name,
+    email,
+    creation_date: now,
+    last_login: "",
+    valid_account,
+    active: true,
+    pwd,
+  });
 
   newCustomer
     .save()
@@ -57,6 +67,7 @@ const creatCustomer = (req, res, next) => {
 };
 
 // Retrieve customers data from the db
+
 const getCustomersData = (req, res, next) => {
   const page = req.query.page || 1;
   Customers.find({})
@@ -74,6 +85,7 @@ const getCustomersData = (req, res, next) => {
 };
 
 // Retrieve customers data based on serach
+
 const getCustomerSearch = (req, res, next) => {
   const page = req.query.page || 1;
   let sort = "DESC";
@@ -96,6 +108,7 @@ const getCustomerSearch = (req, res, next) => {
 };
 
 // Retrieve specific customer data
+
 const getOneCustomerData = (req, res, next) => {
   const { id } = req.params;
   Customers.findOne({ id })
@@ -118,7 +131,7 @@ const getOneCustomerData = (req, res, next) => {
 const updateCustomerData = (req, res, next) => {
   const { id } = req.params;
   const DataToUpdate = req.body;
-  Customers.findOneAndUpdate({ id }, DataToUpdate, { new: true })
+  Customers.findOneAndUpdate({ id }, { DataToUpdate })
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: "invalid customer id" });

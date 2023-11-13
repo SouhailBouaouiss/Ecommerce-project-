@@ -4,9 +4,7 @@ import { categoryRouter } from "../Routes/categoryRouter.js";
 // Create a new category
 
 const createNewCategory = (req, res, next) => {
-  const { category_name } = req.body;
-
-  Category.create({ category_name }).then((data) => {
+  Category.create(req.body).then((data) => {
     if (!data) {
       res
         .status(400)
@@ -68,8 +66,7 @@ const getCategoryById = (req, res, next) => {
 // Update a specific category
 
 const updateCategory = (req, res, next) => {
-  const { id, category_name } = req.body;
-  Category.findOneAndUpdate({ id }, { category_name }).then((data) => {
+  Category.findOneAndUpdate({ id }, req.body, { new: true }).then((data) => {
     if (!data) {
       res.status(404).send({ message: "invalid category id" });
       return;
