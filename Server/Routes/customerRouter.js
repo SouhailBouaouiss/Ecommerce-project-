@@ -1,17 +1,35 @@
-import { Router } from "express";
+import express from "express";
 import passport from "passport";
+import validate from "express-validator";
+
 import {
   expressValidatorCheck,
   tokenGenration,
-} from "../Middelwares/authMiddelware";
-import { signin, creatCustomer } from "../Controllers/customersControllers";
+  verifyAuth,
+  verifyAdmin,
+  verifyManagerOrAdmin,
+} from "../Middelwares/authMiddelware.js";
 
-const customersRouter = Router();
+import {
+  signin,
+  creatCustomer,
+  getCustomersData,
+  getCustomerSearch,
+  getOneCustomerData,
+} from "../Controllers/customersControllers.js";
 
-customerRouters.post(
+const customerRouter = express.Router();
+
+// Athentication
+customerRouter.post(
   "/login",
-  body("email").isEmail().withMessage("Invalid email adress").normalizeEmail(),
-  body("password")
+  validate
+    .body("email")
+    .isEmail()
+    .withMessage("Invalid email adress")
+    .normalizeEmail(),
+  validate
+    .body("password")
     .isStrongPassword()
     .isString()
     .withMessage("Password must be at least 6 characters long"),
@@ -20,4 +38,21 @@ customerRouters.post(
   signin
 );
 
-customerRouter.post("/customers, ");
+// Creat a customer document
+customerRouter.post("/");
+
+//Get customers data
+customerRouter.get("/", verifyAuth, verifyManagerOrAdmin, getCustomersData);
+
+// Get a customer based on search query value
+customerRouter.get("/", verifyAuth, verifyManagerOrAdmin, getCustomerSearch);
+
+// Get a specific customer data
+customerRouter.get(
+  "/:id",
+  verifyAuth,
+  verifyManagerOrAdmin,
+  getOneCustomerData
+);
+
+export { customerRouter };

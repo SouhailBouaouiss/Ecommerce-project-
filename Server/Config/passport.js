@@ -17,8 +17,11 @@ passport.use(
       Users.findOne({ email })
         .then((data) => {
           if (!data) {
+            // User not found
+            // Let's see the customers list
             Customers.findOne({ email }).then((data) => {
               if (!data) {
+                // Customer not found
                 done(null, false, { message: "Not found", status: 401 });
                 return;
               } else {
@@ -53,13 +56,16 @@ passport.use(
             return;
           }
 
+          // email & pwd are valid
           if (data?.active == false) {
+            // Banned Account
             done(null, false, {
               message: "Banned Account",
-              stataus: 401,
+              status: 401,
             });
             return;
           } else {
+            // Active account
             done(null, data);
           }
         })
