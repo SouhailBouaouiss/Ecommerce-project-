@@ -3,19 +3,7 @@ import { Products } from "../Models/Product.js";
 // Create new product
 
 const createNewProduct = (req, res, next) => {
-  const { product_name } = req.body;
-
-  Products.create({
-    sku,
-    product_image,
-    product_name,
-    subcategory_id,
-    short_description,
-    long_description,
-    price,
-    discount_price,
-    options,
-  }).then((data) => {
+  Products.create(req.body).then((data) => {
     if (!data) {
       res.status(400).send({ message: "product name already exists" });
       return;
@@ -89,11 +77,8 @@ const getProductById = (req, res, next) => {
 // Update a specific product
 
 const updateProduct = (req, res, next) => {
-  const { id, product_name, subcategory_id, active } = req.body;
-  Products.findOneAndUpdate(
-    { id },
-    { product_name, subcategory_id, active }
-  ).then((data) => {
+  const { id } = req.body;
+  Products.findOneAndUpdate({ id }, req.body).then((data) => {
     if (!data) {
       res.status(404).send({ message: "invalid product id" });
       return;

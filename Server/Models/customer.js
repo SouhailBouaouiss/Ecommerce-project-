@@ -44,6 +44,14 @@ const customerschema = new Schema({
   },
 });
 
+customerschema.index({
+  first_name: "text",
+  last_name: "text",
+  user_name: "text",
+});
+
 const Customers = mongoose.model("customer", customerschema, "customers");
+
+Customers.createIndexes();
 
 export { Customers };

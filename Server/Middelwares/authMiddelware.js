@@ -43,7 +43,6 @@ const expressValidatorCheck = (req, res, next) => {
 };
 
 // Verify authentication by verifying the token sent in head of request
-
 const verifyAuth = (req, res, next) => {
   const token =
     req.headers.authorization?.split(" ")[1] ?? req.cookies.access_token; // Grab it from Cookies

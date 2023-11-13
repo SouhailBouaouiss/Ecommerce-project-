@@ -1,5 +1,7 @@
 // Send the access token and the customer data
 
+import { Customers } from "../Models/customer";
+
 const signin = (req, res, next) => {
   const { generatedAccessToken, generatedRefreshToken } = req.jwt;
   const { _id } = req.user;
@@ -31,7 +33,7 @@ const signin = (req, res, next) => {
         .send({
           access_token: generatedAccessToken,
           refresh_token: generatedRefreshToken,
-          customer: data,
+          user: data,
         });
     })
     .catch((err) => {
@@ -42,25 +44,16 @@ const signin = (req, res, next) => {
 // Creat a customer document
 
 const creatCustomer = (req, res, next) => {
-  const { email, first_name, last_name, pwd } = req.body;
   const now = new Date().toString();
 
-  const newCustomer = new Customer({
-    first_name,
-    last_name,
-    email,
-    creation_date: now,
-    last_login: "",
-    valid_account,
-    active: true,
-    pwd,
-  });
+  const newCustomer = new Customer(req.body);
 
-  newCustomer.save
+  newCustomer
+    .save()
     .then((customer) =>
       res.statuts(201).send({ message: "customer created successfully" })
     )
-    .catch((err) => res.status(400).send(err));
+    .catch((err) => res.status(500).send(err));
 };
 
 // Retrieve customers data from the db
@@ -71,14 +64,11 @@ const getCustomersData = (req, res, next) => {
     .skip((page - 1) * 10)
     .limit(10)
     .then((data) => {
-      if (!data) {
-        return res.status(404).send({ message: "No customer found" });
-      }
-      res.status(200).send({ data: data });
+      res.status(200).send({ data });
       return;
     })
     .catch((err) => {
-      res.status(500).send({ message: " Internal Server Error", ...err });
+      res.status(500).send({ message: "Internal Server Error", ...err });
       return;
     });
 };
@@ -86,12 +76,22 @@ const getCustomersData = (req, res, next) => {
 // Retrieve customers data based on serach
 const getCustomerSearch = (req, res, next) => {
   const page = req.query.page || 1;
+  let sort = "DESC";
+
+  if (req.query.sort == "DESC" || req.query.sort == "ASC") {
+    sort = req.query.sort;
+  }
+
   const { query } = req.query;
   Customers.find({ $text: { $search: query } })
     .skip((page - 1) * 10)
     .limit(10)
+    .sort(sort)
     .then((data) => {
       res.status(200).send({ data });
+    })
+    .catch((err) => {
+      res.status(500).send(err);
     });
 };
 
@@ -108,7 +108,7 @@ const getOneCustomerData = (req, res, next) => {
       res.status(200).send({ data });
     })
     .catch((err) => {
-      res.status(500).send({ message: " Internal Server Error", ...err });
+      res.status(500).send({ message: "Internal Server Error", ...err });
       return;
     });
 };
@@ -118,12 +118,28 @@ const getOneCustomerData = (req, res, next) => {
 const updateCustomerData = (req, res, next) => {
   const { id } = req.params;
   const DataToUpdate = req.body;
-  Customers.findOneAndUpdate({ id }, { DataToUpdate })
+  Customers.findOneAndUpdate({ id }, DataToUpdate, { new: true })
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: "invalid customer id" });
       }
       res.status(200).send({ message: "customer updated successfully" });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: " Internal Server Error", ...err });
+    });
+};
+
+// Delete a customer based on id
+
+const deleteCustomer = (req, res, next) => {
+  const { id } = req.params;
+  Customers.deleteOne({ id })
+    .then((data) => {
+      if (!data) {
+        return res.status(404).send({ message: "invalid customer id" });
+      }
+      res.status(200).send({ message: "customer deleted successfully" });
     })
     .catch((err) => {
       res.status(500).send({ message: " Internal Server Error", ...err });
@@ -137,4 +153,5 @@ export {
   getCustomerSearch,
   getOneCustomerData,
   updateCustomerData,
+  deleteCustomer,
 };
