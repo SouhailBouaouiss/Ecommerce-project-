@@ -3,6 +3,7 @@ import { jwtSecret, refSecret } from "../Config/env.js";
 import validate from "express-validator";
 import { allowedRoles } from "../utils.js";
 import passport from "passport";
+import { Users } from "../Models/User.js";
 
 const tokenGenration = (req, res, next) => {
   passport.authenticate("local", function (err, user, info) {
@@ -12,11 +13,12 @@ const tokenGenration = (req, res, next) => {
     }
     if (user) {
       // Genrate an access token to the authenticated User
-      const generatedAccessToken = jwt.sign({ ...user }, jwtSecret, {
+      console.log(user);
+      const generatedAccessToken = jwt.sign({ _id: user._id }, jwtSecret, {
         expiresIn: "2h",
       });
       // Genrate an refresh token to the authenticated User
-      const generatedRefreshToken = jwt.sign({ ...user }, refSecret, {
+      const generatedRefreshToken = jwt.sign({ _id: user._id }, refSecret, {
         expiresIn: "2d",
       });
       req.user = user;
@@ -43,15 +45,15 @@ const expressValidatorCheck = (req, res, next) => {
 };
 
 // Verify authentication by verifying the token sent in head of request
-const verifyAuth = (req, res, next) => {
+const verifyAuth = async (req, res, next) => {
   const token =
     req.headers.authorization?.split(" ")[1] ?? req.cookies.access_token; // Grab it from Cookies
   if (!token) return next({ status: 401, message: "Invalid JWT token" });
   try {
     const decodedUserData = jwt.verify(token, jwtSecret);
-    delete decodedUserData?.pwd;
-    req.data = decodedUserData._doc;
 
+    const data = await Users.findById({ _id: decodedUserData._id });
+    req.data = data;
     next();
   } catch (error) {
     console.log(error);
@@ -62,11 +64,11 @@ const verifyAuth = (req, res, next) => {
 // Verify anthenticated user's role
 
 const verifyAdmin = (req, res, next) => {
-  const { role } = req.data;
   console.log(req.data);
+  const { role } = req.data;
   console.log(role);
   if (role == "admin") {
-    next();
+    return next();
   }
   res.status(403).send({ message: "you don't have enough privilege" });
   return;
@@ -75,6 +77,7 @@ const verifyAdmin = (req, res, next) => {
 // Verify wether the user is an admin or manager
 const verifyManagerOrAdmin = (req, res, next) => {
   const { role } = req.data;
+  console.log(role);
   if (allowedRoles.includes(role)) {
     return next();
   }

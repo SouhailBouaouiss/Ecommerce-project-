@@ -65,14 +65,13 @@ usersRouter.post(
 //Get users data
 
 usersRouter.get("/", verifyAuth, verifyManagerOrAdmin, getUsersData);
+// Get a users based on search query value
+
+usersRouter.get("/search", verifyAuth, verifyManagerOrAdmin, getUserSearch);
 
 // Get a specific user data
 
 usersRouter.get("/:id", verifyAuth, verifyManagerOrAdmin, getOneUserData);
-
-// Get a users based on search query value
-
-usersRouter.get("/", verifyAuth, verifyManagerOrAdmin, getUserSearch);
 
 // Update a user document
 
@@ -85,11 +84,11 @@ usersRouter.put(
     .isEmail()
     .withMessage("Invalid email address")
     .normalizeEmail(),
-  validate
-    .body("password")
-    .isStrongPassword()
-    .isString()
-    .withMessage("Password must be at least 6 characters long"),
+  // validate
+  //   .body("password")
+  //   .isStrongPassword()
+  //   .isString()
+  //   .withMessage("Password must be at least 6 characters long"),
   expressValidatorCheck,
   updateUserData
 );

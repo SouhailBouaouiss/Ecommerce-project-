@@ -51,7 +51,7 @@ const creatUser = (req, res, next) => {
   const { email, first_name, last_name, user_name, role, pwd } = req.body;
   const now = new Date().toDateString();
 
-  const newUser = new User({
+  const newUser = new Users({
     email,
     first_name,
     last_name,
@@ -101,7 +101,9 @@ const getOneUserData = (req, res, next) => {
     .select("-pwd")
     .then((data) => {
       if (!data) {
-        return res.status(404).send({ message: "user not found" });
+        return res
+          .status(404)
+          .send({ message: "user not found ohhh aahhahaha ohhhhh" });
       }
 
       res.status(200).send({ data });
@@ -117,12 +119,26 @@ const getOneUserData = (req, res, next) => {
 const getUserSearch = (req, res, next) => {
   const page = req.query.page || 1;
   const { query } = req.query;
-  Users.find({ $text: { $search: query } })
+  console.log(query);
+  Users.find({
+    $or: [
+      { first_name: { $regex: new RegExp(query, "i") } },
+      { last_name: { $regex: new RegExp(query, "i") } },
+      { user_name: { $regex: new RegExp(query, "i") } },
+    ],
+  })
     .skip((page - 1) * 10)
     .limit(10)
     .then((data) => {
-      res.status(200).send({ data });
-    });
+      if (!data) {
+        res.status(404).send({ message: "ach hadchi kanchouf anari nari" });
+        return;
+      }
+      return res.status(200).send({ data });
+    })
+    .catch((err) =>
+      res.status(800).send({ message: "dkchi li kayn khouya souhail" })
+    );
 };
 
 // Update user's data based on id
