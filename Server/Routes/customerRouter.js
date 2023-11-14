@@ -10,16 +10,18 @@ import {
   verifyAuth,
   verifyAdmin,
   verifyManagerOrAdmin,
+  verifyCustomer,
 } from "../Middelwares/authMiddelware.js";
 
 import {
   signin,
-  creatCustomer,
+  createNewCustomer,
   getCustomersData,
   getCustomerSearch,
   getOneCustomerData,
   updateCustomerData,
   deleteCustomer,
+  getCustomerData,
 } from "../Controllers/customersControllers.js";
 
 const customerRouter = express.Router();
@@ -42,7 +44,30 @@ customerRouter.post(
 );
 
 // Creat a customer document
-customerRouter.post("/");
+// Express Validator: body() x 4
+// Middleware: expressValidatorCheck
+customerRouter.post(
+  "/signup",
+  validate
+    .body("first_name")
+    .isAlpha()
+    .withMessage("First name should contain only alphabetic characters"),
+  valiodate
+    .body("last_name")
+    .isAlpha()
+    .withMessage("Last name should contain only alphabetic characters"),
+  validate
+    .body("email")
+    .isEmail()
+    .withMessage("Invalid email adress")
+    .normalizeEmail(),
+  validate
+    .body("pwd")
+    .isStrongPassword()
+    .withMessage("Password must be at least 6 characters long"),
+  expressValidatorCheck,
+  createNewCustomer
+);
 
 //Get customers data
 customerRouter.get("/", verifyAuth, verifyManagerOrAdmin, getCustomersData);
@@ -63,7 +88,7 @@ customerRouter.get(
   getOneCustomerData
 );
 
-// Update a user document
+// Update a customer document
 customerRouter.put(
   "/:id",
   verifyAuth,
@@ -82,7 +107,17 @@ customerRouter.put(
 );
 
 // Delete a customer document
-
 customerRouter.delete("/:id", verifyAuth, verifyManagerOrAdmin, deleteCustomer);
+
+// get the customer's profile
+customerRouter.get("/profile", verifyAuth, verifyCustomer, getCustomerData); // controller
+
+// update the cutomers data
+customerRouter.patch(
+  "/profile/update",
+  verifyAuth,
+  verifyCustomer,
+  updateCustomerData
+);
 
 export { customerRouter };

@@ -1,6 +1,6 @@
 // Send the access token and the customer data
 
-import { Customers } from "../Models/customer";
+import { Customers } from "../Models/Customer";
 
 const signin = (req, res, next) => {
   const { generatedAccessToken, generatedRefreshToken } = req.jwt;
@@ -43,15 +43,19 @@ const signin = (req, res, next) => {
 
 // Creat a customer document
 
-const creatCustomer = (req, res, next) => {
-  const newCustomer = new Customer(req.body);
-
-  newCustomer
-    .save()
-    .then((customer) =>
-      res.statuts(201).send({ message: "customer created successfully" })
-    )
-    .catch((err) => res.status(500).send(err));
+const createNewCustomer = (req, res, next) => {
+  Customers.create(req.body)
+    .then((data) => {
+      if (!data) {
+        res.status(400).send({ message: "email or user_name already exists" });
+        return;
+      }
+      res.status(201).send({ message: "customer created successfully" });
+      return;
+    })
+    .catch((err) => {
+      res.status(500).send();
+    });
 };
 
 // Retrieve customers data from the db
@@ -119,7 +123,7 @@ const getOneCustomerData = (req, res, next) => {
 const updateCustomerData = (req, res, next) => {
   const { id } = req.params;
   const DataToUpdate = req.body;
-  Customers.findOneAndUpdate({ id }, { DataToUpdate })
+  Customers.findOneAndUpdate({ id }, DataToUpdate)
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: "invalid customer id" });
@@ -147,12 +151,19 @@ const deleteCustomer = (req, res, next) => {
     });
 };
 
+// get customer data
+
+const getCustomerData = (req, res, next) => {
+  res.status(200).send(req.data);
+};
+
 export {
   signin,
-  creatCustomer,
+  createNewCustomer,
   getCustomersData,
   getCustomerSearch,
   getOneCustomerData,
   updateCustomerData,
   deleteCustomer,
+  getCustomerData,
 };
