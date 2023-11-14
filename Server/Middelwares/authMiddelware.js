@@ -50,10 +50,11 @@ const verifyAuth = (req, res, next) => {
   try {
     const decodedUserData = jwt.verify(token, jwtSecret);
     delete decodedUserData?.pwd;
-    req.data = decodedUserData;
+    req.data = decodedUserData._doc;
 
     next();
   } catch (error) {
+    console.log(error);
     res.status(404).send(error);
   }
 };
@@ -62,8 +63,10 @@ const verifyAuth = (req, res, next) => {
 
 const verifyAdmin = (req, res, next) => {
   const { role } = req.data;
+  console.log(req.data);
+  console.log(role);
   if (role == "admin") {
-    return next();
+    next();
   }
   res.status(403).send({ message: "you don't have enough privilege" });
   return;
