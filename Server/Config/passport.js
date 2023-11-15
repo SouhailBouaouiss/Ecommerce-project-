@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
 import { Users } from "../Models/User.js";
-import { Customers } from "../Models/customer.js";
+import { Customers } from "../Models/Customer.js";
 
 const localStrategy = local.Strategy;
 
