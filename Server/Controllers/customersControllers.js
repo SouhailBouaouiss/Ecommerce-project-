@@ -1,6 +1,6 @@
 // Send the access token and the customer data
 
-import { Customers } from "../Models/Customer";
+import { Customers } from "../Models/customer.js";
 
 const signin = (req, res, next) => {
   const { generatedAccessToken, generatedRefreshToken } = req.jwt;

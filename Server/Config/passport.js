@@ -26,24 +26,23 @@ passport.use(
                 done(null, false, { message: "Not found", status: 401 });
                 return;
               } else {
-                Customers.findOne({ email, pwd }).then((data) => {
-                  if (!data) {
+                if (pwd !== data.pwd) {
+                  done(null, false, {
+                    message: "Wrong password",
+                    status: 401,
+                  });
+                  return;
+                } else {
+                  if (data?.active == false) {
                     done(null, false, {
-                      message: "Wrong password",
-                      status: 401,
+                      message: "Banned Account",
+                      stataus: 401,
                     });
+                    return;
                   } else {
-                    if (data?.active == false) {
-                      done(null, false, {
-                        message: "Banned Account",
-                        stataus: 401,
-                      });
-                      return;
-                    } else {
-                      done(null, data);
-                    }
+                    done(null, data);
                   }
-                });
+                }
               }
             });
             return;
