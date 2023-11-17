@@ -37,11 +37,6 @@ productRouter.get("/:id", getProductById);
 productRouter.put("/:id", verifyAuth, verifyManagerOrAdmin, updateProduct);
 
 // Delete a product
-subcategoryRouter.delete(
-  "/:id",
-  verifyAuth,
-  verifyManagerOrAdmin,
-  deleteProduct
-);
+productRouter.delete("/:id", verifyAuth, verifyManagerOrAdmin, deleteProduct);
 
 export { productRouter };

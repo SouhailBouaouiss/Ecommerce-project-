@@ -1,12 +1,13 @@
 // Send the access token and the customer data
 
-import { Customers } from "../Models/customer.js";
+import Customers from "../models/Customer.js";
 
+const now = new Date().toString();
 const signin = (req, res, next) => {
   const { generatedAccessToken, generatedRefreshToken } = req.jwt;
   const { _id } = req.user;
 
-  Customers.findOne({ _id })
+  Customers.findOneAndUpdate({ _id }, { last_login: now }, { new: true })
     .select("-pwd")
     .then((data) => {
       if (!data) {
@@ -50,7 +51,10 @@ const createNewCustomer = (req, res, next) => {
         res.status(400).send({ message: "email or user_name already exists" });
         return;
       }
-      res.status(201).send({ message: "customer created successfully" });
+
+      req.user_id = data._id;
+      next();
+      // res.status(201).send({ message: "customer created successfully" });
       return;
     })
     .catch((err) => {
@@ -80,23 +84,25 @@ const getCustomersData = (req, res, next) => {
 
 const getCustomerSearch = (req, res, next) => {
   const page = req.query.page || 1;
-  let sort = "DESC";
-
-  if (req.query.sort == "DESC" || req.query.sort == "ASC") {
-    sort = req.query.sort;
-  }
-
   const { query } = req.query;
-  Customers.find({ $text: { $search: query } })
+  Customers.find({
+    $or: [
+      { first_name: { $regex: new RegExp(query, "i") } },
+      { last_name: { $regex: new RegExp(query, "i") } },
+    ],
+  })
     .skip((page - 1) * 10)
     .limit(10)
-    .sort(sort)
     .then((data) => {
-      res.status(200).send({ data });
+      if (!data) {
+        res.status(404).send({ message: "ach hadchi kanchouf anari nari" });
+        return;
+      }
+      return res.status(200).send({ data });
     })
-    .catch((err) => {
-      res.status(500).send(err);
-    });
+    .catch((err) =>
+      res.status(800).send({ message: "dkchi li kayn khouya souhail" })
+    );
 };
 
 // Retrieve specific customer data
@@ -122,6 +128,21 @@ const getOneCustomerData = (req, res, next) => {
 
 const updateCustomerData = (req, res, next) => {
   const { id } = req.params;
+  const DataToUpdate = req.body;
+  Customers.findOneAndUpdate({ id }, DataToUpdate)
+    .then((data) => {
+      if (!data) {
+        return res.status(404).send({ message: "invalid customer id" });
+      }
+      res.status(200).send({ message: "customer updated successfully" });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: " Internal Server Error", ...err });
+    });
+};
+
+const updateCustomerDataByCustomer = (req, res, next) => {
+  const { id } = req.data;
   const DataToUpdate = req.body;
   Customers.findOneAndUpdate({ id }, DataToUpdate)
     .then((data) => {
@@ -166,4 +187,5 @@ export {
   updateCustomerData,
   deleteCustomer,
   getCustomerData,
+  updateCustomerDataByCustomer,
 };

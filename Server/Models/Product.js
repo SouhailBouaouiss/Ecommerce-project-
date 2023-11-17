@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
   id: {
     type: String,
-    default: uuidv4,
+    default: uuidv4(),
   },
   sku: {
     type: String,
@@ -25,6 +25,7 @@ const productSchema = new Schema({
   subcategory_id: {
     type: mongoose.Types.ObjectId,
     ref: "subcategory",
+    required: true,
   },
   short_description: {
     type: String,
@@ -59,6 +60,6 @@ productSchema.index({ product_name: "text" });
 
 const Products = mongoose.model("product", productSchema);
 
-Product.createIndexes();
+Products.createIndexes();
 
 export { Products };

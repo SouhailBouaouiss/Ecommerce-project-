@@ -11,6 +11,9 @@ import { usersRouter } from "./Routes/userRouter.js";
 import { PORT } from "./Config/env.js";
 import { connecting } from "./Config/database.js";
 import { Users } from "./Models/User.js";
+import { customerRouter } from "./Routes/customerRouter.js";
+import { productRouter } from "./Routes/productRouter.js";
+import { categoryRouter } from "./Routes/categoryRouter.js";
 
 dotenv.config();
 app.use(cookieParser());
@@ -32,6 +35,10 @@ app.use(passport.session());
 import("./Config/passport.js");
 
 app.use("/v1/users", usersRouter);
+app.use("/v1/customers", customerRouter);
+app.use("/v1/products", productRouter);
+app.use("/v1/categories", categoryRouter);
+
 connecting().then(() => {
   Users.find().then((data) => console.log(data));
 });

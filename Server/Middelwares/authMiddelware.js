@@ -4,6 +4,7 @@ import validate from "express-validator";
 import { allowedRoles } from "../utils.js";
 import passport from "passport";
 import { Users } from "../Models/User.js";
+import Customers from "../models/Customer.js";
 
 const tokenGenration = (req, res, next) => {
   passport.authenticate("local", function (err, user, info) {
@@ -48,12 +49,22 @@ const expressValidatorCheck = (req, res, next) => {
 const verifyAuth = async (req, res, next) => {
   const token =
     req.headers.authorization?.split(" ")[1] ?? req.cookies.access_token; // Grab it from Cookies
+  console.log(token);
   if (!token) return next({ status: 401, message: "Invalid JWT token" });
   try {
     const decodedUserData = jwt.verify(token, jwtSecret);
+    console.log(decodedUserData);
 
     const data = await Users.findById({ _id: decodedUserData._id });
+    if (!data) {
+      const data = await Customers.findById({ _id: decodedUserData._id });
+      req.data = data;
+      next();
+      return;
+    }
+    console.log(data);
     req.data = data;
+    console.log(req.data);
     next();
   } catch (error) {
     console.log(error);
@@ -70,7 +81,7 @@ const verifyAdmin = (req, res, next) => {
   if (role == "admin") {
     return next();
   }
-  res.status(403).send({ message: "you don't have enough privilege" });
+  res.status(403).send({ message: "you don't have enough privilege &" });
   return;
 };
 
@@ -81,13 +92,13 @@ const verifyManagerOrAdmin = (req, res, next) => {
   if (allowedRoles.includes(role)) {
     return next();
   }
-  res.status(403).send({ message: "you don't have enough privilege" });
+  res.status(403).send({ message: "you don't have enough privilege à" });
   return;
 };
 
 // Verify customer
 const verifyCustomer = (req, res, next) => {
-  const { role } = req.data;
+  const role = req?.data?.role;
   if (role) {
     res.status(403).send({ message: "you are not a customer" });
     return;
