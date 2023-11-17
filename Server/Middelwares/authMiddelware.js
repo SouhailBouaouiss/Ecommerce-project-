@@ -15,7 +15,7 @@ const tokenGenration = (req, res, next) => {
       // Genrate an access token to the authenticated User
       console.log(user);
       const generatedAccessToken = jwt.sign({ _id: user._id }, jwtSecret, {
-        expiresIn: "2h",
+        expiresIn: "1h",
       });
       // Genrate an refresh token to the authenticated User
       const generatedRefreshToken = jwt.sign({ _id: user._id }, refSecret, {
@@ -46,21 +46,60 @@ const expressValidatorCheck = (req, res, next) => {
 
 // Verify authentication by verifying the token sent in head of request
 const verifyAuth = async (req, res, next) => {
+  console.log("hona");
   const token =
-    req.headers.authorization?.split(" ")[1] ?? req.cookies.access_token; // Grab it from Cookies
+    // req.headers.authorization?.split(" ")[1] ??
+    req.cookies.access_token; // Grab it from Cookies
   if (!token) return next({ status: 401, message: "Invalid JWT token" });
   try {
     const decodedUserData = jwt.verify(token, jwtSecret);
+    console.log(decodedUserData);
 
     const data = await Users.findById({ _id: decodedUserData._id });
     req.data = data;
-    next();
+    return next();
   } catch (error) {
-    console.log(error);
-    res.status(404).send(error);
+    console.log("here 0");
+    req.data = null;
+    return next();
   }
 };
 
+// Verify refresh token
+
+const verifyRefreshToken = async (req, res, next) => {
+  try {
+    console.log("here");
+    if (!req.data) {
+      console.log("here 1");
+      const { refresh_token } = req.cookies;
+      console.log(refresh_token);
+
+      const decodedUserData = jwt.verify(refresh_token, refSecret);
+      console.log(decodedUserData);
+      const generatedAccessToken = jwt.sign(
+        { _id: decodedUserData._id },
+        jwtSecret,
+        {
+          expiresIn: "1h",
+        }
+      );
+      res.cookie("access_token", generatedAccessToken, {
+        path: "/",
+        domaine: "localhost",
+        httpOnly: true,
+        secure: false,
+      });
+      const data = await Users.findById({ _id: decodedUserData._id });
+      req.data = data;
+      return next();
+    }
+    console.log("here 2");
+    return next();
+  } catch (error) {
+    res.status(401).send({ message: "Invalid token 2" });
+  }
+};
 // Verify anthenticated user's role
 
 const verifyAdmin = (req, res, next) => {
@@ -114,4 +153,5 @@ export {
   verifyManagerOrAdmin,
   verifyCustomer,
   checkValidation,
+  verifyRefreshToken,
 };

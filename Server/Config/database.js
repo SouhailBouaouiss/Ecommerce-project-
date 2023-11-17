@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 import { Users } from "../Models/User.js";
-const url = "mongodb://127.0.0.1:27017";
+const url =
+  "mongodb+srv://souhail:3aMFq8MclZqFMKVk@firstcluster.aihbxtp.mongodb.net/";
 
 const connecting = async () => {
-  await mongoose.connect(url, { dbName: "check" });
+  await mongoose.connect(url, { dbName: "3WA_Ecom" });
 
   console.log("db connected!");
 };

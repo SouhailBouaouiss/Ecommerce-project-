@@ -18,7 +18,8 @@ const productRouter = express.Router();
 
 // Create new product
 
-productRouter.post("/", verifyAuth, verifyManagerOrAdmin, createNewProduct);
+productRouter.post("/", createNewProduct);
+// productRouter.post("/", verifyAuth, verifyManagerOrAdmin, createNewProduct);
 
 // List all products
 
@@ -37,11 +38,6 @@ productRouter.get("/:id", getProductById);
 productRouter.put("/:id", verifyAuth, verifyManagerOrAdmin, updateProduct);
 
 // Delete a product
-subcategoryRouter.delete(
-  "/:id",
-  verifyAuth,
-  verifyManagerOrAdmin,
-  deleteProduct
-);
+productRouter.delete("/:id", verifyAuth, verifyManagerOrAdmin, deleteProduct);
 
 export { productRouter };

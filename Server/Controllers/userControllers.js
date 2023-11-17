@@ -17,22 +17,18 @@ const signin = (req, res, next) => {
       }
       res
         .status(200)
-        .cookie(
-          {
-            access_token: generatedAccessToken,
-            path: "/",
-            domaine: "localhost",
-            httpOnly: true,
-            secure: false,
-          },
-          {
-            refresh_token: generatedRefreshToken,
-            path: "/",
-            domaine: "localhost",
-            httpOnly: true,
-            secure: false,
-          }
-        )
+        .cookie("access_token", generatedAccessToken, {
+          path: "/",
+          domaine: "localhost",
+          httpOnly: true,
+          secure: false,
+        })
+        .cookie("refresh_token", generatedRefreshToken, {
+          path: "/",
+          domaine: "localhost",
+          httpOnly: true,
+          secure: false,
+        })
         .send({
           access_token: generatedAccessToken,
           refresh_token: generatedRefreshToken,

@@ -37,7 +37,9 @@ const getAllCategories = (req, res, next) => {
 const getSearchedCategories = (req, res, next) => {
   const page = req.query.page || 1;
   const { query } = req.query;
-  Category.find({ $text: { $search: query } })
+  Category.find({
+    $or: [{ category_name: { $regex: new RegExp(query, "i") } }],
+  })
     .skip((page - 1) * 10)
     .limit(10)
     .then((data) => {
@@ -52,7 +54,7 @@ const getSearchedCategories = (req, res, next) => {
 // Get a specific category using id
 
 const getCategoryById = (req, res, next) => {
-  const { id } = req.body;
+  const { id } = req.params;
   Category.findOne({ id }).then((data) => {
     if (!data) {
       res.status(404).send({ message: "category not found" });
@@ -66,6 +68,7 @@ const getCategoryById = (req, res, next) => {
 // Update a specific category
 
 const updateCategory = (req, res, next) => {
+  const { id } = req.params;
   Category.findOneAndUpdate({ id }, req.body, { new: true }).then((data) => {
     if (!data) {
       res.status(404).send({ message: "invalid category id" });
@@ -78,8 +81,9 @@ const updateCategory = (req, res, next) => {
 // Delete a category
 
 const deleteCategory = (req, res, next) => {
-  const { id } = req.body;
+  const { id } = req.params;
   Category.findOne({ id }).then((data) => {
+    console.log(data);
     if (!data) {
       res.status(404).send({ message: "invalid category id" });
       return;

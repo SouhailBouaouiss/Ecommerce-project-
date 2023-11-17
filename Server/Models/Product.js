@@ -8,15 +8,15 @@ const productSchema = new Schema({
     type: String,
     default: uuidv4,
   },
-  sku: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  product_image: {
-    type: String,
-    required: true,
-  },
+  // sku: {
+  //   type: String,
+  //   required: true,
+  //   unique: true,
+  // },
+  // product_image: {
+  //   type: String,
+  //   required: true,
+  // },
   product_name: {
     type: String,
     required: true,
@@ -26,39 +26,39 @@ const productSchema = new Schema({
     type: mongoose.Types.ObjectId,
     ref: "subcategory",
   },
-  short_description: {
-    type: String,
-    required: true,
-  },
-  long_description: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  discount_price: {
-    type: Number,
-  },
-  quatity: {
-    type: Number,
-    default: 0,
-    required: true,
-  },
-  options: {
-    type: [String],
-  },
-  active: {
-    type: Boolean,
-    default: false,
-  },
+  // short_description: {
+  //   type: String,
+  //   required: true,
+  // },
+  // long_description: {
+  //   type: String,
+  //   required: true,
+  // },
+  // price: {
+  //   type: Number,
+  //   required: true,
+  // },
+  // discount_price: {
+  //   type: Number,
+  // },
+  // quatity: {
+  //   type: Number,
+  //   default: 0,
+  //   required: true,
+  // },
+  // options: {
+  //   type: [String],
+  // },
+  // active: {
+  //   type: Boolean,
+  //   default: false,
+  // },
 });
 
 productSchema.index({ product_name: "text" });
 
 const Products = mongoose.model("product", productSchema);
 
-Product.createIndexes();
+Products.createIndexes();
 
 export { Products };
