@@ -21,6 +21,7 @@ import {
 } from "../Controllers/userControllers.js";
 
 import validate from "express-validator";
+import { sendCredentialsByEmail } from "../Middelwares/userEmail.js";
 
 const usersRouter = express.Router();
 
@@ -61,7 +62,8 @@ usersRouter.post(
     .isString()
     .withMessage("Password must be at least 6 characters long"),
   expressValidatorCheck,
-  creatUser
+  creatUser,
+  sendCredentialsByEmail
 );
 
 //Get users data

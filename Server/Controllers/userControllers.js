@@ -44,26 +44,19 @@ const signin = (req, res, next) => {
 // Creat a user document
 
 const creatUser = (req, res, next) => {
-  const { email, first_name, last_name, user_name, role, pwd } = req.body;
+
   const now = new Date().toDateString();
 
-  const newUser = new Users({
-    email,
-    first_name,
-    last_name,
-    user_name,
-    role,
-    active: true,
-    creationDate: now,
-    last_login: "",
-    last_update: "",
-    pwd,
-  });
+  const newUser = new Users(req.body);
 
   newUser
     .save()
-    .then((user) =>
+    .then((user) =>{
+
+      req.userData = user
       res.status(201).send({ message: "user created successfully" })
+     return  next()
+    }
     )
     .catch((err) => res.status(400).send(err));
 };
