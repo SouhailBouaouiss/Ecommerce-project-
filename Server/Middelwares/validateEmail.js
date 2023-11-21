@@ -1,12 +1,13 @@
-import jwf from "jsonwebtoken";
-import Customers from "../models/Customer.js";
+import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
+import Customers from "../Models/Customer.js";
 
 dotenv.config();
 
 const validateEmail = (req, res) => {
   const tokenEmail = req.query.token;
+  console.log("token email", tokenEmail);
   try {
     const decoded = jwt.verify(tokenEmail, process.env.JWT_EMAIL);
 

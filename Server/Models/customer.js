@@ -44,14 +44,14 @@ const customerschema = new Schema({
   },
 });
 
-customerschema.index({
-  first_name: "text",
-  last_name: "text",
-});
+// customerschema.index({
+//   first_name: "text",
+//   last_name: "text",
+// });
 
 const Customers =
   mongoose.models.customer || mongoose.model("customer", customerschema);
 
-Customers.createIndexes();
+// Customers.createIndexes();
 
 export default Customers;

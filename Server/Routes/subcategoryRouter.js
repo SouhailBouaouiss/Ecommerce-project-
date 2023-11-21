@@ -22,8 +22,8 @@ subcategoryRouter.post(
   "/",
   validate.body("subcategory_name").notEmpty(),
   expressValidatorCheck,
-  verifyAuth,
-  verifyManagerOrAdmin,
+  // verifyAuth,
+  // verifyManagerOrAdmin,
   createNewSubcategory
 );
 

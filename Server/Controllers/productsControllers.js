@@ -1,16 +1,50 @@
+import mongoose from "mongoose";
 import { Products } from "../Models/Product.js";
+import { Subcategory } from "../Models/Subcategogy.js";
 
 // Create new product
 
-const createNewProduct = (req, res, next) => {
-  Products.create(req.body).then((data) => {
-    if (!data) {
-      res.status(400).send({ message: "product name already exists" });
-      return;
-    }
-    res.status(201).send({ message: "product created successfully" });
-    return;
-  });
+const createNewProduct = async (req, res, next) => {
+  // Initialize a session
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const newProduct = await Products.create([req.product], { session });
+    console.log(newProduct);
+
+    // Retrieve the product _id
+
+    const newProductID = newProduct[0]._id.toString();
+    console.log(newProductID);
+
+    // Retrieve the product's subcategory_id
+
+    const newProductSubcategoryID = newProduct[0].subcategory_id.toString();
+    console.log(newProductSubcategoryID);
+
+    // Find the subcategory of the new product
+
+    const productSubcategory = await Subcategory.findById(
+      newProductSubcategoryID
+    );
+
+    console.log(productSubcategory);
+    // Push the product _id into the products array in subcategory
+
+    productSubcategory.products.addToSet(newProductID);
+    productSubcategory.save();
+
+    session.commitTransaction();
+    return res.status(200).send({ message: "Product created successfully" });
+  } catch (error) {
+    // Reject the two operations in case of the failure of one of them
+    await session.abortTransaction();
+
+    // End the session
+    session.endSession();
+    res.status(500).send({ message: "Something went wrong", ...error });
+  }
 };
 
 // List all products

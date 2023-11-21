@@ -24,7 +24,7 @@ import {
   updateCustomerDataByCustomer,
 } from "../Controllers/customersControllers.js";
 
-import { validateEmail } from "../Middelwares/verifyEmail.js";
+import { validateEmail } from "../Middelwares/validateEmail.js";
 import sendEmail from "../Middelwares/email.js";
 
 const customerRouter = express.Router();

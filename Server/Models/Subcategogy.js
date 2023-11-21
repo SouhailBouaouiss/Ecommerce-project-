@@ -19,6 +19,7 @@ const subcategorySchema = new Schema({
   category_id: {
     type: mongoose.Types.ObjectId,
     ref: "category",
+    required: true,
   },
   products: [
     {
@@ -29,6 +30,7 @@ const subcategorySchema = new Schema({
 });
 
 subcategorySchema.index({ subcategory_name: "text" });
+subcategorySchema.index({ subcategory_name: 3 });
 
 const Subcategory = mongoose.model("subcategory", subcategorySchema);
 

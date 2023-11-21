@@ -7,6 +7,7 @@ import {
   verifyAuth,
   verifyAdmin,
   verifyManagerOrAdmin,
+  verifyRefreshToken,
 } from "../Middelwares/authMiddelware.js";
 
 import {
@@ -47,6 +48,7 @@ usersRouter.post(
 usersRouter.post(
   "/",
   verifyAuth,
+  verifyRefreshToken,
   verifyAdmin,
   validate
     .body("email")
@@ -64,7 +66,13 @@ usersRouter.post(
 
 //Get users data
 
-usersRouter.get("/", verifyAuth, verifyManagerOrAdmin, getUsersData);
+usersRouter.get(
+  "/",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyManagerOrAdmin,
+  getUsersData
+);
 // Get a users based on search query value
 
 usersRouter.get("/search", verifyAuth, verifyManagerOrAdmin, getUserSearch);

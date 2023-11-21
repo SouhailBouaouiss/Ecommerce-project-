@@ -4,6 +4,9 @@ import {
   verifyAuth,
   verifyManagerOrAdmin,
 } from "../Middelwares/authMiddelware.js";
+import { upload } from "../upload/storing.js";
+
+import { postProduct } from "../Middelwares/postProduct.js";
 
 import {
   createNewProduct,
@@ -18,7 +21,14 @@ const productRouter = express.Router();
 
 // Create new product
 
-productRouter.post("/", verifyAuth, verifyManagerOrAdmin, createNewProduct);
+productRouter.post(
+  "/",
+  verifyAuth,
+  verifyManagerOrAdmin,
+  upload.single("file"),
+  postProduct,
+  createNewProduct
+);
 
 // List all products
 
