@@ -22,10 +22,9 @@ const customerschema = new Schema({
     unique: true,
     lowercase: true,
   },
-  user_name: {
-    type: String,
-    required: true,
-    unique: true,
+  valid_account: {
+    type: Boolean,
+    default: false,
   },
   pwd: {
     type: String,
@@ -37,6 +36,7 @@ const customerschema = new Schema({
   },
   last_login: {
     type: String,
+    default: new Date().toDateString(),
   },
   active: {
     type: Boolean,
@@ -44,14 +44,14 @@ const customerschema = new Schema({
   },
 });
 
-customerschema.index({
-  first_name: "text",
-  last_name: "text",
-  user_name: "text",
-});
+// customerschema.index({
+//   first_name: "text",
+//   last_name: "text",
+// });
 
-const Customers = mongoose.model("customer", customerschema, "customers");
+const Customers =
+  mongoose.models.customer || mongoose.model("customer", customerschema);
 
-Customers.createIndexes();
+// Customers.createIndexes();
 
-export { Customers };
+export default Customers;
