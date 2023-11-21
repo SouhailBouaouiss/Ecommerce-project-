@@ -4,6 +4,7 @@ import validate from "express-validator";
 import { allowedRoles } from "../utils.js";
 import passport from "passport";
 import { Users } from "../Models/User.js";
+import Customers from "../models/Customer.js";
 
 const tokenGenration = (req, res, next) => {
   passport.authenticate("local", function (err, user, info) {
@@ -56,9 +57,15 @@ const verifyAuth = async (req, res, next) => {
     console.log(decodedUserData);
 
     const data = await Users.findById({ _id: decodedUserData._id });
-    delete data.pwd
+    if (!data) {
+      const data = await Customers.findById({ _id: decodedUserData._id });
+      req.data = data;
+      next();
+      return;
+    }
+    console.log(data);
     req.data = data;
-    return next();
+    next();
   } catch (error) {
     console.log("here 0");
     req.data = null;
@@ -110,7 +117,7 @@ const verifyAdmin = (req, res, next) => {
   if (role == "admin") {
     return next();
   }
-  res.status(403).send({ message: "you don't have enough privilege" });
+  res.status(403).send({ message: "you don't have enough privilege &" });
   return;
 };
 
@@ -121,13 +128,13 @@ const verifyManagerOrAdmin = (req, res, next) => {
   if (allowedRoles.includes(role)) {
     return next();
   }
-  res.status(403).send({ message: "you don't have enough privilege" });
+  res.status(403).send({ message: "you don't have enough privilege à" });
   return;
 };
 
 // Verify customer
 const verifyCustomer = (req, res, next) => {
-  const { role } = req.data;
+  const role = req?.data?.role;
   if (role) {
     res.status(403).send({ message: "you are not a customer" });
     return;

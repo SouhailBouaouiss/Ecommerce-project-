@@ -1,6 +1,5 @@
 import express from "express";
 import passport from "passport";
-import validate from "express-validator";
 
 import validate from "express-validator";
 
@@ -22,7 +21,11 @@ import {
   updateCustomerData,
   deleteCustomer,
   getCustomerData,
+  updateCustomerDataByCustomer,
 } from "../Controllers/customersControllers.js";
+
+import { validateEmail } from "../Middelwares/validateEmail.js";
+import sendEmail from "../Middelwares/email.js";
 
 const customerRouter = express.Router();
 
@@ -52,7 +55,7 @@ customerRouter.post(
     .body("first_name")
     .isAlpha()
     .withMessage("First name should contain only alphabetic characters"),
-  valiodate
+  validate
     .body("last_name")
     .isAlpha()
     .withMessage("Last name should contain only alphabetic characters"),
@@ -66,8 +69,12 @@ customerRouter.post(
     .isStrongPassword()
     .withMessage("Password must be at least 6 characters long"),
   expressValidatorCheck,
-  createNewCustomer
+  verifyCustomer,
+  createNewCustomer,
+  sendEmail
 );
+
+customerRouter.get("/validate", validateEmail);
 
 //Get customers data
 customerRouter.get("/", verifyAuth, verifyManagerOrAdmin, getCustomersData);
@@ -79,6 +86,9 @@ customerRouter.get(
   verifyManagerOrAdmin,
   getCustomerSearch
 );
+
+// get the customer's profile
+customerRouter.get("/profile", verifyAuth, verifyCustomer, getCustomerData); // controller
 
 // Get a specific customer data
 customerRouter.get(
@@ -93,31 +103,18 @@ customerRouter.put(
   "/:id",
   verifyAuth,
   verifyManagerOrAdmin,
-  validate
-    .body("email")
-    .isEmail()
-    .withMessage("Invalid email address")
-    .normalizeEmail(),
-  validate
-    .body("pwd")
-    .isStrongPassword()
-    .withMessage("Password must be at least 6 characters long"),
-  expressValidatorCheck,
   updateCustomerData
 );
 
 // Delete a customer document
 customerRouter.delete("/:id", verifyAuth, verifyManagerOrAdmin, deleteCustomer);
 
-// get the customer's profile
-customerRouter.get("/profile", verifyAuth, verifyCustomer, getCustomerData); // controller
-
 // update the cutomers data
 customerRouter.patch(
   "/profile/update",
   verifyAuth,
   verifyCustomer,
-  updateCustomerData
+  updateCustomerDataByCustomer
 );
 
 export { customerRouter };

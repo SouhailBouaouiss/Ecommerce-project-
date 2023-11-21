@@ -10,7 +10,7 @@ const createNewProduct = async (req, res, next) => {
   session.startTransaction();
 
   try {
-    const newProduct = await Products.create([req.body], { session });
+    const newProduct = await Products.create([req.product], { session });
     console.log(newProduct);
 
     // Retrieve the product _id
@@ -74,7 +74,9 @@ const getAllProducts = (req, res, next) => {
 const getSearchedProducts = (req, res, next) => {
   const page = req.query.page || 1;
   const { query } = req.query;
-  Products.find({ $text: { $search: query } })
+  Products.find({
+    $or: [{ product_name: { $regex: new RegExp(query, "i") } }],
+  })
     .populate({
       path: "subcategory_id",
       options: { limit: 10, skip: (page - 1) * 10 },
@@ -95,7 +97,7 @@ const getSearchedProducts = (req, res, next) => {
 // Get a specific product using id
 
 const getProductById = (req, res, next) => {
-  const { id } = req.body;
+  const { id } = req.params;
   Products.findOne({ id })
     .populate({ path: "subcategory_id", populate: { path: "category_id" } })
     .then((data) => {
@@ -111,10 +113,10 @@ const getProductById = (req, res, next) => {
 // Update a specific product
 
 const updateProduct = (req, res, next) => {
-  const { id } = req.body;
+  const { id } = req.params;
   Products.findOneAndUpdate({ id }, req.body).then((data) => {
     if (!data) {
-      res.status(404).send({ message: "invalid product id" });
+      res.status(404).send({ message: "invalid product id " });
       return;
     }
     res.status(200).send({ message: "product updated successfully", data });
@@ -123,7 +125,7 @@ const updateProduct = (req, res, next) => {
 
 // Delete a product
 const deleteProduct = (req, res, next) => {
-  const { id } = req.body;
+  const { id } = req.params;
   Products.deleteOne({ id })
     .then((data) => {
       if (!data) {

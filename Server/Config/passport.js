@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
 import { Users } from "../Models/User.js";
-import { Customers } from "../Models/customer.js";
+import { Customers } from "../Models/Customer.js";
 
 const localStrategy = local.Strategy;
 
@@ -33,14 +33,21 @@ passport.use(
                   });
                   return;
                 } else {
-                  if (data?.active == false) {
+                  if (!data.valid_account) {
                     done(null, false, {
-                      message: "Banned Account",
-                      stataus: 401,
+                      message: "you should to validate your account",
                     });
                     return;
                   } else {
-                    done(null, data);
+                    if (data?.active == false) {
+                      done(null, false, {
+                        message: "Banned Account",
+                        stataus: 401,
+                      });
+                      return;
+                    } else {
+                      done(null, data);
+                    }
                   }
                 }
               }
