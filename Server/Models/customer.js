@@ -54,4 +54,4 @@ const Customers =
 
 // Customers.createIndexes();
 
-export default Customers;
+export { Customers}

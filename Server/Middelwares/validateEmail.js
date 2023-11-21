@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
-import Customers from "../Models/Customer.js";
+import {Customers} from "../Models/Customer.js";
 
 dotenv.config();
 

@@ -4,7 +4,7 @@ import validate from "express-validator";
 import { allowedRoles } from "../utils.js";
 import passport from "passport";
 import { Users } from "../Models/User.js";
-import Customers from "../models/Customer.js";
+import {Customers} from "../Models/customer.js";
 
 const tokenGenration = (req, res, next) => {
   passport.authenticate("local", function (err, user, info) {
