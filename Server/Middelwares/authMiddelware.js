@@ -56,6 +56,7 @@ const verifyAuth = async (req, res, next) => {
     console.log(decodedUserData);
 
     const data = await Users.findById({ _id: decodedUserData._id });
+    delete data.pwd
     req.data = data;
     return next();
   } catch (error) {

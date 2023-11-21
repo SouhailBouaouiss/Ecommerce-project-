@@ -2,6 +2,7 @@
 
 import { Users } from "../Models/User.js";
 
+
 const signin = (req, res, next) => {
   const { generatedAccessToken, generatedRefreshToken } = req.jwt;
   const now = new Date().toString();
@@ -60,6 +61,8 @@ const creatUser = (req, res, next) => {
     )
     .catch((err) => res.status(400).send(err));
 };
+
+
 
 // Retrieve users data from the db
 
