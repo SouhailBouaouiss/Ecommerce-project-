@@ -54,7 +54,8 @@ const verifyAuth = async (req, res, next) => {
   if (!token) return next({ status: 401, message: "Invalid JWT token" });
   try {
     const decodedUserData = jwt.verify(token, jwtSecret);
-    console.log(decodedUserData);
+    console.log(decodedUserData); 
+    
 
     const data = await Users.findById({ _id: decodedUserData._id });
     if (!data) {
@@ -67,6 +68,8 @@ const verifyAuth = async (req, res, next) => {
     req.data = data;
     next();
   } catch (error) {
+    // In the case of expired token 
+    
     console.log("here 0");
     req.data = null;
     return next();

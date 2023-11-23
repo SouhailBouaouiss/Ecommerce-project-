@@ -1,6 +1,6 @@
 // Send the access token and the customer data
 
-import {Customers} from "../Models/Customer.js";
+import {Customers} from "../Models/customer.js";
 
 const now = new Date().toString();
 const signin = (req, res, next) => {
