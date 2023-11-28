@@ -4,7 +4,7 @@ import validate from "express-validator";
 import { allowedRoles } from "../utils.js";
 import passport from "passport";
 import { Users } from "../Models/User.js";
-import {Customers} from "../Models/customer.js";
+import { Customers } from "../Models/customer.js";
 
 const tokenGenration = (req, res, next) => {
   passport.authenticate("local", function (err, user, info) {
@@ -14,17 +14,15 @@ const tokenGenration = (req, res, next) => {
     }
     if (user) {
       // Genrate an access token to the authenticated User
-      console.log(user);
+
       const generatedAccessToken = jwt.sign({ _id: user._id }, jwtSecret, {
-        expiresIn: "1h",
+        expiresIn: "30s",
       });
       // Genrate an refresh token to the authenticated User
       const generatedRefreshToken = jwt.sign({ _id: user._id }, refSecret, {
         expiresIn: "2d",
       });
       req.user = user;
-
-      console.log(req.user);
 
       req.jwt = { generatedAccessToken, generatedRefreshToken };
       next();
@@ -49,13 +47,11 @@ const expressValidatorCheck = (req, res, next) => {
 const verifyAuth = async (req, res, next) => {
   console.log("hona");
   const token =
-    // req.headers.authorization?.split(" ")[1] ??
-    req.cookies.access_token; // Grab it from Cookies
-  if (!token) return next({ status: 401, message: "Invalid JWT token" });
+    req.headers.authorization?.split(" ")[1] ?? req.cookies.access_token; // Grab it from Cookies
+  if (!token) return res.status(401).send({ message: "Invalid JWT token" });
   try {
     const decodedUserData = jwt.verify(token, jwtSecret);
-    console.log(decodedUserData); 
-    
+    console.log(decodedUserData);
 
     const data = await Users.findById({ _id: decodedUserData._id });
     if (!data) {
@@ -68,10 +64,11 @@ const verifyAuth = async (req, res, next) => {
     req.data = data;
     next();
   } catch (error) {
-    // In the case of expired token 
-    
+    // In the case of expired token
+
     console.log("here 0");
     req.data = null;
+
     return next();
   }
 };
@@ -83,8 +80,8 @@ const verifyRefreshToken = async (req, res, next) => {
     console.log("here");
     if (!req.data) {
       console.log("here 1");
-      const { refresh_token } = req.cookies;
-      console.log(refresh_token);
+      const refresh_token = req.cookies.refresh_token ?? req.body.refresh_token;
+      console.log(req.body);
 
       const decodedUserData = jwt.verify(refresh_token, refSecret);
       console.log(decodedUserData);
@@ -92,7 +89,7 @@ const verifyRefreshToken = async (req, res, next) => {
         { _id: decodedUserData._id },
         jwtSecret,
         {
-          expiresIn: "1h",
+          expiresIn: "30s",
         }
       );
       res.cookie("access_token", generatedAccessToken, {

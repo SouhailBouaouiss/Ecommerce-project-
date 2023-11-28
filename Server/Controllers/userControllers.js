@@ -2,12 +2,10 @@
 
 import { Users } from "../Models/User.js";
 
-
 const signin = (req, res, next) => {
   const { generatedAccessToken, generatedRefreshToken } = req.jwt;
   const now = new Date().toString();
 
-  console.log(req.user);
   const { _id } = req.user;
 
   Users.findOneAndUpdate({ _id }, { last_login: now }, { new: true })
@@ -31,6 +29,7 @@ const signin = (req, res, next) => {
           secure: false,
         })
         .send({
+          message: "Successfull authentication",
           access_token: generatedAccessToken,
           refresh_token: generatedRefreshToken,
           user: data,
@@ -45,24 +44,19 @@ const signin = (req, res, next) => {
 // Creat a user document
 
 const creatUser = (req, res, next) => {
-
   const now = new Date().toDateString();
 
   const newUser = new Users(req.body);
 
   newUser
     .save()
-    .then((user) =>{
-
-      req.userData = user
-      res.status(201).send({ message: "user created successfully" })
-     return  next()
-    }
-    )
+    .then((user) => {
+      req.userData = user;
+      res.status(201).send({ message: "user created successfully" });
+      return next();
+    })
     .catch((err) => res.status(400).send(err));
 };
-
-
 
 // Retrieve users data from the db
 
