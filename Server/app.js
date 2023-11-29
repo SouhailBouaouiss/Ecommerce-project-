@@ -16,6 +16,7 @@ import { customerRouter } from "./Routes/customerRouter.js";
 import { categoryRouter } from "./Routes/categoryRouter.js";
 import { subcategoryRouter } from "./Routes/subcategoryRouter.js";
 import { productRouter } from "./Routes/productRouter.js";
+import { countRouter } from "./Routes/statisticsRouter.js";
 
 dotenv.config();
 app.use(cookieParser());
@@ -30,7 +31,7 @@ app.use(
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-                                        
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -42,6 +43,7 @@ app.use("/v1/subcategories", subcategoryRouter);
 
 app.use("/v1/customers", customerRouter);
 app.use("/v1/products", productRouter);
+app.use("/v1/count", countRouter);
 
 connecting().then(() => {
   Users.find().then((data) => console.log(data));
