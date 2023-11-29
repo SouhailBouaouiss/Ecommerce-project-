@@ -52,6 +52,4 @@ const customerschema = new Schema({
 const Customers =
   mongoose.models.customer || mongoose.model("customer", customerschema);
 
-// Customers.createIndexes();
-
 export { Customers };
