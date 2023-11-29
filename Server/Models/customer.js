@@ -8,11 +8,11 @@ const customerschema = new Schema({
     type: String,
     default: v4(),
   },
-  first_name: {
+  customer_first_name: {
     type: String,
     required: true,
   },
-  last_name: {
+  customer_last_name: {
     type: String,
     required: true,
   },
@@ -45,13 +45,13 @@ const customerschema = new Schema({
 });
 
 // customerschema.index({
-//   first_name: "text",
-//   last_name: "text",
+//   customer_first_name: "text",
+//   customer_last_name: "text",
 // });
-
+// customerschema.index({ customer_first_name: 5, customer_last_name: 5 });
 const Customers =
   mongoose.models.customer || mongoose.model("customer", customerschema);
 
 // Customers.createIndexes();
 
-export { Customers}
+export { Customers };
