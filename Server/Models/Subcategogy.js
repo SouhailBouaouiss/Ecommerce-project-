@@ -10,7 +10,6 @@ const subcategorySchema = new Schema({
   },
   subcategory_name: {
     type: String,
-    unique: true,
   },
   active: {
     type: Boolean,

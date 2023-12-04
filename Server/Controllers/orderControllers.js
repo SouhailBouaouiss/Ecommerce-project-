@@ -1,6 +1,10 @@
+import { Products } from "../Models/Product.js";
+import { Order } from "../Models/Order.js";
+
 // Add new order
 
 const addOrder = (req, res, next) => {
+  const { customer_id } = req.data;
   Products.create(req.body).then((data) => {
     if (!data) {
       res.status(500).send({ message: "internal server " });
@@ -21,7 +25,6 @@ const getAllOrders = (req, res, next) => {
       options: {
         limit: 10,
         skip: (page - 1) * 10,
-        select: "-pwd first-name last-name",
       },
     })
     .then((data) => {

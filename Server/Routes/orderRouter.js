@@ -6,6 +6,7 @@ import {
   verifyAuth,
   verifyCustomer,
   verifyManagerOrAdmin,
+  verifyRefreshToken,
 } from "../Middelwares/authMiddelware.js";
 
 import {
@@ -18,7 +19,14 @@ const orderRouter = express.Router();
 
 // Add new order
 
-orderRouter.post("/", verifyAuth, verifyCustomer, checkValidation, addOrder);
+orderRouter.post(
+  "/",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyCustomer,
+  checkValidation,
+  addOrder
+);
 
 // List all orders
 

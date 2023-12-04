@@ -16,7 +16,7 @@ const tokenGenration = (req, res, next) => {
       // Genrate an access token to the authenticated User
 
       const generatedAccessToken = jwt.sign({ _id: user._id }, jwtSecret, {
-        expiresIn: "30s",
+        expiresIn: "1h",
       });
       // Genrate an refresh token to the authenticated User
       const generatedRefreshToken = jwt.sign({ _id: user._id }, refSecret, {
@@ -46,8 +46,8 @@ const expressValidatorCheck = (req, res, next) => {
 // Verify authentication by verifying the token sent in head of request
 const verifyAuth = async (req, res, next) => {
   console.log("hona");
-  const token =
-    req.headers.authorization?.split(" ")[1] ?? req.cookies.access_token; // Grab it from Cookies
+  const token = req.headers.authorization?.split(" ")[1];
+  // ?? req.cookies.access_token; // Grab it from Cookies
   if (!token) return res.status(401).send({ message: "Invalid JWT token" });
   try {
     const decodedUserData = jwt.verify(token, jwtSecret);
@@ -63,6 +63,7 @@ const verifyAuth = async (req, res, next) => {
     console.log(data);
     req.data = data;
     next();
+    return;
   } catch (error) {
     // In the case of expired token
 
@@ -134,6 +135,7 @@ const verifyManagerOrAdmin = (req, res, next) => {
 
 // Verify customer
 const verifyCustomer = (req, res, next) => {
+  console.log(req.data);
   const role = req?.data?.role;
   if (role) {
     res.status(403).send({ message: "you are not a customer" });
@@ -145,6 +147,7 @@ const verifyCustomer = (req, res, next) => {
 
 // Verify email validation
 const checkValidation = (req, res, next) => {
+  console.log(req.data);
   const { valid_account } = req.data;
   if (valid_account == false) {
     res.status(403).send({ message: "you don't have enough privilege" });

@@ -12,9 +12,9 @@ const countRouter = express.Router();
 
 countRouter.get(
   "/",
-  verifyAuth,
-  verifyRefreshToken,
-  verifyManagerOrAdmin,
+  // verifyAuth,
+  // verifyRefreshToken,
+  // verifyManagerOrAdmin,
   getStatistics
 );
 

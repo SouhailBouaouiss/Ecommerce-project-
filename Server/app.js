@@ -19,6 +19,8 @@ import { subcategoryRouter } from "./Routes/subcategoryRouter.js";
 import { productRouter } from "./Routes/productRouter.js";
 import { countRouter } from "./Routes/statisticsRouter.js";
 import { verifyRouter } from "./Routes/verifyRouter.js";
+import { orderRouter } from "./Routes/orderRouter.js";
+import { insertSubcategories } from "./fakeData/subcategoriesFakeData.js";
 
 dotenv.config();
 app.use(cookieParser());
@@ -33,6 +35,7 @@ app.use(
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -42,10 +45,12 @@ import("./Config/passport.js");
 app.use("/v1/users", usersRouter);
 app.use("/v1/categories", categoryRouter);
 app.use("/v1/subcategories", subcategoryRouter);
+app.use("/v1/orders", orderRouter);
 
 app.use("/v1/customers", customerRouter);
 app.use("/v1/products", productRouter);
-
+app.use("/verify", verifyRouter);
+app.use("/v1/count", countRouter);
 connecting().then(() => {
   Users.find().then((data) => console.log(data));
 });
