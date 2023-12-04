@@ -19,6 +19,9 @@ import { subcategoryRouter } from "./Routes/subcategoryRouter.js";
 import { productRouter } from "./Routes/productRouter.js";
 import { countRouter } from "./Routes/statisticsRouter.js";
 import { verifyRouter } from "./Routes/verifyRouter.js";
+import { insertFakeCategories } from "./fakeData/categoriesFakeData.js";
+import { insertFakeCustomers } from "./fakeData/customersFakeData.js";
+import { insertFakeUsers } from "./fakeData/usersFakeData.js";
 
 dotenv.config();
 app.use(cookieParser());

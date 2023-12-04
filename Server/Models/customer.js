@@ -44,10 +44,9 @@ const customerschema = new Schema({
   },
 });
 
-customerschema.index({ first_name: "text", last_name: "text" });
-customerschema.index({ first_name: 7, last_name: 7 });
+// customerschema.index({ first_name: "text", last_name: "text" });
+// customerschema.index({ first_name: 7, last_name: 7 });
 
-const Customers =
-  mongoose.models.customer || mongoose.model("customer", customerschema);
+const Customers = mongoose.model("customer", customerschema);
 
 export { Customers };
