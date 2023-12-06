@@ -34,6 +34,11 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
           </NavLink>
         </li>
         <li className="sidebar-list-item">
+          <NavLink to={"/users"} href="" className="flex items-center gap-1">
+            <BsGrid1X2Fill className="icon" /> <span>Users</span>
+          </NavLink>
+        </li>
+        <li className="sidebar-list-item">
           <NavLink to="/product" className="flex items-center gap-1">
             <BsFillArchiveFill className="icon" /> <span>Products</span>
           </NavLink>

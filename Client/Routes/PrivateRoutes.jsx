@@ -12,6 +12,11 @@ const PrivateRoutes = [
     path: "/product",
     element: <Product />,
   },
+  {
+    id: 3,
+    path: "/user",
+    element: <User />,
+  },
 ];
 
 export { PrivateRoutes };
