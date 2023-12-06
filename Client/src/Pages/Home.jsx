@@ -20,6 +20,7 @@ import {
   LineChart,
   Line,
 } from "recharts";
+import { axiosInstance } from "../api";
 
 function Home() {
   const data = [
@@ -62,8 +63,8 @@ function Home() {
   });
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5001/v1/count")
+    axiosInstance
+      .get("/v1/count")
       .then((resp) => {
         const data = resp.data.data;
         console.log(data);

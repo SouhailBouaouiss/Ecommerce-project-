@@ -10,8 +10,8 @@ const createNewProduct = async (req, res, next) => {
   session.startTransaction();
 
   try {
-    const newProduct = await Products.create([req.product], { session });
-    console.log(newProduct);
+    const newProduct = await Products.create([req.body], { session });
+    console.log("newproduct", newProduct);
 
     // Retrieve the product _id
 
@@ -36,7 +36,9 @@ const createNewProduct = async (req, res, next) => {
     productSubcategory.save();
 
     session.commitTransaction();
-    return res.status(200).send({ message: "Product created successfully" });
+    return res
+      .status(200)
+      .send({ message: "Product created successfully", data: newProduct });
   } catch (error) {
     // Reject the two operations in case of the failure of one of them
     await session.abortTransaction();
@@ -114,19 +116,22 @@ const getProductById = (req, res, next) => {
 
 const updateProduct = (req, res, next) => {
   const { id } = req.params;
-  Products.findOneAndUpdate({ id }, req.body).then((data) => {
-    if (!data) {
-      res.status(404).send({ message: "invalid product id " });
-      return;
+  Products.findOneAndUpdate({ _id: id }, req.body, { new: true }).then(
+    (data) => {
+      if (!data) {
+        res.status(404).send({ message: "invalid product id " });
+        return;
+      }
+      console.log("New data", data);
+      res.status(200).send({ message: "product updated successfully", data });
     }
-    res.status(200).send({ message: "product updated successfully", data });
-  });
+  );
 };
 
 // Delete a product
 const deleteProduct = (req, res, next) => {
   const { id } = req.params;
-  Products.deleteOne({ id })
+  Products.deleteOne({ _id: id })
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: "invalid product id" });

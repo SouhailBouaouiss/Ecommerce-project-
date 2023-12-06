@@ -2,30 +2,31 @@
 
 import { Users } from "../Models/User.js";
 
-const signin = (req, res, next) => {
+const signin = async (req, res, next) => {
   const { generatedAccessToken, generatedRefreshToken } = req.jwt;
   const now = new Date().toString();
 
   const { _id } = req.user;
 
-  Users.findOneAndUpdate({ _id }, { last_login: now }, { new: true })
+  Users.findByIdAndUpdate(_id, { last_login: now }, { new: true })
     .select("-pwd")
     .then((data) => {
+      console.log("data", data);
       if (!data) {
         return res.status(404).send({ message: "invalid user id" });
       }
       res
         .status(200)
         .cookie("access_token", generatedAccessToken, {
-          path: "/",
+          // path: "/",
           domaine: "localhost",
-          httpOnly: true,
+          // httpOnly: true,
           secure: false,
         })
         .cookie("refresh_token", generatedRefreshToken, {
-          path: "/",
+          // path: "/",
           domaine: "localhost",
-          httpOnly: true,
+          // httpOnly: true,
           secure: false,
         })
         .send({

@@ -2,47 +2,70 @@ import * as React from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { Button, Grid, Typography, TextField } from "@mui/material";
 import { tableFields } from "../util";
-import { UserContext } from "../contexts/AuthContext";
-import { set } from "mongoose";
+import { axiosInstance } from "../api";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+import { useForm } from "react-hook-form";
 
 export default function Product() {
-  // Import the user context
-
-  const user = React.useContext(UserContext);
-
   //Creat a state for products
 
   const [products, setProducts] = React.useState([]);
 
-  // Creat a state for modals
+  // Creat a state for the passing product to Edit in the modal
 
-  const [data, setData] = React.useState({
+  const [productToEdit, setProductToEdit] = React.useState({
     id: null,
-    product: null,
+    product_name: null,
     quantity: null,
     price: null,
+    sku: null,
+    short_description: null,
+    long_description: null,
   });
 
-  const rows = React.useMemo(
-    (row, field) => {
-      console.log(row);
-      return products.map((elm) => {
-        return {
-          id: elm._id,
-          product: elm.product_name,
-          quantity: elm.quatity,
-          price: elm.price,
-        };
-      });
-    },
-    [products]
-  );
+  // Creat a useState to stock subcategories
 
-  // Box style
+  const [subcategories, setSubcategories] = React.useState([]);
+
+  // Retrieve the subcategories from the backEnd
+
+  React.useEffect(() => {
+    axiosInstance
+      .get("/v1/subcategories")
+      .then((resp) => {
+        const data = resp.data.data;
+
+        setSubcategories(data);
+        toast.success("nadi2");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+        return setSubcategories([]);
+      });
+  }, []);
+
+  // Transform the product data from the useState to a format that fites the DataGrid and stock
+  //in the useMemo
+
+  const rows = React.useMemo(() => {
+    return products.map((elm) => {
+      return {
+        ...elm,
+        id: elm._id,
+      };
+    });
+  }, [products]);
+
+  // Box styling
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -55,14 +78,12 @@ export default function Product() {
     p: 4,
   };
 
+  // Get the products from the Backend
   React.useEffect(() => {
-    // Get the products from the Backend
-
-    axios
-      .get("http://localhost:5001/v1/products")
+    axiosInstance
+      .get("/v1/products")
       .then((resp) => {
         const data = resp.data.data;
-
         console.log(resp);
 
         setProducts(data);
@@ -78,7 +99,7 @@ export default function Product() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setData((prev) => ({
+    setProductToEdit((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -86,9 +107,57 @@ export default function Product() {
 
   // Handle submit function
 
-  const handleSubmit = (event) => {
+  const handleSubmitEdit = (event) => {
     event.preventDefault();
+
     // Add your form submission logic here
+
+    axiosInstance
+      .put(`/v1/products/${productToEdit.id}`, productToEdit)
+      .then((resp) => {
+        const data = resp.data.data;
+        console.log(data);
+        setProducts((prev) => {
+          return prev.map((elm) => {
+            console.log(elm._id, data._id);
+            if (elm._id == data._id) {
+              console.log(elm, "found", elm, data._id);
+              return data;
+            } else {
+              return elm;
+            }
+          });
+        });
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.message ?? "Something went wrong");
+        console.error(error);
+      });
+  };
+
+  // Haandle delete click
+
+  const handleDeleteClick = (row) => {
+    const productToDeleteId = row.id;
+    console.log(row.id);
+    axiosInstance
+      .delete(`/v1/products/${productToDeleteId}`)
+      .then((resp) => {
+        const message = resp.data.message;
+        console.log(message);
+        console.log(resp);
+        toast.warning(message);
+        setProducts((prev) => {
+          return prev.filter((elm) => {
+            console.log(elm._id, productToDeleteId);
+            return elm._id !== productToDeleteId;
+          });
+        });
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.message ?? "Something went wrong");
+        console.error(error);
+      });
   };
   // Grid table columns config
 
@@ -118,11 +187,11 @@ export default function Product() {
         headerName: "Delete",
         sortable: false,
         width: 150,
-        renderCell: (params) => (
+        renderCell: ({ row, field }) => (
           <Button
             variant="contained"
             color="primary"
-            onClick={() => handleButtonClick(params.row)}
+            onClick={() => handleDeleteClick(row)}
           >
             Action
           </Button>
@@ -131,15 +200,203 @@ export default function Product() {
     ];
   }, []);
 
+  // Handle adding a new product
+
+  const handleAddProduct = async (event) => {
+    // Access the input value using event.target.value
+    event.preventDefault();
+
+    axiosInstance.post("/v1/products").then((resp) => {
+      const data = resp.data.data;
+
+      setProducts((prev) => {
+        return [...prev, data];
+      });
+    });
+  };
+
+  // Handle the select change
+  const [subcategoryName, setSubcategoryName] = React.useState("");
+
+  const handleSelectChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSubcategoryName(
+      // On autofill we get a stringified value.
+      event.target.value
+    );
+  };
+
+  // Select input style
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+  // Upload button style
+
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
+
+  // Handle input change for adding new Product
+
+  const { register, handleSubmit } = useForm();
+  // This is the function that returns the toolUpBar
+
   const CustomToolbar = () => (
     <Grid container alignItems="center" justifyContent="space-between">
       <Grid item>
         <Typography variant="h6">Product List</Typography>
       </Grid>
       <Grid item>
-        <Button variant="contained" color="primary">
-          Custom Button
+        <Button variant="contained" color="primary" onClick={handleOpen}>
+          Add Product
         </Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <form onSubmit={handleSubmit(handleAddProduct)}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Product Name"
+                    name="product_name"
+                    variant="outlined"
+                    {...register("product_name")}
+
+                    // Add any additional props or event handlers as needed
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <FormControl sx={{ m: 1, width: 300 }}>
+                    <InputLabel id="demo-multiple-name-label">
+                      Subcategory
+                    </InputLabel>
+                    <Select
+                      labelId="demo-multiple-name-label"
+                      id="demo-multiple-name"
+                      // multiple
+                      value={subcategoryName}
+                      onChange={handleSelectChange}
+                      // input={<OutlinedInput label="Name" />}
+                      // MenuProps={MenuProps}
+                    >
+                      {subcategories.map((elm) => (
+                        <MenuItem value={elm.subcategory_name} key={elm._id}>
+                          {elm.subcategory_name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    startIcon={<CloudUploadIcon />}
+                  >
+                    Upload file
+                    <VisuallyHiddenInput type="file" />
+                  </Button>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Short description"
+                    variant="outlined"
+                    name="short_description"
+                    {...register("short_description")}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Long description"
+                    variant="outlined"
+                    name="long_description"
+                    {...register("long_description")}
+
+                    // Add any additional props or event handlers as needed
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Quantity"
+                    type="number"
+                    name="quatity"
+                    variant="outlined"
+                    {...register("quatity")}
+                    // Add any additional props or event handlers as needed
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Price"
+                    type="number"
+                    name="price"
+                    variant="outlined"
+                    {...register("price")}
+                    // Add any additional props or event handlers as needed
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Discount price"
+                    type="number"
+                    variant="outlined"
+                    name="discount_price"
+                    {...register("discount_price")}
+
+                    // Add any additional props or event handlers as needed
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="sku"
+                    variant="outlined"
+                    name="sku"
+                    {...register("sku")}
+
+                    // Add any additional props or event handlers as needed
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button type="submit" variant="contained" color="primary">
+                    Submit
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </Box>
+        </Modal>
       </Grid>
     </Grid>
   );
@@ -150,7 +407,7 @@ export default function Product() {
   const handleOpen = (row) => {
     console.log(row);
     setOpen(true);
-    setData(row);
+    setProductToEdit(row);
   };
   const handleClose = () => setOpen(false);
 
@@ -167,16 +424,16 @@ export default function Product() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitEdit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
                   label="Product Name"
-                  name="product"
+                  name="product_name"
                   variant="outlined"
                   onChange={handleChange}
-                  value={data.product}
+                  value={productToEdit.product_name}
                   // Add any additional props or event handlers as needed
                 />
               </Grid>
@@ -186,6 +443,9 @@ export default function Product() {
                   fullWidth
                   label="Short description"
                   variant="outlined"
+                  name="short_description"
+                  onChange={handleChange}
+                  value={productToEdit.short_description}
                   // Add any additional props or event handlers as needed
                 />
               </Grid>
@@ -194,6 +454,9 @@ export default function Product() {
                   fullWidth
                   label="Long description"
                   variant="outlined"
+                  name="long_description"
+                  onChange={handleChange}
+                  value={productToEdit.long_description}
                   // Add any additional props or event handlers as needed
                 />
               </Grid>
@@ -202,8 +465,10 @@ export default function Product() {
                   fullWidth
                   label="Quantity"
                   type="number"
-                  value={data.quantity}
+                  value={productToEdit.quantity}
+                  name="quatity"
                   variant="outlined"
+                  onChange={handleChange}
                   // Add any additional props or event handlers as needed
                 />
               </Grid>
@@ -212,8 +477,10 @@ export default function Product() {
                   fullWidth
                   label="Price"
                   type="number"
-                  value={data.price}
+                  name="price"
+                  value={productToEdit.price}
                   variant="outlined"
+                  onChange={handleChange}
                   // Add any additional props or event handlers as needed
                 />
               </Grid>
@@ -223,6 +490,9 @@ export default function Product() {
                   label="Discount price"
                   type="number"
                   variant="outlined"
+                  name="discount_price"
+                  onChange={handleChange}
+                  value={productToEdit.discount_price}
                   // Add any additional props or event handlers as needed
                 />
               </Grid>
@@ -231,6 +501,9 @@ export default function Product() {
                   fullWidth
                   label="sku"
                   variant="outlined"
+                  name="sku"
+                  onChange={handleChange}
+                  value={productToEdit.sku}
                   // Add any additional props or event handlers as needed
                 />
               </Grid>

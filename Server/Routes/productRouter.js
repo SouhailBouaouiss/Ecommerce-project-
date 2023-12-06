@@ -3,6 +3,7 @@ import express from "express";
 import {
   verifyAuth,
   verifyManagerOrAdmin,
+  verifyRefreshToken,
 } from "../Middelwares/authMiddelware.js";
 import { upload } from "../upload/storing.js";
 
@@ -24,6 +25,7 @@ const productRouter = express.Router();
 productRouter.post(
   "/",
   verifyAuth,
+  verifyRefreshToken,
   verifyManagerOrAdmin,
   upload.single("file"),
   postProduct,
@@ -44,9 +46,21 @@ productRouter.get("/:id", getProductById);
 
 // Update a specific product
 
-productRouter.put("/:id", verifyAuth, verifyManagerOrAdmin, updateProduct);
+productRouter.put(
+  "/:id",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyManagerOrAdmin,
+  updateProduct
+);
 
 // Delete a product
-productRouter.delete("/:id", verifyAuth, verifyManagerOrAdmin, deleteProduct);
+productRouter.delete(
+  "/:id",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyManagerOrAdmin,
+  deleteProduct
+);
 
 export { productRouter };

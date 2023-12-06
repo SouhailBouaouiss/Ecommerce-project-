@@ -36,7 +36,7 @@ usersRouter.post(
     .normalizeEmail(),
   validate
     .body("pwd")
-    .isStrongPassword()
+    .notEmpty()
     .isString()
     .withMessage("Password must be at least 6 characters long"),
   expressValidatorCheck,

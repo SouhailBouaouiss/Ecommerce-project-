@@ -17,6 +17,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { UserContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../api";
 
 function AuthServices() {
   // useState to catch the user's email
@@ -57,8 +58,8 @@ function AuthServices() {
 
       // Handle sending the request to the Back-end server
 
-      axios
-        .post("http://localhost:5001/v1/users/login", {
+      axiosInstance
+        .post("/v1/users/login", {
           email: userEmail,
           pwd: userPwd,
         })

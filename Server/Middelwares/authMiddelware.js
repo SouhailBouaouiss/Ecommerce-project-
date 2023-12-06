@@ -46,8 +46,8 @@ const expressValidatorCheck = (req, res, next) => {
 // Verify authentication by verifying the token sent in head of request
 const verifyAuth = async (req, res, next) => {
   console.log("hona");
-  const token = req.headers.authorization?.split(" ")[1];
-  // ?? req.cookies.access_token; // Grab it from Cookies
+  const token = req.cookies.access_token;
+  // req.headers.authorization?.split(" ")[1] ?? // Grab it from Cookies
   if (!token) return res.status(401).send({ message: "Invalid JWT token" });
   try {
     const decodedUserData = jwt.verify(token, jwtSecret);
@@ -60,7 +60,7 @@ const verifyAuth = async (req, res, next) => {
       next();
       return;
     }
-    console.log(data);
+    console.log("User data", data);
     req.data = data;
     next();
     return;
@@ -81,7 +81,8 @@ const verifyRefreshToken = async (req, res, next) => {
     console.log("here");
     if (!req.data) {
       console.log("here 1");
-      const refresh_token = req.cookies.refresh_token ?? req.body.refresh_token;
+      const refresh_token = req.cookies.refresh_token;
+      // ?? req.body.refresh_token;
       console.log(req.body);
 
       const decodedUserData = jwt.verify(refresh_token, refSecret);
