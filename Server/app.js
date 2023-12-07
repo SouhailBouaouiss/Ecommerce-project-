@@ -57,7 +57,7 @@ app.use("/v1/products", productRouter);
 app.use("/verify", verifyRouter);
 app.use("/v1/count", countRouter);
 connecting().then(() => {
-  // Users.find().then((data) => console.log(data));
+  Users.find().then((data) => console.log(data));
 });
 
 app.use((req, res, next) => {

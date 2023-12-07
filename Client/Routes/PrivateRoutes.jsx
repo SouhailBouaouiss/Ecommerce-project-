@@ -1,3 +1,4 @@
+import Customer from "../src/Pages/Customer";
 import Home from "../src/Pages/Home";
 import Product from "../src/Pages/Product";
 
@@ -14,9 +15,13 @@ const PrivateRoutes = [
   },
   {
     id: 3,
-    path: "/user",
-    element: <User />,
+    path: "/customer",
+    element: <Customer />,
   },
+  // {
+  //   id: 3,
+  //   path: "/user",
+  //   element: <User />,
+  // },
 ];
-
 export { PrivateRoutes };

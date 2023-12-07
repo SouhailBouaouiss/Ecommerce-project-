@@ -9,3 +9,26 @@ export const tableFields = [
     width: 150,
   },
 ];
+
+export const customerTableFields = [
+  { field: "id", headerName: "ID", width: 300 },
+  { field: "first_name", headerName: "first_name", width: 130 },
+  { field: "last_name", headerName: "last_name", width: 130 },
+  {
+    field: "email",
+    headerName: "Email",
+
+    width: 150,
+  },
+  {
+    field: "last_login",
+    headerName: "last_login",
+
+    width: 150,
+  },
+  {
+    field: "status",
+    headerName: "status",
+    width: 150,
+  },
+];

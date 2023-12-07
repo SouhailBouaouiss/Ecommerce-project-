@@ -111,8 +111,6 @@ export default function Product() {
   const handleSubmitEdit = (event) => {
     event.preventDefault();
 
-    // Add your form submission logic here
-
     axiosInstance
       .put(`/v1/products/${productToEdit.id}`, productToEdit)
       .then((resp) => {
@@ -134,6 +132,7 @@ export default function Product() {
         toast.error(error?.response?.data?.message ?? "Something went wrong");
         console.error(error);
       });
+    setOpen(false);
   };
 
   // Haandle delete click
@@ -207,10 +206,6 @@ export default function Product() {
   const [productImg, setProductImg] = React.useState({});
 
   const handleAddProduct = (event) => {
-    // Access the input value using event.target.value
-    console.log("Values", getValues());
-    console.log("File", productImg);
-
     axiosInstance
       .post(
         "/v1/products",
@@ -229,6 +224,7 @@ export default function Product() {
           return [...prev, data];
         });
       });
+    setOpenAdd(false);
   };
 
   // Select input style
@@ -268,12 +264,12 @@ export default function Product() {
         <Typography variant="h6">Product List</Typography>
       </Grid>
       <Grid item>
-        <Button variant="contained" color="primary" onClick={handleOpen}>
+        <Button variant="contained" color="primary" onClick={handleOpenAdd}>
           Add Product
         </Button>
         <Modal
-          open={open}
-          onClose={handleClose}
+          open={openAdd}
+          onClose={handleCloseAdd}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -412,9 +408,13 @@ export default function Product() {
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = (row) => {
-    console.log(row);
     setOpen(true);
     setProductToEdit(row);
+  };
+  const handleCloseAdd = () => setOpenAdd(false);
+  const [openAdd, setOpenAdd] = React.useState(false);
+  const handleOpenAdd = (row) => {
+    setOpenAdd(true);
   };
   const handleClose = () => setOpen(false);
 

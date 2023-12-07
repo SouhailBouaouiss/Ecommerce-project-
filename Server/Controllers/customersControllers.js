@@ -71,7 +71,7 @@ const getCustomersData = (req, res, next) => {
     .skip((page - 1) * 10)
     .limit(10)
     .then((data) => {
-      res.status(200).send({ data });
+      res.status(200).send({ message: "Customers fetched successfully", data });
       return;
     })
     .catch((err) => {
