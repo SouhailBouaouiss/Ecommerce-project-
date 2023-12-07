@@ -10,7 +10,7 @@ const createNewProduct = async (req, res, next) => {
   session.startTransaction();
 
   try {
-    const newProduct = await Products.create([req.body], { session });
+    const newProduct = await Products.create([req.product], { session });
     console.log("newproduct", newProduct);
 
     // Retrieve the product _id
@@ -38,7 +38,7 @@ const createNewProduct = async (req, res, next) => {
     session.commitTransaction();
     return res
       .status(200)
-      .send({ message: "Product created successfully", data: newProduct });
+      .send({ message: "Product created successfully", data: newProduct[0] });
   } catch (error) {
     // Reject the two operations in case of the failure of one of them
     await session.abortTransaction();

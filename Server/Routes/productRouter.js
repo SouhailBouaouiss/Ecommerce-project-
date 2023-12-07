@@ -24,6 +24,10 @@ const productRouter = express.Router();
 
 productRouter.post(
   "/",
+  (req, res, next) => {
+    console.log("Creating product", req.body);
+    next();
+  },
   verifyAuth,
   verifyRefreshToken,
   verifyManagerOrAdmin,

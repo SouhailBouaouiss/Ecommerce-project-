@@ -43,7 +43,7 @@ const productSchema = new Schema(
     discount_price: {
       type: Number,
     },
-    quatity: {
+    quantity: {
       type: Number,
       default: 0,
       required: true,

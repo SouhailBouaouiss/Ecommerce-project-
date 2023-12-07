@@ -1,7 +1,9 @@
 import { handleUpload } from "../upload/cloudinary.js";
 
 const postProduct = async (req, res, next) => {
-  console.log(req.file);
+  console.log("File ", req.file);
+  if (!req.file)
+    return res.status(422).send({ message: "No file is provided" });
   try {
     const b64 = Buffer.from(req.file.buffer).toString("base64");
     let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
@@ -16,7 +18,7 @@ const postProduct = async (req, res, next) => {
     return;
   } catch (error) {
     console.log(error);
-    res.send({
+    res.status(500).send({
       message: error.message,
     });
   }

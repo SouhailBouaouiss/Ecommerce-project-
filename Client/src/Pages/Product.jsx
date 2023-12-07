@@ -13,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 export default function Product() {
   //Creat a state for products
@@ -202,30 +203,32 @@ export default function Product() {
 
   // Handle adding a new product
 
-  const handleAddProduct = async (event) => {
-    // Access the input value using event.target.value
-    event.preventDefault();
-
-    axiosInstance.post("/v1/products").then((resp) => {
-      const data = resp.data.data;
-
-      setProducts((prev) => {
-        return [...prev, data];
-      });
-    });
-  };
-
   // Handle the select change
-  const [subcategoryName, setSubcategoryName] = React.useState("");
+  const [productImg, setProductImg] = React.useState({});
 
-  const handleSelectChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setSubcategoryName(
-      // On autofill we get a stringified value.
-      event.target.value
-    );
+  const handleAddProduct = (event) => {
+    // Access the input value using event.target.value
+    console.log("Values", getValues());
+    console.log("File", productImg);
+
+    axiosInstance
+      .post(
+        "/v1/products",
+        { ...getValues(), file: productImg },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+          origin: "http://localhost:5001",
+        }
+      )
+      .then((resp) => {
+        console.log(resp);
+        const data = resp.data.data;
+
+        setProducts((prev) => {
+          return [...prev, data];
+        });
+      });
   };
 
   // Select input style
@@ -256,7 +259,7 @@ export default function Product() {
 
   // Handle input change for adding new Product
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, getValues } = useForm();
   // This is the function that returns the toolUpBar
 
   const CustomToolbar = () => (
@@ -281,7 +284,7 @@ export default function Product() {
                   <TextField
                     fullWidth
                     label="Product Name"
-                    name="product_name"
+                    // name="product_name"
                     variant="outlined"
                     {...register("product_name")}
 
@@ -298,13 +301,13 @@ export default function Product() {
                       labelId="demo-multiple-name-label"
                       id="demo-multiple-name"
                       // multiple
-                      value={subcategoryName}
-                      onChange={handleSelectChange}
+                      {...register("subcategory_id")}
+
                       // input={<OutlinedInput label="Name" />}
                       // MenuProps={MenuProps}
                     >
                       {subcategories.map((elm) => (
-                        <MenuItem value={elm.subcategory_name} key={elm._id}>
+                        <MenuItem value={elm._id} key={elm._id}>
                           {elm.subcategory_name}
                         </MenuItem>
                       ))}
@@ -319,7 +322,11 @@ export default function Product() {
                     startIcon={<CloudUploadIcon />}
                   >
                     Upload file
-                    <VisuallyHiddenInput type="file" />
+                    <VisuallyHiddenInput
+                      //   value={productImg}
+                      onChange={({ target }) => setProductImg(target.files[0])}
+                      type="file"
+                    />
                   </Button>
                 </Grid>
 
@@ -348,9 +355,9 @@ export default function Product() {
                     fullWidth
                     label="Quantity"
                     type="number"
-                    name="quatity"
+                    name="quantity"
                     variant="outlined"
-                    {...register("quatity")}
+                    {...register("quantity")}
                     // Add any additional props or event handlers as needed
                   />
                 </Grid>
@@ -466,7 +473,7 @@ export default function Product() {
                   label="Quantity"
                   type="number"
                   value={productToEdit.quantity}
-                  name="quatity"
+                  name="quantity"
                   variant="outlined"
                   onChange={handleChange}
                   // Add any additional props or event handlers as needed

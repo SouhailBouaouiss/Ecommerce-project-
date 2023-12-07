@@ -34,13 +34,18 @@ app.use(
 );
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 import("./Config/passport.js");
+
+app.use((req, res, next) => {
+  if (req.path.includes("products")) console.log("How");
+  next();
+});
 
 app.use("/v1/users", usersRouter);
 app.use("/v1/categories", categoryRouter);
@@ -52,7 +57,12 @@ app.use("/v1/products", productRouter);
 app.use("/verify", verifyRouter);
 app.use("/v1/count", countRouter);
 connecting().then(() => {
-  Users.find().then((data) => console.log(data));
+  // Users.find().then((data) => console.log(data));
+});
+
+app.use((req, res, next) => {
+  console.log("No route found");
+  res.status(422).send({ message: "Bad request" });
 });
 
 app.use((err, req, res, next) => {
