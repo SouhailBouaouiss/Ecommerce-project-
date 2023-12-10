@@ -11,7 +11,7 @@ export const tableFields = [
 ];
 
 export const customerTableFields = [
-  { field: "id", headerName: "ID", width: 300 },
+  { field: "id", headerName: "ID", width: 250 },
   { field: "first_name", headerName: "first_name", width: 130 },
   { field: "last_name", headerName: "last_name", width: 130 },
   {
@@ -24,11 +24,11 @@ export const customerTableFields = [
     field: "last_login",
     headerName: "last_login",
 
-    width: 150,
+    width: 200,
   },
   {
     field: "status",
     headerName: "status",
-    width: 150,
+    width: 120,
   },
 ];

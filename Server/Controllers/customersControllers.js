@@ -129,12 +129,12 @@ const getOneCustomerData = (req, res, next) => {
 const updateCustomerData = (req, res, next) => {
   const { id } = req.params;
   const DataToUpdate = req.body;
-  Customers.findOneAndUpdate({ id }, DataToUpdate)
+  Customers.findOneAndUpdate({ id }, DataToUpdate, { new: true })
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: "invalid customer id" });
       }
-      res.status(200).send({ message: "customer updated successfully" });
+      res.status(200).send({ message: "customer updated successfully", data });
     })
     .catch((err) => {
       res.status(500).send({ message: " Internal Server Error", ...err });
