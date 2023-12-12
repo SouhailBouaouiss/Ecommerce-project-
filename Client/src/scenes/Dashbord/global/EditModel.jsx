@@ -42,12 +42,11 @@ export function EditModel({
       console.log("Elem", customerToEdit[elm]);
       return (
         <Grid key={elm + customerToEdit[elm]} item xs={12}>
-          <input type="text" />
-          <InputBase
+          <TextField
             key={elm + customerToEdit[elm]}
             fullWidth
             label={elm}
-            defaultValue={customerToEdit[elm]}
+            placeholder={customerToEdit[elm]}
             variant="outlined"
             {...register(elm)}
           />

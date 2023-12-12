@@ -18,43 +18,34 @@ const addOrder = (req, res, next) => {
 // List all orders
 
 const getAllOrders = (req, res, next) => {
-  const page = req.query || 1;
-  Order.find()
-    .populate({
-      path: "customer_id",
-      options: {
-        limit: 10,
-        skip: (page - 1) * 10,
-      },
-    })
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({ message: "No orders found", data: [] });
-        return;
-      }
-      res.status(200).send({ data });
-    });
+  const page = req.query.page || 1;
+  console.log("in");
+  Order.find().then((data) => {
+    console.log("orders", data);
+    if (!data) {
+      res.status(404).send({ message: "No orders found", data: [] });
+      return;
+    }
+    res.status(200).send({ data });
+  });
 };
 
 // Get a specific order using id
 
 const getOrderById = (req, res, next) => {
-  const { id } = req.body;
-  Order.findOne({ id })
-    .populate({
-      path: "customer_id",
-      options: {
-        select: "-pwd first-name last-name",
-      },
-    })
-    .populate(" order_items")
+  const { id } = req.params;
+  Order.findById(id)
+    .populate("customer_id", "-pwd")
+    .populate("order_items")
     .then((data) => {
+      console.log(data);
       if (!data) {
         res.status(404).send({ message: "No orders found", data: [] });
         return;
       }
-      res.status(200).send({ data });
-    });
+      res.status(200).send({ data, message: "Details fetched successfully" });
+    })
+    .catch((err) => console.log(err));
 };
 
 export { addOrder, getAllOrders, getOrderById };

@@ -45,12 +45,16 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
         </li>
         <li className="sidebar-list-item">
           <a href="" className="flex items-center gap-1">
+        
             <BsFillGrid3X3GapFill className="icon" /> <span>Categories</span>
+            
           </a>
         </li>
         <li className="sidebar-list-item">
           <a href="" className="flex items-center gap-1">
+          <NavLink to="/customer" className="flex items-center gap-1">
             <BsPeopleFill className="icon" /> <span>Customers</span>
+            </NavLink>
           </a>
         </li>
         <li className="sidebar-list-item">

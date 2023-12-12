@@ -3,8 +3,10 @@ import { axiosInstance } from "../api";
 import { toast } from "react-toastify";
 import DataTable from "../scenes/Dashbord/global/DataGrid";
 import { customerTableFields } from "../util";
-import { Button } from "@mui/material";
+import { Button, FormControlLabel, Switch, TextField } from "@mui/material";
 import { EditModel } from "../scenes/Dashbord/global/EditModel";
+import CustomToolbar from "../scenes/CustomToolbar";
+import { useForm } from "react-hook-form";
 
 function Customer() {
   // Logic part
@@ -128,6 +130,45 @@ function Customer() {
       });
   };
 
+  // THIS PART IS RELATED TO THE OPENING AND CLOSE OF THE MODEL OF ADD
+
+  const [openAdd, setOpenAdd] = useState(false);
+
+  // Handle close
+
+  const handleCloseAdd = () => setOpenAdd(false);
+
+  const handleOpenAdd = () => {
+    setOpenAdd(true);
+  };
+
+  // Handle add submit
+
+  const handleAddCustomer = () => {};
+
+  const { register, handleSubmit, setValue, getValues } = useForm();
+
+  const inputElements = (arr) => {
+    return arr.map((elm) => {
+      if (elm == "valid_account" || elm == "active") {
+        return (
+          <FormControlLabel
+            control={<Switch defaultChecked {...register(elm)} labe />}
+            label={elm}
+          />
+        );
+      }
+      return (
+        <TextField
+          fullWidth
+          label={elm}
+          // name="product_name"
+          variant="outlined"
+          {...register(elm)}
+        />
+      );
+    });
+  };
   // JSX part
   return (
     <div
@@ -139,6 +180,20 @@ function Customer() {
       }}
       className="mt-10 ms-10"
     >
+      <CustomToolbar
+        name={"Customer"}
+        arr={Customers}
+        fn={handleAddCustomer}
+        handleCloseAdd={handleCloseAdd}
+        handleOpenAdd={handleOpenAdd}
+        setOpenAdd={setOpenAdd}
+        openAdd={openAdd}
+        inputElements={inputElements}
+        register={register}
+        getValues={getValues}
+        handleSubmit={handleSubmit}
+        setValue={setValue}
+      ></CustomToolbar>
       <DataTable rows={rows} columns={columns} />
       <EditModel
         arr={rows}

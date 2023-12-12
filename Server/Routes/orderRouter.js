@@ -30,10 +30,10 @@ orderRouter.post(
 
 // List all orders
 
-orderRouter.get("/", verifyAuth, verifyManagerOrAdmin, getAllOrders);
+orderRouter.get("/", verifyAuth, verifyRefreshToken, verifyManagerOrAdmin, getAllOrders);
 
 // Get a specific order using id
 
-orderRouter.get("/:id", verifyAuth, verifyManagerOrAdmin, getOrderById);
+orderRouter.get("/:id", verifyAuth, verifyRefreshToken, verifyManagerOrAdmin, getOrderById);
 
 export { orderRouter };

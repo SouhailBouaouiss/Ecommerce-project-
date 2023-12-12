@@ -4,10 +4,6 @@ import { stringify, v4 as uuidv4 } from "uuid";
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
-  id: {
-    type: String,
-    default: uuidv4,
-  },
   customer_id: {
     type: mongoose.Types.ObjectId,
     ref: "customer",
