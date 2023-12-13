@@ -21,6 +21,10 @@ const orderSchema = new Schema({
     type: String,
     default: "open",
   },
+  id: {
+    type: String,
+    default: uuidv4(),
+  },
 });
 
 orderSchema.pre("save", function (next) {

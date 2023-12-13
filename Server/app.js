@@ -22,6 +22,8 @@ import { verifyRouter } from "./Routes/verifyRouter.js";
 import { orderRouter } from "./Routes/orderRouter.js";
 import { insertSubcategories } from "./fakeData/subcategoriesFakeData.js";
 import morgan from "morgan";
+import { insertOrders } from "./fakeData/orderFakeData.js";
+import { insertFakeProducts } from "./fakeData/productFakeData.js";
 
 dotenv.config();
 app.use(cookieParser());
@@ -50,9 +52,11 @@ app.use((req, res, next) => {
   next();
 });
 
-connecting().then(() => {
-  console.log("DB Connected");
-});
+connecting()
+  .then(() => {
+    console.log("DB Connected");
+  })
+  .catch();
 
 app.use("/v1/users", usersRouter);
 app.use("/v1/categories", categoryRouter);

@@ -1,7 +1,17 @@
-import { Box, Grid, Modal, Typography, colors } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Grid,
+  Modal,
+  Typography,
+  colors,
+} from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import { axiosInstance } from "../../../api";
 import { toast } from "react-toastify";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 function DetailsModel({ openDetails, handleCloseDetails, id, setId }) {
   const [details, setDetails] = useState([]);
@@ -32,6 +42,7 @@ function DetailsModel({ openDetails, handleCloseDetails, id, setId }) {
   const orderDetails = useMemo(() => {
     return keys.map((elm) => {
       let value = details[elm];
+      console.log(value);
       if (typeof value === "string") {
         return (
           <Grid item xs={12}>
@@ -44,18 +55,30 @@ function DetailsModel({ openDetails, handleCloseDetails, id, setId }) {
           </Grid>
         );
       } else if (Array.isArray(value)) {
-        return value.map((elem) => {
-          return object.keys(elem).map((item) => {
-            return (
-              <Grid item xs={12}>
-                <label></label>
-                <Typography variant="body2">
-                  <strong>{item}</strong> : {value[elem][item]}
-                </Typography>
-              </Grid>
-            );
-          });
-        });
+        return (
+          <>
+            <Accordion style={{ width: "100%" }}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>Products</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {value.map((elem) => {
+                  return (
+                    <Grid key={elem._id} item xs={12}>
+                      <Typography variant="body2">
+                        {elem.product_name}
+                      </Typography>
+                    </Grid>
+                  );
+                })}
+              </AccordionDetails>
+            </Accordion>
+          </>
+        );
       } else if (
         typeof value === "object" &&
         value !== null &&
@@ -66,7 +89,12 @@ function DetailsModel({ openDetails, handleCloseDetails, id, setId }) {
             <Typography marginTop={4} marginLeft={2}>
               <strong>Customer Details :</strong>
             </Typography>
-            <Box paddingLeft={5} marginBottom={2} marginTop={2}>
+            <Box
+              paddingLeft={5}
+              marginBottom={2}
+              marginTop={2}
+              overflow={"auto"}
+            >
               <Grid container>
                 {Object.keys(value).map((item) => {
                   return (
@@ -99,6 +127,8 @@ function DetailsModel({ openDetails, handleCloseDetails, id, setId }) {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 600,
+    height: "80vh",
+    overflowY: "auto",
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
