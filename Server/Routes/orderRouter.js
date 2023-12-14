@@ -13,6 +13,7 @@ import {
   addOrder,
   getAllOrders,
   getOrderById,
+  getOrdersByMounth,
 } from "../Controllers/orderControllers.js";
 
 const orderRouter = express.Router();
@@ -30,10 +31,32 @@ orderRouter.post(
 
 // List all orders
 
-orderRouter.get("/", verifyAuth, verifyRefreshToken, verifyManagerOrAdmin, getAllOrders);
+orderRouter.get(
+  "/",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyManagerOrAdmin,
+  getAllOrders
+);
+
+// Get orders sorted by the mount of their creation
+
+orderRouter.get(
+  "/ordersByMonth",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyManagerOrAdmin,
+  getOrdersByMounth
+);
 
 // Get a specific order using id
 
-orderRouter.get("/:id", verifyAuth, verifyRefreshToken, verifyManagerOrAdmin, getOrderById);
+orderRouter.get(
+  "/:id",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyManagerOrAdmin,
+  getOrderById
+);
 
 export { orderRouter };

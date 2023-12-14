@@ -55,6 +55,7 @@ app.use((req, res, next) => {
 connecting()
   .then(() => {
     console.log("DB Connected");
+    insertOrders(100);
   })
   .catch();
 

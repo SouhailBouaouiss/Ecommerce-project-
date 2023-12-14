@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   BsFillArchiveFill,
   BsFillGrid3X3GapFill,
@@ -23,44 +23,15 @@ import {
 import { axiosInstance } from "../api";
 
 function Home() {
-  const data = [
-    {
-      name: "Page A",
-      uv: 4000,
-
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-
-      amt: 2181,
-    },
-  ];
-
   const [statistics, setStatistics] = useState({
     products: null,
     custumers: null,
     categories: null,
   });
+
+  const [ordersCount, setOrdersCount] = useState([]);
+
+  // Retrieve product customer and categories count
 
   useEffect(() => {
     axiosInstance
@@ -80,6 +51,31 @@ function Home() {
         });
       });
   }, []);
+
+  // Retrieve orders count per mounth
+
+  useEffect(() => {
+    axiosInstance
+      .get("/v1/orders/ordersByMonth")
+      .then((resp) => {
+        const data = resp.data;
+        console.log(data);
+        setOrdersCount(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const graphData = useMemo(() => {
+    return ordersCount.map((elm) => {
+      return {
+        name: `${elm._id.month}/${elm._id.year}`,
+        Sales: elm.totalOrders,
+      };
+    });
+  }, [ordersCount]);
+  console.log(graphData);
 
   return (
     <main className="main-container">
@@ -151,7 +147,7 @@ function Home() {
           <BarChart
             width={100}
             height={300}
-            data={data}
+            data={graphData}
             margin={{
               top: 5,
               right: 30,
@@ -165,15 +161,15 @@ function Home() {
             <Tooltip />
             <Legend />
             {/* <Bar dataKey="pv" fill="#8884d8" /> */}
-            <Bar dataKey="uv" fill="#82ca9d" />
+            <Bar dataKey="Sales" fill="#82ca9d" />
           </BarChart>
         </ResponsiveContainer>
 
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            width={500}
-            height={300}
-            data={data}
+            width={700}
+            height={400}
+            data={graphData}
             margin={{
               top: 5,
               right: 30,
@@ -192,7 +188,7 @@ function Home() {
               stroke="#8884d8"
               activeDot={{ r: 8 }}
             /> */}
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+            <Line type="monotone" dataKey="Sales" stroke="#82ca9d" />
           </LineChart>
         </ResponsiveContainer>
       </div>

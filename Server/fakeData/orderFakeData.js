@@ -47,6 +47,8 @@ const guessOrderItems = async (maxNum) => {
   }
 };
 
+// guessOrderItems().then()
+
 // Generate a random status
 
 const guessStatus = () => {

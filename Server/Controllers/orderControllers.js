@@ -48,4 +48,42 @@ const getOrderById = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-export { addOrder, getAllOrders, getOrderById };
+// Get orders sorted by their creation mounth
+
+const getOrdersByMounth = async (req, res, next) => {
+  try {
+    const result = await Order.aggregate([
+      {
+        $project: {
+          year: { $year: "$order_date" },
+          month: { $month: "$order_date" },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: "$year",
+            month: "$month",
+          },
+          totalOrders: { $sum: 1 }, // Count the number of orders per month
+        },
+      },
+      {
+        $sort: {
+          "_id.year": 1,
+          "_id.month": 1,
+        },
+      },
+    ]);
+
+    res.send({
+      data: result,
+      message: "orders per mounth are retrieved succesfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export { addOrder, getAllOrders, getOrderById, getOrdersByMounth };

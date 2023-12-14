@@ -14,7 +14,7 @@ const orderSchema = new Schema({
     default: 0,
   },
   order_date: {
-    type: String,
+    type: Date,
     default: new Date().toDateString(),
   },
   status: {
