@@ -12,6 +12,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { axiosInstance } from "../../../api";
 import { toast } from "react-toastify";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import OrderDetails from "./OrderDetails";
 
 function DetailsModel({ openDetails, handleCloseDetails, id, setId }) {
   const [details, setDetails] = useState([]);
@@ -37,131 +38,130 @@ function DetailsModel({ openDetails, handleCloseDetails, id, setId }) {
   }, [id]);
   console.log(details);
 
-  const keys = Object.keys(details);
+  // const orderDetails = useMemo(() => {
+  //   const keys = Object.keys(details);
+  //   return keys.map((elm) => {
+  //     let value = details[elm];
+  //     console.log(value);
+  //     if (typeof value === "string") {
+  //       return (
+  //         <Grid item xs={12} marginLeft={2}>
+  //           <label>
+  //             <strong>{elm} :</strong>
+  //           </label>
+  //           <Typography variant="body2" display={"inline"} marginLeft={3}>
+  //             {String(value)}
+  //           </Typography>
+  //         </Grid>
+  //       );
+  //     } else if (Array.isArray(value)) {
+  //       return (
+  //         <>
+  //           <Grid item xs={12}>
+  //             <Accordion style={{ width: "100%", color: "#9e9ea4" }}>
+  //               <AccordionSummary
+  //                 expandIcon={<ExpandMoreIcon />}
+  //                 aria-controls="panel1a-content"
+  //                 id="panel1a-header"
+  //               >
+  //                 <Typography>
+  //                   <label>
+  //                     <strong>Products</strong>
+  //                   </label>
+  //                 </Typography>
+  //               </AccordionSummary>
+  //               <AccordionDetails>
+  //                 {value.map((elem) => {
+  //                   return (
+  //                     <Grid
+  //                       key={elem._id}
+  //                       item
+  //                       xs={12}
+  //                       display={"flex"}
+  //                       justifyContent={"space-between"}
+  //                       gap={5}
+  //                       width={"80%"}
+  //                     >
+  //                       <Typography variant="body2">
+  //                         {elem.product_name} :
+  //                       </Typography>
+  //                       <Typography variant="body2">
+  //                         <strong>{elem.price} MAD</strong>
+  //                       </Typography>
+  //                     </Grid>
+  //                   );
+  //                 })}
+  //               </AccordionDetails>
+  //             </Accordion>
+  //           </Grid>
+  //           <Grid item xs={12} marginLeft={2}>
+  //             <strong>Total price :</strong>
+  //             <Typography variant="body2" display={"inline"} marginLeft={3}>
+  //               {value.reduce((acc, elem) => acc + elem.price, 0)} MAD
+  //             </Typography>
+  //           </Grid>
+  //         </>
+  //       );
+  //     } else if (
+  //       typeof value === "object" &&
+  //       value !== null &&
+  //       value.constructor === Object
+  //     ) {
+  //       return (
+  //         <>
+  //           <Grid item xs={12}>
+  //             <Accordion style={{ width: "100%", color: "#9e9ea4" }}>
+  //               <AccordionSummary
+  //                 expandIcon={<ExpandMoreIcon />}
+  //                 aria-controls="panel1a-content"
+  //                 id="panel1a-header"
+  //               >
+  //                 <Typography>
+  //                   <label>
+  //                     <strong>Customer Details :</strong>
+  //                   </label>
+  //                 </Typography>
+  //               </AccordionSummary>
+  //               <AccordionDetails>
+  //                 <Grid container>
+  //                   {Object.keys(value).map((item) => {
+  //                     return (
+  //                       <Grid
+  //                         item
+  //                         xs={12}
+  //                         display={"flex"}
+  //                         justifyContent={"flex-start"}
+  //                         gap={1}
+  //                       >
+  //                         <Typography
+  //                           variant="body2"
+  //                           display={"inline"}
+  //                           marginLeft={1}
+  //                         >
+  //                           {" "}
+  //                           <label>{item} :</label>
+  //                         </Typography>
 
-  const orderDetails = useMemo(() => {
-    return keys.map((elm) => {
-      let value = details[elm];
-      console.log(value);
-      if (typeof value === "string") {
-        return (
-          <Grid item xs={12} marginLeft={2}>
-            <label>
-              <strong>{elm} :</strong>
-            </label>
-            <Typography variant="body2" display={"inline"} marginLeft={3}>
-              {String(value)}
-            </Typography>
-          </Grid>
-        );
-      } else if (Array.isArray(value)) {
-        return (
-          <>
-            <Grid item xs={12}>
-              <Accordion style={{ width: "100%", color: "#9e9ea4" }}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>
-                    <label>
-                      <strong>Products</strong>
-                    </label>
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {value.map((elem) => {
-                    return (
-                      <Grid
-                        key={elem._id}
-                        item
-                        xs={12}
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        gap={5}
-                        width={"80%"}
-                      >
-                        <Typography variant="body2">
-                          {elem.product_name} :
-                        </Typography>
-                        <Typography variant="body2">
-                          <strong>{elem.price} MAD</strong>
-                        </Typography>
-                      </Grid>
-                    );
-                  })}
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
-            <Grid item xs={12} marginLeft={2}>
-              <strong>Total price :</strong>
-              <Typography variant="body2" display={"inline"} marginLeft={3}>
-                {value.reduce((acc, elem) => acc + elem.price, 0)} MAD
-              </Typography>
-            </Grid>
-          </>
-        );
-      } else if (
-        typeof value === "object" &&
-        value !== null &&
-        value.constructor === Object
-      ) {
-        return (
-          <>
-            <Grid item xs={12}>
-              <Accordion style={{ width: "100%", color: "#9e9ea4" }}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>
-                    <label>
-                      <strong>Customer Details :</strong>
-                    </label>
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Grid container>
-                    {Object.keys(value).map((item) => {
-                      return (
-                        <Grid
-                          item
-                          xs={12}
-                          display={"flex"}
-                          justifyContent={"flex-start"}
-                          gap={1}
-                        >
-                          <Typography
-                            variant="body2"
-                            display={"inline"}
-                            marginLeft={1}
-                          >
-                            {" "}
-                            <label>{item} :</label>
-                          </Typography>
-
-                          <Typography
-                            variant="body2"
-                            display={"inline"}
-                            marginLeft={1}
-                          >
-                            {String(value[item])}
-                          </Typography>
-                        </Grid>
-                      );
-                    })}
-                  </Grid>
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
-          </>
-        );
-      }
-      return "";
-    });
-  }, [details]);
+  //                         <Typography
+  //                           variant="body2"
+  //                           display={"inline"}
+  //                           marginLeft={1}
+  //                         >
+  //                           {String(value[item])}
+  //                         </Typography>
+  //                       </Grid>
+  //                     );
+  //                   })}
+  //                 </Grid>
+  //               </AccordionDetails>
+  //             </Accordion>
+  //           </Grid>
+  //         </>
+  //       );
+  //     }
+  //     return "";
+  //   });
+  // }, [details]);
 
   const style = {
     position: "absolute",
@@ -185,7 +185,7 @@ function DetailsModel({ openDetails, handleCloseDetails, id, setId }) {
     >
       <Box sx={style}>
         <Grid container spacing={2} gap={3}>
-          {orderDetails}
+          <OrderDetails details={details} />
         </Grid>
       </Box>
     </Modal>

@@ -58,7 +58,7 @@ function Home() {
     axiosInstance
       .get("/v1/orders/ordersByMonth")
       .then((resp) => {
-        const data = resp.data;
+        const data = resp.data.data;
         console.log(data);
         setOrdersCount(data);
       })
@@ -68,6 +68,7 @@ function Home() {
   }, []);
 
   const graphData = useMemo(() => {
+    console.log(ordersCount);
     return ordersCount.map((elm) => {
       return {
         name: `${elm._id.month}/${elm._id.year}`,
