@@ -12,6 +12,8 @@ export function EditModel({
   handleClose,
   setCustomerToEdit,
   customerToEdit,
+  register,
+  handleSubmit,
 }) {
   const style = {
     position: "absolute",
@@ -24,8 +26,6 @@ export function EditModel({
     boxShadow: 24,
     p: 4,
   };
-
-  const { register, getValue, handleSubmit } = useForm();
 
   // useMemo to get the keys of the rows array
 
@@ -40,18 +40,21 @@ export function EditModel({
   const renderInputs = useMemo(() => {
     return ressourceProperties.map((elm) => {
       console.log("Elem", customerToEdit[elm]);
-      return (
-        <Grid key={elm + customerToEdit[elm]} item xs={12}>
-          <TextField
-            key={elm + customerToEdit[elm]}
-            fullWidth
-            label={elm}
-            placeholder={customerToEdit[elm]}
-            variant="outlined"
-            {...register(elm)}
-          />
-        </Grid>
-      );
+      if (elm !== "id" && elm !== "last_login") {
+        return (
+          <Grid key={elm + customerToEdit[elm]} item xs={12}>
+            <TextField
+              key={elm + customerToEdit[elm]}
+              fullWidth
+              label={elm}
+              placeholder={customerToEdit[elm]}
+              variant="outlined"
+              {...register(elm)}
+            />
+          </Grid>
+        );
+      }
+      return;
     });
   }, [customerToEdit, ressourceProperties]);
 

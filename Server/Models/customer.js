@@ -8,11 +8,11 @@ const customerschema = new Schema({
     type: String,
     default: v4(),
   },
-  customer_first_name: {
+  first_name: {
     type: String,
     required: true,
   },
-  customer_last_name: {
+  last_name: {
     type: String,
     required: true,
   },

@@ -43,23 +43,19 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
             <BsFillArchiveFill className="icon" /> <span>Products</span>
           </NavLink>
         </li>
+
         <li className="sidebar-list-item">
           <a href="" className="flex items-center gap-1">
-        
-            <BsFillGrid3X3GapFill className="icon" /> <span>Categories</span>
-            
-          </a>
-        </li>
-        <li className="sidebar-list-item">
-          <a href="" className="flex items-center gap-1">
-          <NavLink to="/customer" className="flex items-center gap-1">
-            <BsPeopleFill className="icon" /> <span>Customers</span>
+            <NavLink to="/customer" className="flex items-center gap-1">
+              <BsPeopleFill className="icon" /> <span>Customers</span>
             </NavLink>
           </a>
         </li>
         <li className="sidebar-list-item">
           <a href="" className="flex items-center gap-1">
-            <BsListCheck className="icon" /> <span>Inventory</span>
+            <NavLink to="/order" className="flex items-center gap-1">
+              <BsListCheck className="icon" /> <span>Orders</span>
+            </NavLink>
           </a>
         </li>
         <li className="sidebar-list-item">

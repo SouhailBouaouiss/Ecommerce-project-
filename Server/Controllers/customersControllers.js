@@ -129,7 +129,8 @@ const getOneCustomerData = (req, res, next) => {
 const updateCustomerData = (req, res, next) => {
   const { id } = req.params;
   const DataToUpdate = req.body;
-  Customers.findOneAndUpdate({ id }, DataToUpdate, { new: true })
+  console.log(DataToUpdate);
+  Customers.findOneAndUpdate({ _id: id }, DataToUpdate, { new: true })
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: "invalid customer id" });

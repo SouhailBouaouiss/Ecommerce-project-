@@ -14,12 +14,14 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import DeleteModel from "../scenes/Dashbord/global/DeleteModel";
 
 export default function Product() {
   //Creat a state for products
 
   const [products, setProducts] = React.useState([]);
 
+  const [openDelete, setOpenDelete] = React.useState(false);
   // Creat a state for the passing product to Edit in the modal
 
   const [productToEdit, setProductToEdit] = React.useState({
@@ -134,12 +136,20 @@ export default function Product() {
       });
     setOpen(false);
   };
+  const handleDeleteClick = (row) => {
+    setOpenDelete(true);
+    setProductToEdit(row);
+  };
 
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+    setProductToEdit({});
+  };
   // Haandle delete click
 
-  const handleDeleteClick = (row) => {
-    const productToDeleteId = row.id;
-    console.log(row.id);
+  const handleDelete = () => {
+    const productToDeleteId = productToEdit.id;
+
     axiosInstance
       .delete(`/v1/products/${productToDeleteId}`)
       .then((resp) => {
@@ -153,6 +163,8 @@ export default function Product() {
             return elm._id !== productToDeleteId;
           });
         });
+        setOpenDelete(false);
+        setProductToEdit({});
       })
       .catch((error) => {
         toast.error(error?.response?.data?.message ?? "Something went wrong");
@@ -538,6 +550,11 @@ export default function Product() {
         components={{
           Toolbar: CustomToolbar,
         }}
+      />
+      <DeleteModel
+        fn={handleDelete}
+        openDelete={openDelete}
+        handleCloseDelete={handleCloseDelete}
       />
     </div>
   );

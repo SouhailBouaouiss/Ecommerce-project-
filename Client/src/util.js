@@ -34,9 +34,9 @@ export const customerTableFields = [
 ];
 export const orderTableFields = [
   { field: "id", headerName: "ID", width: 250 },
-  { field: "customer_id", headerName: "customer_id", width: 130 },
+  { field: "customer_id", headerName: "customer_id", width: 250 },
   { field: "order_date", headerName: "order_date", width: 130 },
-  
+
   {
     field: "status",
     headerName: "status",

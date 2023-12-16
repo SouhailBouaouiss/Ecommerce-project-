@@ -7,6 +7,7 @@ import { Button, FormControlLabel, Switch, TextField } from "@mui/material";
 import { EditModel } from "../scenes/Dashbord/global/EditModel";
 import CustomToolbar from "../scenes/CustomToolbar";
 import { useForm } from "react-hook-form";
+import DeleteModel from "../scenes/Dashbord/global/DeleteModel";
 
 function Customer() {
   // Logic part
@@ -14,6 +15,17 @@ function Customer() {
   // First I am defining the state where I am going to stock the customers data
 
   const [Customers, setCustomers] = useState([]);
+
+  // useState of delete model open
+
+  const [openDelete, setOpenDelete] = useState(false);
+  // useState of the current customer to Edit
+
+  const [customerToEdit, setCustomerToEdit] = useState({});
+
+  const [openAdd, setOpenAdd] = useState(false);
+  // userForm hook
+  const { register, handleSubmit, setValue, getValues } = useForm();
 
   // Second I am defining the useEffect that is going to retrieve data from the BckEnd
 
@@ -89,25 +101,61 @@ function Customer() {
 
   // Handle close
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setCustomerToEdit({});
+  };
 
   const handleOpen = (row) => {
+    setCustomerToEdit(row);
     setOpen(true);
+  };
+
+  const handleDeleteClick = (row) => {
+    setOpenDelete(true);
     setCustomerToEdit(row);
   };
 
-  // THIS PART IS RELATED TO THE CUSTOMER DATA EDIT LOGIC
-  //
-  //
-  // useState of the current customer to Edit
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+    setCustomerToEdit({});
+  };
 
-  const [customerToEdit, setCustomerToEdit] = useState({});
+  const handleDeleteConfirmation = () => {
+    axiosInstance.delete(`/v1/customers/${customerToEdit.id}`).then((resp) => {
+      const message = resp.data.message;
+      console.log(message);
+      console.log(resp);
+      toast.warning(message);
+      setCustomers((prev) => {
+        return prev.filter((elm) => {
+          return elm._id !== customerToEdit.id;
+        });
+      });
+      setOpenDelete(false);
+    });
+  };
 
-  // HandleEdit
+  const filterValuesToEdit = (obj) => {
+    const result = {};
+    for (const key in obj) {
+      if (
+        obj.hasOwnProperty(key) &&
+        typeof obj[key] === "string" &&
+        obj[key].trim() !== ""
+      ) {
+        result[key] = obj[key];
+      }
+    }
+    return result;
+  };
 
   const handleEdit = () => {
     axiosInstance
-      .put("/v1/customers", customerToEdit)
+      .put(
+        `/v1/customers/${customerToEdit.id}`,
+        filterValuesToEdit(getValues())
+      )
       .then((resp) => {
         const data = resp.data.data;
 
@@ -123,6 +171,8 @@ function Customer() {
             }
           });
         });
+        setCustomerToEdit({});
+        setOpen(false);
       })
       .catch((error) => {
         toast.error(error?.response?.data?.message ?? "Something went wrong");
@@ -131,8 +181,6 @@ function Customer() {
   };
 
   // THIS PART IS RELATED TO THE OPENING AND CLOSE OF THE MODEL OF ADD
-
-  const [openAdd, setOpenAdd] = useState(false);
 
   // Handle close
 
@@ -145,8 +193,6 @@ function Customer() {
   // Handle add submit
 
   const handleAddCustomer = () => {};
-
-  const { register, handleSubmit, setValue, getValues } = useForm();
 
   const inputElements = (arr) => {
     return arr.map((elm) => {
@@ -173,8 +219,6 @@ function Customer() {
   return (
     <div
       style={{
-        height: 400,
-        width: "93%",
         backgroundColor: "#0b2f3a94",
         color: "wheat",
       }}
@@ -203,6 +247,13 @@ function Customer() {
         handleClose={handleClose}
         setCustomerToEdit={setCustomerToEdit}
         customerToEdit={customerToEdit}
+        register={register}
+        handleSubmit={handleSubmit}
+      />
+      <DeleteModel
+        fn={handleDeleteConfirmation}
+        openDelete={openDelete}
+        handleCloseDelete={handleCloseDelete}
       />
     </div>
   );

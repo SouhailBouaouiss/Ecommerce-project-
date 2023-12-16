@@ -99,7 +99,7 @@ function Home() {
           </div>
 
           <strong>
-            <h1 style={{ color: "#FFFF00" }}>{statistics.products}</h1>
+            <h1 style={{ color: "#ded55b" }}>{statistics.products}</h1>
           </strong>
         </div>
         <div className="card" style={{ height: 120 }}>
@@ -113,7 +113,7 @@ function Home() {
             />
           </div>
           <strong>
-            <h1 style={{ color: "#FFFF00" }}>{statistics.categories}</h1>
+            <h1 style={{ color: "#ded55b" }}>{statistics.categories}</h1>
           </strong>
         </div>
         <div className="card" style={{ height: 120 }}>
@@ -124,13 +124,13 @@ function Home() {
             <BsPeopleFill className="card_icon" style={{ color: "#01DFD7" }} />
           </div>
           <strong>
-            <h1 style={{ color: "#FFFF00" }}>{statistics.customers}</h1>
+            <h1 style={{ color: "#ded55b" }}>{statistics.customers}</h1>
           </strong>
         </div>
         <div className="card" style={{ height: 120 }}>
           <div className="card-inner">
             <strong>
-              <h3 style={{ color: "#01DFD7" }}>ALERTS</h3>
+              <h3 style={{ color: "#01DFD7" }}>ORDERS</h3>
             </strong>
             <BsFillBellFill
               className="card_icon"
@@ -138,7 +138,7 @@ function Home() {
             />
           </div>
           <strong>
-            <h1 style={{ color: "#FFFF00" }}>300</h1>
+            <h1 style={{ color: "#ded55b" }}>{statistics.orders}</h1>
           </strong>
         </div>
       </div>
@@ -162,7 +162,7 @@ function Home() {
             <Tooltip />
             <Legend />
             {/* <Bar dataKey="pv" fill="#8884d8" /> */}
-            <Bar dataKey="Sales" fill="#82ca9d" />
+            <Bar dataKey="Sales" fill="#8eca82" />
           </BarChart>
         </ResponsiveContainer>
 
@@ -189,7 +189,7 @@ function Home() {
               stroke="#8884d8"
               activeDot={{ r: 8 }}
             /> */}
-            <Line type="monotone" dataKey="Sales" stroke="#82ca9d" />
+            <Line type="monotone" dataKey="Sales" stroke="#8eca82" />
           </LineChart>
         </ResponsiveContainer>
       </div>

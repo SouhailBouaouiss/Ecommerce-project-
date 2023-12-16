@@ -6,6 +6,7 @@ import { axiosInstance } from "../api";
 import { Button } from "@mui/material";
 import { EditModel } from "../scenes/Dashbord/global/EditModel";
 import DetailsModel from "../scenes/Dashbord/global/DetailsModel";
+import { useForm } from "react-hook-form";
 
 function Order() {
   // Logic part
@@ -13,6 +14,12 @@ function Order() {
   // First I am defining the state where I am going to stock the orders data
 
   const [orders, setOrders] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [orderToEdit, setOrderToEdit] = useState({});
+  const [id, setId] = useState("");
+  const [openDetails, setOpenDetails] = useState(false);
+
+  const { register, handleSubmit, setValue, getValues } = useForm();
 
   // Second I am defining the useEffect that is going to retrieve data from the BckEnd
 
@@ -88,27 +95,9 @@ function Order() {
         </div>
       ),
     },
-
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      width: 150,
-      renderCell: ({ row, field }) => (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleDeleteClick(row)}
-        >
-          Action
-        </Button>
-      ),
-    },
   ];
 
   // THIS PART IS RELATED TO THE OPENING AND CLOSE OF THE MODEL OF EDIT
-
-  const [open, setOpen] = useState(false);
 
   // Handle close
 
@@ -119,13 +108,10 @@ function Order() {
     setOrderToEdit(row);
   };
 
-  const [orderToEdit, setOrderToEdit] = useState({});
   const handleEdit = () => {};
 
   // This part is related to the detail model logic
 
-  const [openDetails, setOpenDetails] = useState(false);
-  const [id, setId] = useState("");
   const handleOpenDetails = (row) => {
     setOpenDetails(true);
     setId(row.id);
@@ -153,6 +139,8 @@ function Order() {
         handleClose={handleClose}
         setCustomerToEdit={setOrderToEdit}
         customerToEdit={orderToEdit}
+        register={register}
+        handleSubmit={handleSubmit}
       />
       <DetailsModel
         id={id}

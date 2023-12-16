@@ -52,9 +52,9 @@ function PrivateRouteAccess() {
     return (
       <>
         <Header />
-        <div className="flex">
+        <div className="flex" style={{ height: "100%" }}>
           <Sidebar />
-          <div className="w-full">
+          <div className="w-full mt-10 ms-10">
             <Outlet />
           </div>
         </div>

@@ -10,6 +10,7 @@ import {
   verifyAdmin,
   verifyManagerOrAdmin,
   verifyCustomer,
+  verifyRefreshToken,
 } from "../Middelwares/authMiddelware.js";
 
 import {
@@ -77,7 +78,13 @@ customerRouter.post(
 customerRouter.get("/validate", validateEmail);
 
 //Get customers data
-customerRouter.get("/", verifyAuth, verifyManagerOrAdmin, getCustomersData);
+customerRouter.get(
+  "/",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyManagerOrAdmin,
+  getCustomersData
+);
 
 // Get a customer based on search query value
 customerRouter.get(
@@ -88,12 +95,19 @@ customerRouter.get(
 );
 
 // get the customer's profile
-customerRouter.get("/profile", verifyAuth, verifyCustomer, getCustomerData); // controller
+customerRouter.get(
+  "/profile",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyCustomer,
+  getCustomerData
+); // controller
 
 // Get a specific customer data
 customerRouter.get(
   "/:id",
   verifyAuth,
+  verifyRefreshToken,
   verifyManagerOrAdmin,
   getOneCustomerData
 );
@@ -102,17 +116,25 @@ customerRouter.get(
 customerRouter.put(
   "/:id",
   verifyAuth,
+  verifyRefreshToken,
   verifyManagerOrAdmin,
   updateCustomerData
 );
 
 // Delete a customer document
-customerRouter.delete("/:id", verifyAuth, verifyManagerOrAdmin, deleteCustomer);
+customerRouter.delete(
+  "/:id",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyManagerOrAdmin,
+  deleteCustomer
+);
 
 // update the cutomers data
 customerRouter.patch(
   "/profile/update",
   verifyAuth,
+  verifyRefreshToken,
   verifyCustomer,
   updateCustomerDataByCustomer
 );
