@@ -231,6 +231,8 @@ export default function Product() {
       .then((resp) => {
         console.log(resp);
         const data = resp.data.data;
+        console.log(resp.data);
+        toast.success();
 
         setProducts((prev) => {
           return [...prev, data];
