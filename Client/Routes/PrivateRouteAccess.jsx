@@ -10,31 +10,26 @@ import { axiosInstance } from "../src/api";
 function PrivateRouteAccess() {
   console.log("Private route");
   // Import the user context
-  const user = useContext(UserContext);
+  const user = useContext(UserContext); // { user: { isConnected: false, data: null }, setUser}
 
   // Config the useNavigate
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // From React-Router-DOM
   const { isConnected } = user.user;
 
   useEffect(() => {
     console.log(isConnected);
 
     if (isConnected == false) {
-      const access_token = localStorage.getItem("access_token");
-      const refresh_token = localStorage.getItem("refresh_token");
-
       axiosInstance
-        .post("/verify", { refresh_token })
+        .post("/verify")
         .then((resp) => {
+          console.log("Resp",resp);
           const data = resp.data;
 
           user.setUser({
             isConnected: true,
-            data: {
-              ...data.user,
-              token: data.access_token,
-            },
+            data: data.user
           });
 
           toast.success(data.message);
@@ -43,7 +38,7 @@ function PrivateRouteAccess() {
         .catch((error) => {
           console.log(error);
           toast.error(error);
-          return navigate("/");
+          navigate("/");
         });
     }
   }, [isConnected]);
@@ -61,6 +56,7 @@ function PrivateRouteAccess() {
       </>
     );
   }
+  return "";
 }
 
 export default PrivateRouteAccess;

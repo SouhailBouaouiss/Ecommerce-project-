@@ -77,17 +77,30 @@ usersRouter.get(
 );
 // Get a users based on search query value
 
-usersRouter.get("/search", verifyAuth, verifyManagerOrAdmin, getUserSearch);
+usersRouter.get(
+  "/search",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyManagerOrAdmin,
+  getUserSearch
+);
 
 // Get a specific user data
 
-usersRouter.get("/:id", verifyAuth, verifyManagerOrAdmin, getOneUserData);
+usersRouter.get(
+  "/:id",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyManagerOrAdmin,
+  getOneUserData
+);
 
 // Update a user document
 
 usersRouter.put(
   "/:id",
   verifyAuth,
+  verifyRefreshToken,
   verifyAdmin,
   validate
     .body("email")
@@ -105,6 +118,12 @@ usersRouter.put(
 
 // Delete a user document
 
-usersRouter.delete("/:id", verifyAuth, verifyAdmin, deleteUser);
+usersRouter.delete(
+  "/:id",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyAdmin,
+  deleteUser
+);
 
 export { usersRouter };

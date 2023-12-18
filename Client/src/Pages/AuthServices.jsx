@@ -66,16 +66,11 @@ function AuthServices() {
         .then((resp) => {
           const data = resp.data;
 
-          localStorage.setItem("access_token", data.access_token);
-          localStorage.setItem("refresh_token", data.refresh_token);
-
           // Handle the case of auth success
+          // Context
           user.setUser({
             isConnected: true,
-            data: {
-              ...data.user,
-              token: data.access_token,
-            },
+            data: data.user
           });
 
           toast.success(data.message);

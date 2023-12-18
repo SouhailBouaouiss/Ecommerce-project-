@@ -29,17 +29,14 @@ export const customerTableFields = [
   {
     field: "status",
     headerName: "status",
-    width: 120,
+    width: 200,
   },
 ];
-export const orderTableFields = [
-  { field: "id", headerName: "ID", width: 250 },
-  { field: "customer_id", headerName: "customer_id", width: 250 },
-  { field: "order_date", headerName: "order_date", width: 130 },
 
-  {
-    field: "status",
-    headerName: "status",
-    width: 120,
-  },
+export const userTableFields = [
+  { field: "id", headerName: "ID", width: 300 },
+  { field: "first_name", headerName: "First Name", width: 130 },
+  { field: "last_name", headerName: "Last Name", width: 130 },
+  { field: "role", headerName: "Role", with: 130 },
+  { field: "creation_date", headerName: "Date of Registration", with: 250 },
 ];

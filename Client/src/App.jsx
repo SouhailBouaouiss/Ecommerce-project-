@@ -24,9 +24,11 @@ function App() {
               ))}
             </Route>
 
+
             {PublicRoutes.map(({ id, path, element }) => (
               <Route key={id} element={element} path={path}></Route>
             ))}
+
           </Routes>
         </UserContext.Provider>
       </BrowserRouter>

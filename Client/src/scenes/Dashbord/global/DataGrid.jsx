@@ -3,17 +3,18 @@ import { DataGrid } from "@mui/x-data-grid";
 
 export default function DataTable({ rows, columns }) {
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 600, width: "99%", marginLeft: 10, marginTop: 20 }}>
       <DataGrid
         rows={rows}
         columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
+        // initialState={{
+        //   pagination: {
+        //     paginationModel: { page: 0, pageSize: 5 },
+        //   },
+        // }}
+        // pageSizeOptions={[5, 10]}
+        // checkboxSelection
+        pagination={false}
       />
     </div>
   );

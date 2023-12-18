@@ -64,9 +64,8 @@ const creatUser = (req, res, next) => {
 const getUsersData = (req, res, next) => {
   const page = req.query.page || 1;
   Users.find({})
-    .select("-pwd")
-    .skip((page - 1) * 10)
-    .limit(10)
+    // .skip((page - 1) * 10)
+    // .limit(10)
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: "No user found" });
@@ -83,9 +82,10 @@ const getUsersData = (req, res, next) => {
 // Retrieve specific user data
 
 const getOneUserData = (req, res, next) => {
+  console.log("ins");
   const { id } = req.params;
-  Users.findOne({ id })
-    .select("-pwd")
+  console.log(id);
+  Users.findOne({ _id: id })
     .then((data) => {
       if (!data) {
         return res
@@ -93,10 +93,10 @@ const getOneUserData = (req, res, next) => {
           .send({ message: "user not found ohhh aahhahaha ohhhhh" });
       }
 
-      res.status(200).send({ data });
+      return res.status(200).send({ data });
     })
     .catch((err) => {
-      res.status(500).send({ message: " Internal Server Error", ...err });
+      res.status(500).send({ message: " Internal Server Error2", ...err });
       return;
     });
 };
@@ -133,12 +133,13 @@ const getUserSearch = (req, res, next) => {
 const updateUserData = (req, res, next) => {
   const { id } = req.params;
   const DataToUpdate = req.body;
-  Users.findOneAndUpdate({ id }, { DataToUpdate })
+  console.log("id", id);
+  Users.findOneAndUpdate({ _id: id }, DataToUpdate, { new: true })
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: "invalid user id" });
       }
-      res.status(200).send({ message: "user updated successfully" });
+      res.status(200).send({ message: "user updated successfully", data });
     })
     .catch((err) => {
       res.status(500).send({ message: " Internal Server Error", ...err });
@@ -149,7 +150,8 @@ const updateUserData = (req, res, next) => {
 
 const deleteUser = (req, res, next) => {
   const { id } = req.params;
-  Users.deleteOne({ id })
+  console.log("Id", id);
+  Users.findByIdAndDelete(id)
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: "invalid user id" });

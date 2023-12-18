@@ -47,10 +47,11 @@ app.use(passport.session());
 
 import("./Config/passport.js");
 
-app.use((req, res, next) => {
-  if (req.path.includes("products")) console.log("How");
-  next();
-});
+connecting()
+  .then(() => {
+    console.log("DB Connected");
+  })
+  .catch();
 
 connecting()
   .then(() => {
@@ -67,6 +68,9 @@ app.use("/v1/customers", customerRouter);
 app.use("/v1/products", productRouter);
 app.use("/verify", verifyRouter);
 app.use("/v1/count", countRouter);
+connecting().then(() => {
+  console.log("DB Connected");
+});
 
 app.use((req, res, next) => {
   console.log("No route found");
