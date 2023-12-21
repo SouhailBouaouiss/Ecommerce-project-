@@ -53,7 +53,7 @@ const creatUser = (req, res, next) => {
     .save()
     .then((user) => {
       req.userData = user;
-      res.status(201).send({ message: "user created successfully" });
+      // res.status(201).send({ message: "user created successfully" }); //
       return next();
     })
     .catch((err) => res.status(400).send(err));

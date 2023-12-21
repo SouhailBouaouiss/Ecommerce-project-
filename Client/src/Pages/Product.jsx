@@ -433,7 +433,7 @@ export default function Product() {
   // Row Grid table config
   return (
     <div
-      style={{ height: 400, width: "93%", backgroundColor: "#0b2f3a94" }}
+      style={{ width: "93%", backgroundColor: "#0b2f3a94" }}
       className="mt-10 ms-10"
     >
       <Modal

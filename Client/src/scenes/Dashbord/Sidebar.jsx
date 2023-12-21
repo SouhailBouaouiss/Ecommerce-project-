@@ -16,7 +16,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
     <aside
       id="sidebar"
       className={openSidebarToggle ? "sidebar-responsive" : ""}
-      style={{ width: 260, backgroundColor: "#0b2f3a94" }}
+      style={{ width: 260, backgroundColor: "#191c24" }}
     >
       <div className="sidebar-title flex items-center">
         <div className="sidebar-brand flex">
@@ -30,43 +30,34 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
       <ul className="sidebar-list">
         <li className="sidebar-list-item">
           <NavLink to={"/home"} href="" className="flex items-center gap-1">
-            <BsGrid1X2Fill className="icon" /> <span>Dashboard</span>
+            <BsGrid1X2Fill className="icon" style={{ color: "#8f5fe8" }} />{" "}
+            <span>Dashboard</span>
           </NavLink>
         </li>
         <li className="sidebar-list-item">
           <NavLink to={"/user"} href="" className="flex items-center gap-1">
-            <BsGrid1X2Fill className="icon" /> <span>Users</span>
+            <BsGrid1X2Fill className="icon" style={{ color: "orange" }} />{" "}
+            <span>Users</span>
           </NavLink>
         </li>
         <li className="sidebar-list-item">
           <NavLink to="/product" className="flex items-center gap-1">
-            <BsFillArchiveFill className="icon" /> <span>Products</span>
+            <BsFillArchiveFill className="icon" style={{ color: "#0090e7" }} />{" "}
+            <span>Products</span>
           </NavLink>
         </li>
 
         <li className="sidebar-list-item">
-          <a href="" className="flex items-center gap-1">
-            <NavLink to="/customer" className="flex items-center gap-1">
-              <BsPeopleFill className="icon" /> <span>Customers</span>
-            </NavLink>
-          </a>
+          <NavLink to="/customer" className="flex items-center gap-1">
+            <BsPeopleFill className="icon" style={{ color: "#00d25b" }} />{" "}
+            <span>Customers</span>
+          </NavLink>
         </li>
         <li className="sidebar-list-item">
-          <a href="" className="flex items-center gap-1">
-            <NavLink to="/order" className="flex items-center gap-1">
-              <BsListCheck className="icon" /> <span>Orders</span>
-            </NavLink>
-          </a>
-        </li>
-        <li className="sidebar-list-item">
-          <a href="" className="flex items-center gap-1">
-            <BsMenuButtonWideFill className="icon" /> <span>Reports</span>
-          </a>
-        </li>
-        <li className="sidebar-list-item">
-          <a href="" className="flex items-center gap-1">
-            <BsFillGearFill className="icon" /> <span>Setting</span>
-          </a>
+          <NavLink to="/order" className="flex items-center gap-1">
+            <BsListCheck className="icon" style={{ color: "#fc424a" }} />{" "}
+            <span>Orders</span>
+          </NavLink>
         </li>
       </ul>
     </aside>

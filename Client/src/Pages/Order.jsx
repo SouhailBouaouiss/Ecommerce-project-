@@ -21,11 +21,13 @@ function Order() {
 
   const { register, handleSubmit, setValue, getValues } = useForm();
 
+  const Orderpath = "/v1/orders/";
+
   // Second I am defining the useEffect that is going to retrieve data from the BckEnd
 
   useEffect(() => {
     axiosInstance
-      .get("/v1/orders")
+      .get(Orderpath)
       .then((resp) => {
         const data = resp.data.data;
         console.log(data);
@@ -35,21 +37,22 @@ function Order() {
       .catch((err) => {
         toast.error(err.response.data.message);
         // mongodb+srv://souhail:tRHfUT.G8WQk-PV@firstcluster.aihbxtp.mongodb.net/
-        return setCustomers([]);
       });
   }, []);
 
   // UseMemo to stock the rows of the dataTable
 
-  const rows = useMemo(() =>
-    orders.map((elm) => {
-      return {
-        id: elm._id,
-        customer_id: elm.customer_id,
-        order_date: elm.order_date,
-        status: elm.status,
-      };
-    })
+  const rows = useMemo(
+    () =>
+      orders.map((elm) => {
+        return {
+          id: elm._id,
+          customer_id: elm.customer_id,
+          order_date: elm.order_date,
+          status: elm.status,
+        };
+      }),
+    [orders]
   );
   console.log(rows);
 
@@ -108,7 +111,46 @@ function Order() {
     setOrderToEdit(row);
   };
 
-  const handleEdit = () => {};
+  const filterValuesToEdit = (obj) => {
+    const result = {};
+    for (const key in obj) {
+      if (
+        obj.hasOwnProperty(key) &&
+        typeof obj[key] === "string" &&
+        obj[key].trim() !== ""
+      ) {
+        result[key] = obj[key];
+      }
+    }
+    return result;
+  };
+
+  const handleEdit = () => {
+    axiosInstance
+      .put(`/v1/orders/${orderToEdit.id}`, filterValuesToEdit(getValues()))
+      .then((resp) => {
+        const data = resp.data.data;
+
+        toast.success(resp.data.message);
+        setOrders((prev) => {
+          return prev.map((elm) => {
+            console.log(elm._id, data._id);
+            if (elm._id == data._id) {
+              console.log(elm, "found", elm, data._id);
+              return data;
+            } else {
+              return elm;
+            }
+          });
+        });
+        setOrderToEdit({});
+        setOpen(false);
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.message ?? "Something went wrong");
+        console.error(error);
+      });
+  };
 
   // This part is related to the detail model logic
 
@@ -147,6 +189,7 @@ function Order() {
         setId={setId}
         handleCloseDetails={handleCloseDetails}
         openDetails={openDetails}
+        path={Orderpath}
       />
     </div>
   );

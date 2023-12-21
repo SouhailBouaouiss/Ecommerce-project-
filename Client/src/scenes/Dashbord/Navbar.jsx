@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   BsFillBellFill,
   BsFillEnvelopeFill,
@@ -9,13 +10,11 @@ import {
 
 function Header({ OpenSidebar }) {
   return (
-    <header className="header">
+    <header className="header" style={{ backgroundColor: "#191c24" }}>
       <div className="menu-icon">
         <BsJustify className="icon" onClick={OpenSidebar} />
       </div>
-      <div className="header-left">
-        <BsSearch className="icon" />
-      </div>
+      <div className="header-left"></div>
       <div className="header-right flex gap-2">
         <BsFillBellFill className="icon" />
         <BsFillEnvelopeFill className="icon" />

@@ -79,7 +79,14 @@ function Home() {
   console.log(graphData);
 
   return (
-    <main className="main-container">
+    <div
+      style={{
+        width: "93%",
+        backgroundColor: "#0000",
+        color: "wheat",
+      }}
+      className="mt-10 ms-10"
+    >
       <div className="main-title">
         <strong>
           <h3>DASHBOARD</h3>
@@ -87,113 +94,198 @@ function Home() {
       </div>
 
       <div className="main-cards">
-        <div className="card" style={{ height: 120 }}>
+        <div
+          className="card"
+          style={{ height: 120, backgroundColor: "#191c24" }}
+        >
           <div className="card-inner">
             <strong>
-              <h3 style={{ color: "#01DFD7" }}>PRODUCTS</h3>
+              <h3
+                style={{
+                  color: "white",
+                  fontSize: "1rem",
+                  fontFamily: "Open Sans , sans-serif",
+                }}
+              >
+                PRODUCTS
+              </h3>
             </strong>
             <BsFillArchiveFill
               className="card_icon"
-              style={{ color: "#01DFD7" }}
+              style={{ color: "#009E60" }}
             />
           </div>
 
           <strong>
-            <h1 style={{ color: "#ded55b" }}>{statistics.products}</h1>
+            <h1
+              style={{
+                color: "white",
+              }}
+            >
+              {statistics.products}
+            </h1>
           </strong>
         </div>
-        <div className="card" style={{ height: 120 }}>
+        <div
+          className="card"
+          style={{ height: 120, backgroundColor: "#191c24" }}
+        >
           <div className="card-inner">
             <strong>
-              <h3 style={{ color: "#01DFD7" }}>CATEGORIES</h3>
+              <h3
+                style={{
+                  color: "white",
+                  fontSize: "1rem",
+                  fontFamily: "Open Sans , sans-serif",
+                }}
+              >
+                CATEGORIES
+              </h3>
             </strong>
             <BsFillGrid3X3GapFill
               className="card_icon"
-              style={{ color: "#01DFD7" }}
+              style={{ color: "#C4B454" }}
             />
           </div>
           <strong>
-            <h1 style={{ color: "#ded55b" }}>{statistics.categories}</h1>
+            <h1
+              style={{
+                color: "white",
+              }}
+            >
+              {statistics.categories}
+            </h1>
           </strong>
         </div>
-        <div className="card" style={{ height: 120 }}>
+        <div
+          className="card"
+          style={{ height: 120, backgroundColor: "#191c24" }}
+        >
           <div className="card-inner">
             <strong>
-              <h3 style={{ color: "#01DFD7" }}>CUSTOMERS</h3>
+              <h3
+                style={{
+                  color: "white",
+                  fontSize: "1rem",
+                  fontFamily: "Open Sans , sans-serif",
+                }}
+              >
+                CUSTOMERS
+              </h3>
             </strong>
-            <BsPeopleFill className="card_icon" style={{ color: "#01DFD7" }} />
+            <BsPeopleFill className="card_icon" style={{ color: "#1F51FF" }} />
           </div>
           <strong>
-            <h1 style={{ color: "#ded55b" }}>{statistics.customers}</h1>
+            <h1
+              style={{
+                color: "white",
+              }}
+            >
+              {statistics.customers}
+            </h1>
           </strong>
         </div>
-        <div className="card" style={{ height: 120 }}>
+        <div
+          className="card"
+          style={{ height: 120, backgroundColor: "#191c24" }}
+        >
           <div className="card-inner">
             <strong>
-              <h3 style={{ color: "#01DFD7" }}>ORDERS</h3>
+              <h3
+                style={{
+                  color: "white",
+                  fontSize: "1rem",
+                  fontFamily: "Open Sans , sans-serif",
+                }}
+              >
+                ORDERS
+              </h3>
             </strong>
             <BsFillBellFill
               className="card_icon"
-              style={{ color: "#01DFD7" }}
+              style={{ color: "#D2042D" }}
             />
           </div>
           <strong>
-            <h1 style={{ color: "#ded55b" }}>{statistics.orders}</h1>
+            <h1
+              style={{
+                color: "white",
+              }}
+            >
+              {statistics.orders}
+            </h1>
           </strong>
         </div>
       </div>
 
       <div className="charts">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            width={100}
-            height={300}
-            data={graphData}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            {/* <Bar dataKey="pv" fill="#8884d8" /> */}
-            <Bar dataKey="Sales" fill="#8eca82" />
-          </BarChart>
-        </ResponsiveContainer>
-
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            width={700}
-            height={400}
-            data={graphData}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            {/* <Line
+        <div
+          style={{
+            backgroundColor: "#191c24",
+            height: 350,
+            padding: 20,
+            borderRadius: 5,
+          }}
+        >
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              width={100}
+              height={300}
+              data={graphData}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              {/* <Bar dataKey="pv" fill="#8884d8" /> */}
+              <Bar dataKey="Sales" fill="#0080FF" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div
+          style={{
+            backgroundColor: "#191c24",
+            height: 350,
+            padding: 30,
+            borderRadius: 5,
+          }}
+        >
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              width={700}
+              height={400}
+              data={graphData}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              {/* <Line
               type="monotone"
               dataKey="pv"
               stroke="#8884d8"
               activeDot={{ r: 8 }}
             /> */}
-            <Line type="monotone" dataKey="Sales" stroke="#8eca82" />
-          </LineChart>
-        </ResponsiveContainer>
+              <Line type="monotone" dataKey="Sales" stroke="#E67E22" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
 

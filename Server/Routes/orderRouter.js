@@ -14,6 +14,7 @@ import {
   getAllOrders,
   getOrderById,
   getOrdersByMounth,
+  updateOrderData,
 } from "../Controllers/orderControllers.js";
 
 const orderRouter = express.Router();
@@ -57,6 +58,14 @@ orderRouter.get(
   verifyRefreshToken,
   verifyManagerOrAdmin,
   getOrderById
+);
+
+orderRouter.put(
+  "/:id",
+  verifyAuth,
+  verifyRefreshToken,
+  verifyManagerOrAdmin,
+  updateOrderData
 );
 
 export { orderRouter };

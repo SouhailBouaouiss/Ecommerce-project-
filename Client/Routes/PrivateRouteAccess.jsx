@@ -24,12 +24,12 @@ function PrivateRouteAccess() {
       axiosInstance
         .post("/verify")
         .then((resp) => {
-          console.log("Resp",resp);
+          console.log("Resp", resp);
           const data = resp.data;
 
           user.setUser({
             isConnected: true,
-            data: data.user
+            data: data.user,
           });
 
           toast.success(data.message);
@@ -49,9 +49,8 @@ function PrivateRouteAccess() {
         <Header />
         <div className="flex" style={{ height: "100%" }}>
           <Sidebar />
-          <div className="w-full mt-10 ms-10">
-            <Outlet />
-          </div>
+
+          <Outlet />
         </div>
       </>
     );

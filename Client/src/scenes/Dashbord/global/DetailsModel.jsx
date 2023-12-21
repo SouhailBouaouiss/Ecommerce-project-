@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import OrderDetails from "./OrderDetails";
 
-function DetailsModel({ openDetails, handleCloseDetails, id, setId }) {
+function DetailsModel({ openDetails, handleCloseDetails, id, setId, path }) {
   const [details, setDetails] = useState([]);
   useEffect(() => {
     console.log(id);
@@ -22,7 +22,7 @@ function DetailsModel({ openDetails, handleCloseDetails, id, setId }) {
       setDetails({});
     } else {
       axiosInstance
-        .get(`/v1/orders/${id}`)
+        .get(path + id)
         .then((resp) => {
           const data = resp.data.data;
           console.log(data);

@@ -86,4 +86,26 @@ const getOrdersByMounth = async (req, res, next) => {
   }
 };
 
-export { addOrder, getAllOrders, getOrderById, getOrdersByMounth };
+const updateOrderData = (req, res, next) => {
+  const { id } = req.params;
+  const DataToUpdate = req.body;
+  console.log("id", id);
+  Order.findOneAndUpdate({ _id: id }, DataToUpdate, { new: true })
+    .then((data) => {
+      if (!data) {
+        return res.status(404).send({ message: "invalid order id" });
+      }
+      res.status(200).send({ message: "order updated successfully", data });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: " Internal Server Error", ...err });
+    });
+};
+
+export {
+  addOrder,
+  getAllOrders,
+  getOrderById,
+  getOrdersByMounth,
+  updateOrderData,
+};

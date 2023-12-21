@@ -36,6 +36,7 @@ function CustomToolbar({
         elm !== "_id" &&
         elm !== "id" &&
         elm !== "creation_date" &&
+        elm !== "active" &&
         elm !== "last_login"
       );
     });

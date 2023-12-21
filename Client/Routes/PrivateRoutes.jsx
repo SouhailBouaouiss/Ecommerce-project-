@@ -25,10 +25,10 @@ const PrivateRoutes = [
     path: "/order",
     element: <Order />,
   },
-  // {
-  //   id: 3,
-  //   path: "/user",
-  //   element: <User />,
-  // },
+  {
+    id: 4,
+    path: "/user",
+    element: <User />,
+  },
 ];
 export { PrivateRoutes };

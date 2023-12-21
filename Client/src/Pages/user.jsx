@@ -1,70 +1,203 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
-import { axiosInstance } from "../api";
-import { toast } from "react-toastify";
-import DataTable from "../scenes/Dashbord/global/DataGrid";
-import { userTableFields } from "../util";
-import {
-  Button,
-  IconButton,
-  InputAdornment,
-  OutlinedInput,
-  styled,
-} from "@mui/material";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import { Grid, Typography, TextField } from "@mui/material";
 import { UserContext } from "../contexts/AuthContext";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
+import { userTableFields } from "../util";
+import DataTable from "../scenes/Dashbord/global/DataGrid";
+import { axiosInstance } from "../api";
+import { Button, TextField } from "@mui/material";
+import { EditModel } from "../scenes/Dashbord/global/EditModel";
+import DetailsModel from "../scenes/Dashbord/global/DetailsModel";
 import { useForm } from "react-hook-form";
+import DeleteModel from "../scenes/Dashbord/global/DeleteModel";
+import CustomToolbar from "../scenes/CustomToolbar";
+import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
-export default function User() {
+function User() {
   const [users, setUsers] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [userToEdit, setUserToEdit] = useState({});
+  const [id, setId] = useState("");
+  const [openDetails, setOpenDetails] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
+
+  const { register, handleSubmit, setValue, getValues, reset } = useForm();
 
   const { user } = useContext(UserContext);
-  const role = user.data.role;
-  console.log(role);
+  const { role } = user.data;
 
-  const [userToEdit, setUserToEdit] = useState({
-    id: null,
-    first_name: null,
-    last_name: null,
-    email: null,
-    user_name: null,
-    role: null,
-  });
+  const Userpath = "/v1/users/";
 
-  const [showPassword, setShowPassword] = React.useState(false);
+  // Second I am defining the useEffect that is going to retrieve data from the BckEnd
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const handleChange = (event) => {
-    console.log("khdama ana");
-    const { name, value } = event.target;
-    setSelectedUserUpdate((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmitEdit = (event) => {
-    event.preventDefault();
-
+  useEffect(() => {
     axiosInstance
-      .put(`/v1/users/${selectedUserUpdate._id}`, selectedUserUpdate)
+      .get(Userpath)
       .then((resp) => {
-        const { data, message } = resp.data;
+        const data = resp.data.data;
         console.log(data);
-        toast.success(message);
+        toast.success(resp.data.message);
+        return setUsers(data);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
+  }, []);
 
+  // UseMemo to stock the rows of the dataTable
+
+  const rows = useMemo(
+    () =>
+      users.map((elm) => {
+        return {
+          id: elm._id,
+          first_name: elm.first_name,
+          last_name: elm.last_name,
+          email: elm.email,
+          last_login: elm.last_login,
+          role: elm.role,
+          creation_date: elm.creation_date,
+        };
+      }),
+    [users]
+  );
+  console.log(rows);
+
+  const statusRow = useMemo(() => {
+    return users.map(
+      ({ first_name, last_name, email, role, user_name, pwd }) => ({
+        first_name,
+        last_name,
+        email,
+        role,
+        user_name,
+        pwd,
+      })
+    );
+  }, [users]);
+
+  const columns = useMemo(() => {
+    if (role === "admin") {
+      return [
+        ...userTableFields,
+
+        {
+          field: "show details",
+          headerName: "Show Details",
+          sortable: false,
+          width: 150,
+          renderCell: ({ row, field }) => (
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleOpenDetails(row)}
+              >
+                Show Details
+              </Button>
+            </div>
+          ),
+        },
+        {
+          field: "edit",
+          headerName: "Edit",
+          sortable: false,
+          width: 150,
+          renderCell: ({ row, field }) => (
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleOpen(row)}
+              >
+                Edit
+              </Button>
+            </div>
+          ),
+        },
+        {
+          field: "delete",
+          headerName: "Delete",
+          sortable: false,
+          width: 150,
+          renderCell: ({ row, field }) => (
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleDeleteClick(row)}
+              >
+                Delete
+              </Button>
+            </div>
+          ),
+        },
+      ];
+    } else {
+      return [
+        ...userTableFields,
+
+        {
+          field: "show details",
+          headerName: "Show Details",
+          sortable: false,
+          width: 150,
+          renderCell: ({ row, field }) => (
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleOpenDetails(row)}
+              >
+                Show Details
+              </Button>
+            </div>
+          ),
+        },
+      ];
+    }
+  }, [role]);
+
+  // THIS PART IS RELATED TO THE OPENING AND CLOSE OF THE MODEL OF EDIT
+
+  // Handle close
+
+  const handleClose = () => {
+    setOpen(false);
+    setUserToEdit({});
+  };
+
+  const handleOpen = (row) => {
+    setOpen(true);
+    setUserToEdit(row);
+  };
+
+  const filterValuesToEdit = (obj) => {
+    const result = {};
+    for (const key in obj) {
+      if (
+        obj.hasOwnProperty(key) &&
+        typeof obj[key] === "string" &&
+        obj[key].trim() !== ""
+      ) {
+        result[key] = obj[key];
+      }
+    }
+    return result;
+  };
+
+  const handleEdit = () => {
+    axiosInstance
+      .put(`/v1/users/${userToEdit.id}`, filterValuesToEdit(getValues()))
+      .then((resp) => {
+        const data = resp.data.data;
+
+        toast.success(resp.data.message);
         setUsers((prev) => {
-          console.log(prev);
           return prev.map((elm) => {
             console.log(elm._id, data._id);
             if (elm._id == data._id) {
@@ -75,354 +208,150 @@ export default function User() {
             }
           });
         });
+        setUserToEdit({});
+        setOpen(false);
       })
       .catch((error) => {
         toast.error(error?.response?.data?.message ?? "Something went wrong");
         console.error(error);
       });
-    setOpenEdit(false);
+  };
+
+  // This part is related to the detail model logic
+
+  const handleOpenDetails = (row) => {
+    setOpenDetails(true);
+    setId(row.id);
+  };
+  const handleCloseDetails = () => {
+    setOpenDetails(false);
   };
 
   const handleDeleteClick = (row) => {
-    const productToDeleteId = row.id;
-    console.log(productToDeleteId);
-    axiosInstance
-      .delete(`/v1/users/${productToDeleteId}`)
-      .then((resp) => {
-        const message = resp.data.message;
-        toast.warning(message);
-        setUsers((prev) => {
-          return prev.filter((elm) => {
-            return elm._id !== productToDeleteId;
-          });
-        });
-      })
-      .catch((error) => {
-        toast.error(error?.response?.data?.message ?? "Something went wrong");
-      });
+    setOpenDelete(true);
+    setUserToEdit(row);
   };
 
-  useEffect(() => {
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+    setUserToEdit({});
+  };
+
+  const handleDeleteConfirmation = () => {
+    axiosInstance.delete(`/v1/users/${userToEdit.id}`).then((resp) => {
+      const message = resp.data.message;
+      console.log(message);
+      console.log(resp);
+      toast.warning(message);
+      setUsers((prev) => {
+        return prev.filter((elm) => {
+          return elm._id !== userToEdit.id;
+        });
+      });
+      setOpenDelete(false);
+    });
+  };
+
+  const handleCloseAdd = () => setOpenAdd(false);
+
+  const handleOpenAdd = () => {
+    setOpenAdd(true);
+  };
+
+  const handleAddCustomer = () => {
+    console.log(getValues());
     axiosInstance
-      .get("/v1/users")
+      .post(`/v1/users/`, getValues())
       .then((resp) => {
         const data = resp.data.data;
-        console.log(data);
         toast.success(resp.data.message);
-        return setUsers(data);
+        const user = resp.data.user;
+
+        setUsers((prev) => [...prev, user]);
+        reset();
       })
       .catch((err) => {
-        toast.error(err.response.data.message);
-        return setUsers([]);
+        console.error(err);
       });
-  }, []);
-
-  console.log(users);
-
-  const rows = useMemo(() => {
-    return users.map((elm) => {
-      return {
-        id: elm._id,
-        first_name: elm.first_name,
-        last_name: elm.last_name,
-        role: elm.role,
-        creation_date: elm.creation_date,
-      };
-    });
-  }, [users]);
-
-  const columns = useMemo(() => {
-    if (role === "manager") {
-      return [
-        ...userTableFields,
-        {
-          field: "details",
-          headerName: "Details",
-          sortable: false,
-          width: 150,
-          renderCell: ({ row, field }) => (
-            <div>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleOpen(row)}
-              >
-                Show Details
-              </Button>
-            </div>
-          ),
-        },
-      ];
-    }
-    return [
-      ...userTableFields,
-      {
-        field: "edit",
-        headerName: "Edit",
-        sortable: false,
-        width: 150,
-        renderCell: ({ row, field }) => {
-          if (role === "admin") {
-            return (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleOpenUpdate(row)}
-              >
-                Edit
-              </Button>
-            );
-          }
-        },
-      },
-      {
-        field: "delete",
-        headerName: "Delete",
-        sortable: false,
-        width: 150,
-        renderCell: ({ row, field }) => {
-          if (role === "admin") {
-            return (
-              <div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleDeleteClick(row)}
-                >
-                  Delete
-                </Button>
-              </div>
-            );
-          }
-        },
-      },
-      {
-        field: "details",
-        headerName: "Details",
-        sortable: false,
-        width: 150,
-        renderCell: ({ row, field }) => (
-          <div>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleOpen(row)}
-            >
-              Show Details
-            </Button>
-          </div>
-        ),
-      },
-    ];
-  }, []);
-
-  const [open, setOpen] = useState(false);
-  const [selectedUser, setselectedUser] = useState({});
-  const [openEdit, setOpenEdit] = useState(false);
-  const [selectedUserUpdate, setSelectedUserUpdate] = useState({});
-
-  const handleOpen = (data) => {
-    setOpen(true);
-    console.log(data.id);
-    const id = data.id;
-    axiosInstance
-      .get(`/v1/users/${id}`)
-      .then((resp) => {
-        const data = resp.data.data;
-        setselectedUser(data);
-        console.log(data);
-      })
-      .catch((err) => console.log(err));
   };
 
-  const handleOpenUpdate = (data) => {
-    const id = data.id;
-    axiosInstance.get(`/v1/users/${id}`).then((resp) => {
-      const data = resp.data.data;
-      setOpenEdit(true);
-      setSelectedUserUpdate(data);
+  const inputElements = (arr) => {
+    return arr.map((elm) => {
+      if (elm === "role") {
+        return (
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Role</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                {...register(elm)}
+                label={elm}
+                fullWidth
+              >
+                <MenuItem value={"admin"}>admin</MenuItem>
+                <MenuItem value={"manager"}>manager</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        );
+      }
+      return (
+        <TextField
+          {...register(elm)}
+          fullWidth
+          label={elm}
+          variant="outlined"
+        />
+      );
     });
   };
-
-  console.log(selectedUserUpdate);
-
-  const handleClose = () => {
-    setOpen(false);
-    setOpenEdit(false);
-  };
-
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 600,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
-  const { register, handleSubmit, getValues } = useForm();
 
   return (
-    <div>
-      <Modal
-        open={openEdit}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <form onSubmit={handleSubmitEdit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  label="First Name"
-                  variant="outlined"
-                  defaultValue={selectedUserUpdate.first_name}
-                  onChange={handleChange}
-                  fullWidth
-                  name="first_name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Last Name"
-                  variant="outlined"
-                  defaultValue={selectedUserUpdate.last_name}
-                  onChange={handleChange}
-                  fullWidth
-                  name="last_name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Email"
-                  variant="outlined"
-                  defaultValue={selectedUserUpdate.email}
-                  onChange={handleChange}
-                  fullWidth
-                  name="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Username"
-                  variant="outlined"
-                  defaultValue={selectedUserUpdate.user_name}
-                  onChange={handleChange}
-                  fullWidth
-                  name="user_name"
-                />
-              </Grid>
-
-              {role === "admin" && (
-                <>
-                  <Grid item xs={12}>
-                    <FormControl
-                      sx={{ m: 1, width: "25ch" }}
-                      variant="outlined"
-                    >
-                      <InputLabel htmlFor="outlined-adornment-password">
-                        Password
-                      </InputLabel>
-                      <OutlinedInput
-                        id="outlined-adornment-password"
-                        type={showPassword ? "text" : "password"}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                              edge="end"
-                            >
-                              {showPassword ? "Eye" : "Show"}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        defaultValue={selectedUserUpdate.pwd}
-                        onChange={handleChange}
-                        label="Password"
-                        name="pwd"
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">
-                        Role
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        // value={role}
-                        label="Role"
-                        defaultValue={selectedUserUpdate.role}
-                        onChange={handleChange}
-                      >
-                        <MenuItem value={"manager"}>Manager</MenuItem>
-                        <MenuItem value={"admin"}>Admin</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </>
-              )}
-
-              <Grid item xs={12}>
-                <Button type="submit" variant="contained" color="primary">
-                  Submit
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-        </Box>
-      </Modal>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <form>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              User Information
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Active : {String(selectedUser.active)}
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Email : {selectedUser.email}
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              First Name : {selectedUser.first_name}
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Last Name : {selectedUser.last_name}
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              User Name : {selectedUser.user_name}
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Role : {selectedUser.role}
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Creation Date : {selectedUser.creation_date}
-            </Typography>
-          </form>
-        </Box>
-      </Modal>
-      {role === "admin" && (
-        <Button
-          variant="contained"
-          color="primary"
-          style={{ marginLeft: 20, marginTop: 12 }}
-        >
-          Add New User
-        </Button>
-      )}
+    <div
+      style={{ width: "93%", backgroundColor: "#0b2f3a94" }}
+      className="mt-10 ms-10"
+    >
+      <CustomToolbar
+        name={"User"}
+        arr={users}
+        fn={handleAddCustomer}
+        handleCloseAdd={handleCloseAdd}
+        handleOpenAdd={handleOpenAdd}
+        setOpenAdd={setOpenAdd}
+        inputElements={inputElements}
+        openAdd={openAdd}
+        register={register}
+        getValues={getValues}
+        handleSubmit={handleSubmit}
+        setValue={setValue}
+      />
       <DataTable rows={rows} columns={columns} />
+      <EditModel
+        arr={statusRow}
+        fn={handleEdit}
+        open={open}
+        setOpen={setOpen}
+        handleClose={handleClose}
+        setCustomerToEdit={setUserToEdit}
+        customerToEdit={userToEdit}
+        register={register}
+        handleSubmit={handleSubmit}
+      />
+      <DetailsModel
+        id={id}
+        setId={setId}
+        handleCloseDetails={handleCloseDetails}
+        openDetails={openDetails}
+        path={Userpath}
+      />
+      <DeleteModel
+        fn={handleDeleteConfirmation}
+        openDelete={openDelete}
+        handleCloseDelete={handleCloseDelete}
+      />
     </div>
   );
 }
+
+export default User;

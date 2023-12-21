@@ -5,7 +5,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #0B4C5F;
+  background-color: #000000;
   color: #9e9ea4;
   font-family: 'Roboto', sans-serif;
   height: 100vh;
@@ -98,7 +98,7 @@ body {
 }
 
 .sidebar-list-item > a.active {
-    background-color: rgba(255, 255, 255, 0.2) !important;
+    background-color: #0f1015 !important;
     color: white;
 }
 
@@ -112,13 +112,15 @@ body {
 }
 
 .sidebar-list-item:hover {
-  background-color: rgba(255, 255, 255, 0.2) !important;
+  background-color: #0f1015 !important;
   cursor: pointer !important;
+  border-radius: 0px 100px 100px 0px;
 }
 
 .sidebar-list-item > a {
   text-decoration: none !important;
   color: #9e9ea4 !important;
+  border-radius: 0px 100px 100px 0px;
 }
 
 .sidebar-responsive {

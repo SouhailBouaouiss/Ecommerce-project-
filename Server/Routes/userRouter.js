@@ -112,7 +112,7 @@ usersRouter.put(
   //   .isStrongPassword()
   //   .isString()
   //   .withMessage("Password must be at least 6 characters long"),
-  expressValidatorCheck,
+
   updateUserData
 );
 
