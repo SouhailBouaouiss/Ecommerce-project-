@@ -10,7 +10,10 @@ import {
 
 function Header({ OpenSidebar }) {
   return (
-    <header className="header" style={{ backgroundColor: "#0B4C5F" }}>
+    <header
+      className="header"
+      style={{ backgroundColor: "rgb(25 28 36 / 95%)" }}
+    >
       <div className="menu-icon">
         <BsJustify className="icon" onClick={OpenSidebar} />
       </div>

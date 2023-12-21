@@ -52,8 +52,9 @@ function PrivateRouteAccess() {
           style={{ height: "100%", backgroundColor: "#0B4C5F" }}
         >
           <Sidebar />
-
-          <Outlet />
+          <div className="w-full" style={{ backgroundColor: "black" }}>
+            <Outlet />
+          </div>
         </div>
       </>
     );
