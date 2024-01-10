@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./style/signUp.css"; // Create a CSS file for styling
+import "../style/signUp.css"; // Create a CSS file for styling
 
 const ImageSignup = () => {
   const initialButtonStyle = {

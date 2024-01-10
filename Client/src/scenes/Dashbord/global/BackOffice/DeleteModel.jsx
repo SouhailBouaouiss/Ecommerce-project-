@@ -8,10 +8,12 @@ function DeleteModel({ fn, openDelete, handleCloseDelete }) {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 600,
-    bgcolor: "background.paper",
+    bgcolor: "rgb(25, 28, 36)",
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    borderTopLeftRadius: 15,
+    borderBottomRightRadius: 15,
   };
   return (
     <Modal
@@ -30,9 +32,9 @@ function DeleteModel({ fn, openDelete, handleCloseDelete }) {
             </Typography>
           </Grid>
           <Grid item xs={12} marginLeft={50}>
-            <Button variant="outlined" color="error" onClick={fn}>
+            <button className="custom-mui-btn" onClick={fn}>
               Delete
-            </Button>
+            </button>
           </Grid>
         </Grid>
       </Box>

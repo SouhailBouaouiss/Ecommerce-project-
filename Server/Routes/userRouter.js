@@ -16,6 +16,7 @@ import {
   getOneUserData,
   getUserSearch,
   getUsersData,
+  logoutUser,
   signin,
   updateUserData,
 } from "../Controllers/userControllers.js";
@@ -75,6 +76,10 @@ usersRouter.get(
   verifyManagerOrAdmin,
   getUsersData
 );
+
+//logout a user
+
+usersRouter.get("/logout", logoutUser);
 // Get a users based on search query value
 
 usersRouter.get(

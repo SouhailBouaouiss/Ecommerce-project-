@@ -15,16 +15,20 @@ function ArrayFormatDetail({ value }) {
   return (
     <>
       <Grid item xs={12}>
-        <Accordion style={{ width: "100%", color: "#9e9ea4" }}>
+        <Accordion
+          style={{
+            width: "100%",
+            color: "#9e9ea4",
+            backgroundColor: "rgb(25, 28, 36)",
+          }}
+        >
           <AccordionSummary
             expandIcon={<GridExpandMoreIcon />}
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
             <Typography>
-              <label>
-                <strong>Products</strong>
-              </label>
+              <strong>Products</strong>
             </Typography>
           </AccordionSummary>
           <AccordionDetails>

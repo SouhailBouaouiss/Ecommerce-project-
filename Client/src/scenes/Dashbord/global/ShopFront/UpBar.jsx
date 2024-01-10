@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Popover, Disclosure, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
@@ -14,7 +14,8 @@ import {
   LoginIcon,
 } from "@heroicons/react/outline";
 import { ButtonBase } from "@mui/material";
-import "./style/upBar.css";
+import "../style/upBar.css";
+import { CartContext } from "../../../../contexts/CartContext";
 
 const solutions = [
   // ... (unchanged)
@@ -43,20 +44,23 @@ const callsToAction = [
   { name: "Contact sales", href: "#", icon: PhoneIncomingIcon },
 ];
 
-export default function UpBar() {
+function UpBar() {
   const [scrolled, setScrolled] = useState(false);
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
     setScrolled(scrollPosition > 0);
   };
-
+  const { openCart, setOpenCart } = useContext(CartContext);
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
+  const handleClick = () => {
+    setOpenCart(true);
+    console.log("setOpenCart after:", setOpenCart);
+  };
   return (
     <div
       id="up-bar"
@@ -174,7 +178,10 @@ export default function UpBar() {
                   </ButtonBase>
                 </div>
                 <div className="flex justify-end me-20 gap-10">
-                  <ShoppingCartIcon className="h-6 w-6 mt-5" />
+                  <ShoppingCartIcon
+                    className="h-6 w-6 mt-5"
+                    onClick={handleClick}
+                  />
                   <SearchIcon className="h-6 w-6 mt-5" aria-hidden="true" />
                   <LoginIcon className="h-6 w-6 mt-5" aria-hidden="true" />
                 </div>
@@ -186,3 +193,5 @@ export default function UpBar() {
     </div>
   );
 }
+
+export default UpBar;

@@ -12,16 +12,20 @@ function ObjectFormatDetail({ value }) {
   return (
     <>
       <Grid item xs={12}>
-        <Accordion style={{ width: "100%", color: "#9e9ea4" }}>
+        <Accordion
+          style={{
+            width: "100%",
+            color: "#9e9ea4",
+            backgroundColor: "rgb(25, 28, 36)",
+          }}
+        >
           <AccordionSummary
             expandIcon={<GridExpandMoreIcon />}
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
             <Typography>
-              <label>
-                <strong>Customer Details :</strong>
-              </label>
+              <strong>Customer Details :</strong>
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -41,7 +45,7 @@ function ObjectFormatDetail({ value }) {
                       marginLeft={1}
                     >
                       {" "}
-                      <label>{item} :</label>
+                      {item} :
                     </Typography>
 
                     <Typography

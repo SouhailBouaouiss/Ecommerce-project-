@@ -18,15 +18,16 @@ const PartnersSection = () => {
 
   const logoContainerStyle = {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
     width: "90%",
+    gap: "150px",
 
     padding: "50px",
   };
 
   const logoStyle = {
-    width: "200px", // Adjust the size of the logos as needed
-    height: "200px",
+    // Adjust the size of the logos as needed
+    height: "60px",
     margin: "10px",
     // Add other styles as needed
   };

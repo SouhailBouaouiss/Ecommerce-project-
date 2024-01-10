@@ -2,19 +2,22 @@ import { UserContext } from "../contexts/AuthContext";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { userTableFields } from "../util";
-import DataTable from "../scenes/Dashbord/global/DataGrid";
+import DataTable from "../scenes/Dashbord/global/BackOffice/DataGrid";
 import { axiosInstance } from "../api";
-import { Button, TextField } from "@mui/material";
-import { EditModel } from "../scenes/Dashbord/global/EditModel";
-import DetailsModel from "../scenes/Dashbord/global/DetailsModel";
+import { Button, IconButton, TextField } from "@mui/material";
+import { EditModel } from "../scenes/Dashbord/global/BackOffice/EditModel";
+import DetailsModel from "../scenes/Dashbord/global/BackOffice/DetailsModel";
 import { useForm } from "react-hook-form";
-import DeleteModel from "../scenes/Dashbord/global/DeleteModel";
-import CustomToolbar from "../scenes/CustomToolbar";
+import DeleteModel from "../scenes/Dashbord/global/BackOffice/DeleteModel";
+import CustomToolbar from "../scenes/Dashbord/global/BackOffice/CustomToolbar";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 function User() {
   const [users, setUsers] = useState([]);
@@ -84,55 +87,33 @@ function User() {
     if (role === "admin") {
       return [
         ...userTableFields,
-
         {
-          field: "show details",
-          headerName: "Show Details",
-          sortable: false,
-          width: 150,
+          field: "actions",
+          headerName: "Actions",
+          width: 160,
           renderCell: ({ row, field }) => (
             <div>
-              <Button
+              <IconButton
                 variant="contained"
-                color="primary"
+                color="info"
                 onClick={() => handleOpenDetails(row)}
               >
-                Show Details
-              </Button>
-            </div>
-          ),
-        },
-        {
-          field: "edit",
-          headerName: "Edit",
-          sortable: false,
-          width: 150,
-          renderCell: ({ row, field }) => (
-            <div>
-              <Button
+                <RemoveRedEyeIcon color="info" fontSize="small" />
+              </IconButton>
+              <IconButton
                 variant="contained"
-                color="primary"
+                color="info"
                 onClick={() => handleOpen(row)}
               >
-                Edit
-              </Button>
-            </div>
-          ),
-        },
-        {
-          field: "delete",
-          headerName: "Delete",
-          sortable: false,
-          width: 150,
-          renderCell: ({ row, field }) => (
-            <div>
-              <Button
+                <EditIcon color="info" fontSize="small" />
+              </IconButton>
+              <IconButton
                 variant="contained"
-                color="primary"
+                color="error"
                 onClick={() => handleDeleteClick(row)}
               >
-                Delete
-              </Button>
+                <DeleteForeverIcon color="error" fontSize="small" />
+              </IconButton>
             </div>
           ),
         },
@@ -140,7 +121,6 @@ function User() {
     } else {
       return [
         ...userTableFields,
-
         {
           field: "show details",
           headerName: "Show Details",
@@ -309,8 +289,21 @@ function User() {
 
   return (
     <div
-      style={{ width: "93%", backgroundColor: "#0b2f3a94" }}
-      className="mt-10 ms-10"
+      style={{
+        width: "93%",
+        maxWidth: "1190px",
+        backgroundColor: "rgb(25, 28, 36)",
+        color: "white",
+        position: "absolute",
+        top: "42%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        borderTopLeftRadius: 15,
+        borderBottomRightRadius: 15,
+        marginTop: 20,
+        border: "none",
+      }}
+      className="p-4 mt-10"
     >
       <CustomToolbar
         name={"User"}
@@ -327,6 +320,7 @@ function User() {
         setValue={setValue}
       />
       <DataTable rows={rows} columns={columns} />
+
       <EditModel
         arr={statusRow}
         fn={handleEdit}
@@ -337,6 +331,7 @@ function User() {
         customerToEdit={userToEdit}
         register={register}
         handleSubmit={handleSubmit}
+        statusOptions={[]}
       />
       <DetailsModel
         id={id}

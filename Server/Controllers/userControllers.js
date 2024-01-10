@@ -163,6 +163,16 @@ const deleteUser = (req, res, next) => {
     });
 };
 
+// Logout a user
+
+const logoutUser = (req, res, next) => {
+  console.log("Hey");
+  res.cookie("access_token", "", { expires: new Date(0) });
+  res.cookie("refresh_token", "", { expires: new Date(0) });
+
+  res.json({ success: true });
+};
+
 export {
   signin,
   creatUser,
@@ -171,4 +181,5 @@ export {
   getUserSearch,
   updateUserData,
   deleteUser,
+  logoutUser,
 };

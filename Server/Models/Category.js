@@ -16,12 +16,6 @@ const categorySchema = new Schema({
     type: Boolean,
     default: false,
   },
-  subCategories: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: "subcategory",
-    },
-  ],
 });
 
 categorySchema.index({ category_name: "text" });

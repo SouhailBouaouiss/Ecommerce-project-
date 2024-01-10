@@ -24,6 +24,7 @@ import { insertSubcategories } from "./fakeData/subcategoriesFakeData.js";
 import morgan from "morgan";
 import { insertOrders } from "./fakeData/orderFakeData.js";
 import { insertFakeProducts } from "./fakeData/productFakeData.js";
+import { stripeRouter } from "./Routes/stripeRouter.js";
 
 dotenv.config();
 app.use(cookieParser());
@@ -53,12 +54,6 @@ connecting()
   })
   .catch();
 
-connecting()
-  .then(() => {
-    console.log("DB Connected");
-  })
-  .catch();
-
 app.use("/v1/users", usersRouter);
 app.use("/v1/categories", categoryRouter);
 app.use("/v1/subcategories", subcategoryRouter);
@@ -68,9 +63,7 @@ app.use("/v1/customers", customerRouter);
 app.use("/v1/products", productRouter);
 app.use("/verify", verifyRouter);
 app.use("/v1/count", countRouter);
-connecting().then(() => {
-  console.log("DB Connected");
-});
+app.use("/v1/stripe", stripeRouter);
 
 app.use((req, res, next) => {
   console.log("No route found");

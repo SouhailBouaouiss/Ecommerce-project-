@@ -3,8 +3,8 @@ import { UserContext } from "../src/contexts/AuthContext";
 import { Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Sidebar from "../src/scenes/Dashbord/Sidebar";
-import Header from "../src/scenes/Dashbord/Navbar";
+import Sidebar from "../src/scenes/Dashbord/global/BackOffice/Sidebar";
+import Header from "../src/scenes/Dashbord/global/BackOffice/Navbar";
 import { axiosInstance } from "../src/api";
 
 function PrivateRouteAccess() {
@@ -52,7 +52,7 @@ function PrivateRouteAccess() {
           style={{ height: "100%", backgroundColor: "#0B4C5F" }}
         >
           <Sidebar />
-          <div className="w-full" style={{ backgroundColor: "black" }}>
+          <div className="w-full relative" style={{ backgroundColor: "black" }}>
             <Outlet />
           </div>
         </div>

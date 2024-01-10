@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./style/video.css"; // Create a CSS file for your component styles
+import "../style/video.css"; // Create a CSS file for your component styles
 
 const BackgroundVideo = () => {
   const images = [

@@ -99,8 +99,8 @@ const getSearchedProducts = (req, res, next) => {
 // Get a specific product using id
 
 const getProductById = (req, res, next) => {
-  const { id } = req.params;
-  Products.findOne({ id })
+  const { id_or_slug } = req.params;
+  Products.findOne({ $or: [{ _id: id_or_slug }, { slug: id_or_slug }] })
     .populate({ path: "subcategory_id", populate: { path: "category_id" } })
     .then((data) => {
       if (!data) {

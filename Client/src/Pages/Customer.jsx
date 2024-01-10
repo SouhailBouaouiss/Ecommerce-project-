@@ -1,13 +1,22 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { axiosInstance } from "../api";
 import { toast } from "react-toastify";
-import DataTable from "../scenes/Dashbord/global/DataGrid";
+import DataTable from "../scenes/Dashbord/global/BackOffice/DataGrid";
 import { customerTableFields } from "../util";
-import { Button, FormControlLabel, Switch, TextField } from "@mui/material";
-import { EditModel } from "../scenes/Dashbord/global/EditModel";
-import CustomToolbar from "../scenes/CustomToolbar";
+import {
+  Button,
+  FormControlLabel,
+  IconButton,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { EditModel } from "../scenes/Dashbord/global/BackOffice/EditModel";
+
 import { useForm } from "react-hook-form";
-import DeleteModel from "../scenes/Dashbord/global/DeleteModel";
+import DeleteModel from "../scenes/Dashbord/global/BackOffice/DeleteModel";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 function Customer() {
   // Logic part
@@ -61,36 +70,26 @@ function Customer() {
   const columns = [
     ...customerTableFields,
     {
-      field: "edit",
-      headerName: "Edit",
-      sortable: false,
-      width: 150,
+      field: "actions",
+      headerName: "Actions",
+      width: 160,
       renderCell: ({ row, field }) => (
         <div>
-          <Button
+          <IconButton
             variant="contained"
-            color="primary"
+            color="info"
             onClick={() => handleOpen(row)}
           >
-            Open modal
-          </Button>
+            <EditIcon color="info" fontSize="small" />
+          </IconButton>
+          <IconButton
+            variant="contained"
+            color="error"
+            onClick={() => handleDeleteClick(row)}
+          >
+            <DeleteForeverIcon color="error" fontSize="small" />
+          </IconButton>
         </div>
-      ),
-    },
-
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      width: 150,
-      renderCell: ({ row, field }) => (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleDeleteClick(row)}
-        >
-          Action
-        </Button>
       ),
     },
   ];
@@ -180,82 +179,52 @@ function Customer() {
       });
   };
 
-  // THIS PART IS RELATED TO THE OPENING AND CLOSE OF THE MODEL OF ADD
-
-  // Handle close
-
-  const handleCloseAdd = () => setOpenAdd(false);
-
-  const handleOpenAdd = () => {
-    setOpenAdd(true);
-  };
-
-  // Handle add submit
-
-  const handleAddCustomer = () => {};
-
-  const inputElements = (arr) => {
-    return arr.map((elm) => {
-      if (elm == "valid_account" || elm == "active") {
-        return (
-          <FormControlLabel
-            control={<Switch defaultChecked {...register(elm)} labe />}
-            label={elm}
-          />
-        );
-      }
-      return (
-        <TextField
-          fullWidth
-          label={elm}
-          // name="product_name"
-          variant="outlined"
-          {...register(elm)}
-        />
-      );
-    });
-  };
   // JSX part
   return (
-    <div
-      style={{
-        backgroundColor: "#0b2f3a94",
-        color: "wheat",
-      }}
-      className="mt-10 ms-10"
-    >
-      <CustomToolbar
-        name={"Customer"}
-        arr={Customers}
-        fn={handleAddCustomer}
-        handleCloseAdd={handleCloseAdd}
-        handleOpenAdd={handleOpenAdd}
-        setOpenAdd={setOpenAdd}
-        openAdd={openAdd}
-        inputElements={inputElements}
-        register={register}
-        getValues={getValues}
-        handleSubmit={handleSubmit}
-        setValue={setValue}
-      ></CustomToolbar>
-      <DataTable rows={rows} columns={columns} />
-      <EditModel
-        arr={rows}
-        fn={handleEdit}
-        open={open}
-        setOpen={setOpen}
-        handleClose={handleClose}
-        setCustomerToEdit={setCustomerToEdit}
-        customerToEdit={customerToEdit}
-        register={register}
-        handleSubmit={handleSubmit}
-      />
+    <>
+      <div
+        style={{
+          width: "93%",
+          maxWidth: "1190px",
+          backgroundColor: "rgb(25, 28, 36)",
+          color: "white",
+          position: "absolute",
+          top: "42%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          borderTopLeftRadius: 15,
+          borderBottomRightRadius: 15,
+        }}
+        className="p-4 mt-10"
+      >
+        <Typography variant="overline" fontSize={20} lineHeight={1}>
+          Customer List
+        </Typography>
+        <DataTable rows={rows} columns={columns} />
+        <EditModel
+          currentPage={"customer"}
+          statusOptions={[
+            { label: "active", value: true },
+            { label: "inactive", value: false },
+          ]}
+          arr={rows}
+          fn={handleEdit}
+          open={open}
+          setOpen={setOpen}
+          handleClose={handleClose}
+          setCustomerToEdit={setCustomerToEdit}
+          customerToEdit={customerToEdit}
+          register={register}
+          handleSubmit={handleSubmit}
+        />
+      </div>
+
       <DeleteModel
         fn={handleDeleteConfirmation}
         openDelete={openDelete}
         handleCloseDelete={handleCloseDelete}
       />
-    </div>
+    </>
   );
 }
 

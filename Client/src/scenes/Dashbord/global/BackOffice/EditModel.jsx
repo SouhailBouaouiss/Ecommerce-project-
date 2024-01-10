@@ -18,6 +18,8 @@ export function EditModel({
   customerToEdit,
   register,
   handleSubmit,
+  statusOptions,
+  currentPage,
 }) {
   const style = {
     position: "absolute",
@@ -25,10 +27,12 @@ export function EditModel({
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 600,
-    bgcolor: "background.paper",
+    bgcolor: "#9e9ea4",
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    borderTopLeftRadius: 15,
+    borderBottomRightRadius: 15,
   };
 
   // useMemo to get the keys of the rows array
@@ -46,24 +50,29 @@ export function EditModel({
 
   const renderInputs = useMemo(() => {
     return ressourceProperties.map((elm) => {
-      console.log("Elem", elm);
-      // console.log("Elem", customerToEdit[elm]);
       if (elm === "status") {
+        console.log(currentPage, statusOptions);
         return (
-          <Box sx={{ width: "100%" }}>
+          <Box sx={{ width: "100%", marginTop: 2, marginLeft: 2, width: 530 }}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Status</InputLabel>
+              <InputLabel id="form-status">Status</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                color="primary"
+                labelId="form-status"
+                id="status-select"
                 {...register(elm)}
                 label={elm}
-                fullWidth
               >
-                <MenuItem value={"pending"}>pending</MenuItem>
-                <MenuItem value={"processing"}>processing</MenuItem>
-                <MenuItem value={"delivered"}>delivered</MenuItem>
-                <MenuItem value={"shipped"}>shipped</MenuItem>
+                {statusOptions.map((status, index) => (
+                  <MenuItem
+                    style={{ width: "100%" }}
+                    key={index}
+                    value={currentPage == "customer" ? status.value : status}
+                    fullWidth
+                  >
+                    {currentPage == "customer" ? status.label : status}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>
@@ -72,7 +81,7 @@ export function EditModel({
 
       if (elm === "role") {
         return (
-          <Box sx={{ minWidth: 120 }}>
+          <Box sx={{ minWidth: 120, marginTop: 2, marginLeft: 2, width: 530 }}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Role</InputLabel>
               <Select
@@ -100,6 +109,7 @@ export function EditModel({
               placeholder={customerToEdit[elm]}
               variant="outlined"
               {...register(elm)}
+              style={{ border: "1px white" }}
             />
           </Grid>
         );

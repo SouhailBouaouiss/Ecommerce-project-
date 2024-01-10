@@ -9,10 +9,10 @@ import {
   colors,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import { axiosInstance } from "../../../api";
+import { axiosInstance } from "../../../../api";
 import { toast } from "react-toastify";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import OrderDetails from "./OrderDetails";
+import OrderDetails from "../OrderDetails";
 
 function DetailsModel({ openDetails, handleCloseDetails, id, setId, path }) {
   const [details, setDetails] = useState([]);
@@ -171,10 +171,12 @@ function DetailsModel({ openDetails, handleCloseDetails, id, setId, path }) {
     width: 600,
     height: "70vh",
     overflowY: "auto",
-    bgcolor: "background.paper",
+    bgcolor: "rgb(25, 28, 36)",
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    borderTopLeftRadius: 15,
+    borderBottomRightRadius: 15,
   };
   return (
     <Modal

@@ -3,7 +3,14 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import { toast } from "react-toastify";
-import { Button, Grid, Typography, TextField } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Typography,
+  TextField,
+  colors,
+  IconButton,
+} from "@mui/material";
 import { tableFields } from "../util";
 import { axiosInstance } from "../api";
 import FormControl from "@mui/material/FormControl";
@@ -14,7 +21,11 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import DeleteModel from "../scenes/Dashbord/global/DeleteModel";
+import DeleteModel from "../scenes/Dashbord/global/BackOffice/DeleteModel";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function Product() {
   //Creat a state for products
@@ -47,7 +58,6 @@ export default function Product() {
         const data = resp.data.data;
 
         setSubcategories(data);
-        toast.success("nadi2");
       })
       .catch((error) => {
         toast.error(error.response.data.message);
@@ -79,6 +89,8 @@ export default function Product() {
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    borderTopLeftRadius: 15,
+    borderBottomRightRadius: 15,
   };
 
   // Get the products from the Backend
@@ -90,7 +102,7 @@ export default function Product() {
         console.log(resp);
 
         setProducts(data);
-        toast.success("nadi");
+        toast.success("Products fetched successfully");
       })
       .catch((error) => {
         toast.error(error.response.data.message);
@@ -177,36 +189,26 @@ export default function Product() {
     return [
       ...tableFields,
       {
-        field: "edit",
-        headerName: "Edit",
-        sortable: false,
-        width: 150,
+        field: "actions",
+        headerName: "Actions",
+        width: 160,
         renderCell: ({ row, field }) => (
           <div>
-            <Button
+            <IconButton
               variant="contained"
-              color="primary"
+              color="info"
               onClick={() => handleOpen(row)}
             >
-              Open modal
-            </Button>
+              <EditIcon color="info" fontSize="small" />
+            </IconButton>
+            <IconButton
+              variant="contained"
+              color="error"
+              onClick={() => handleDeleteClick(row)}
+            >
+              <DeleteForeverIcon color="error" fontSize="small" />
+            </IconButton>
           </div>
-        ),
-      },
-
-      {
-        field: "delete",
-        headerName: "Delete",
-        sortable: false,
-        width: 150,
-        renderCell: ({ row, field }) => (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleDeleteClick(row)}
-          >
-            Action
-          </Button>
         ),
       },
     ];
@@ -275,10 +277,19 @@ export default function Product() {
   const CustomToolbar = () => (
     <Grid container alignItems="center" justifyContent="space-between">
       <Grid item>
-        <Typography variant="h6">Product List</Typography>
+        <Typography variant="overline" fontSize={20} lineHeight={1}>
+          Product List
+        </Typography>
       </Grid>
       <Grid item>
-        <Button variant="contained" color="primary" onClick={handleOpenAdd}>
+        <Button
+          variant="text"
+          color="info"
+          startIcon={<AddIcon />}
+          onClick={handleOpenAdd}
+          size="small"
+          sx={{ color: "#2196f3 !important" }}
+        >
           Add Product
         </Button>
         <Modal
@@ -435,8 +446,22 @@ export default function Product() {
   // Row Grid table config
   return (
     <div
-      style={{ width: "93%", backgroundColor: "#0b2f3a94" }}
-      className="mt-10 ms-10"
+      style={{
+        width: "93%",
+        maxWidth: "1190px",
+        backgroundColor: "rgb(25, 28, 36)",
+        color: "white",
+        position: "absolute",
+        top: "42%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        borderTopLeftRadius: 15,
+        borderBottomRightRadius: 15,
+        height: 500,
+        marginTop: 20,
+        border: "none",
+      }}
+      className="p-4 mt-10"
     >
       <Modal
         open={open}
@@ -539,16 +564,10 @@ export default function Product() {
       </Modal>
 
       <DataGrid
-        style={{ color: "#A4A4A4" }}
+        style={{ color: "white", border: "0", height: "100%" }}
         rows={rows}
         columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
+        pagination={false}
         components={{
           Toolbar: CustomToolbar,
         }}

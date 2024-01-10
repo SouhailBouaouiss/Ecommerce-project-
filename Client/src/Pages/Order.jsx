@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { customerTableFields, orderTableFields } from "../util";
-import DataTable from "../scenes/Dashbord/global/DataGrid";
+import DataTable from "../scenes/Dashbord/global/BackOffice/DataGrid";
 import { axiosInstance } from "../api";
-import { Button } from "@mui/material";
-import { EditModel } from "../scenes/Dashbord/global/EditModel";
-import DetailsModel from "../scenes/Dashbord/global/DetailsModel";
+import { Button, IconButton, Typography } from "@mui/material";
+import { EditModel } from "../scenes/Dashbord/global//BackOffice/EditModel";
+import DetailsModel from "../scenes/Dashbord/global/BackOffice/DetailsModel";
 import { useForm } from "react-hook-form";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import EditIcon from "@mui/icons-material/Edit";
 
 function Order() {
   // Logic part
@@ -31,7 +33,7 @@ function Order() {
       .then((resp) => {
         const data = resp.data.data;
         console.log(data);
-        toast.success(resp.data.message);
+        toast.success("orders fetched successfully");
         return setOrders(data);
       })
       .catch((err) => {
@@ -65,36 +67,25 @@ function Order() {
   const columns = [
     ...orderTableFields,
     {
-      field: "edit",
-      headerName: "Edit",
-      sortable: false,
-      width: 150,
+      field: "actions",
+      headerName: "Actions",
+      width: 160,
       renderCell: ({ row, field }) => (
         <div>
-          <Button
+          <IconButton
             variant="contained"
-            color="primary"
-            onClick={() => handleOpen(row)}
-          >
-            Open modal
-          </Button>
-        </div>
-      ),
-    },
-    {
-      field: "show details",
-      headerName: "Show Details",
-      sortable: false,
-      width: 150,
-      renderCell: ({ row, field }) => (
-        <div>
-          <Button
-            variant="contained"
-            color="primary"
+            color="info"
             onClick={() => handleOpenDetails(row)}
           >
-            Show Details
-          </Button>
+            <RemoveRedEyeIcon color="info" fontSize="small" />
+          </IconButton>
+          <IconButton
+            variant="contained"
+            color="info"
+            onClick={() => handleOpen(row)}
+          >
+            <EditIcon color="info" fontSize="small" />
+          </IconButton>
         </div>
       ),
     },
@@ -165,15 +156,26 @@ function Order() {
   return (
     <div
       style={{
-        height: 400,
         width: "93%",
-        backgroundColor: "#0b2f3a94",
-        color: "wheat",
+        maxWidth: "1190px",
+        backgroundColor: "rgb(25, 28, 36)",
+        color: "white",
+        position: "absolute",
+        top: "42%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        borderTopLeftRadius: 15,
+        borderBottomRightRadius: 15,
       }}
-      className="mt-10 ms-10"
+      className="p-4 mt-10"
     >
+      <Typography variant="overline" fontSize={20} lineHeight={1}>
+        Order List
+      </Typography>
+
       <DataTable rows={rows} columns={columns} />
       <EditModel
+        currentPage={"order"}
         arr={statusRow}
         fn={handleEdit}
         open={open}
@@ -183,6 +185,7 @@ function Order() {
         customerToEdit={orderToEdit}
         register={register}
         handleSubmit={handleSubmit}
+        statusOptions={["pending", "processing", "shipped", "delivered"]}
       />
       <DetailsModel
         id={id}

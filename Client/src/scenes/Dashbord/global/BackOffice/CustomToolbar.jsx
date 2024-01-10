@@ -9,6 +9,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import React, { useMemo } from "react";
+import AddIcon from "@mui/icons-material/Add";
 
 function CustomToolbar({
   name,
@@ -51,20 +52,30 @@ function CustomToolbar({
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 600,
-    bgcolor: "background.paper",
+    bgcolor: "rgb(25, 28, 36)",
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    borderTopLeftRadius: 15,
+    borderBottomRightRadius: 15,
   };
 
   return (
     <Grid container alignItems="center" justifyContent="space-between">
       <Grid item>
-        <Typography variant="h6">{name} List</Typography>
+        <Typography variant="overline" fontSize={20} lineHeight={1}>
+          {name} List
+        </Typography>
       </Grid>
 
       <Grid item>
-        <Button variant="contained" color="primary" onClick={handleOpenAdd}>
+        <Button
+          variant="text"
+          startIcon={<AddIcon />}
+          color="info"
+          onClick={handleOpenAdd}
+          size="small"
+        >
           Add {name}
         </Button>
         <Modal
