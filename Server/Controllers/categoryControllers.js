@@ -1,4 +1,6 @@
 import { Category } from "../Models/Category.js";
+import { Products } from "../Models/Product.js";
+import { Subcategory } from "../Models/Subcategogy.js";
 import { categoryRouter } from "../Routes/categoryRouter.js";
 
 // Create a new category
@@ -111,6 +113,29 @@ const deleteCategory = (req, res, next) => {
   });
 };
 
+const showSubcatOfCat = async (req, res) => {
+  console.log("Hello");
+  const category_id = req.params.category_id;
+
+  try {
+    const subs = await Subcategory.find({ category_id });
+    if (subs.length == 0) return res.send({ data: [] });
+
+    const result = [];
+
+    for (let i = 0; i < subs.length; i++) {
+      const sub = subs[i];
+      const subProducts = await Products.find({ subcategory_id: sub._id });
+      result.push({ sub, products: subProducts });
+    }
+
+    res.send({ data: result, message: "Successfuly generated" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error });
+  }
+};
+
 export {
   createNewCategory,
   getAllCategories,
@@ -118,4 +143,5 @@ export {
   getCategoryById,
   updateCategory,
   deleteCategory,
+  showSubcatOfCat,
 };

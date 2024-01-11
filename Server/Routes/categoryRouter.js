@@ -11,6 +11,7 @@ import {
   getAllCategories,
   getCategoryById,
   getSearchedCategories,
+  showSubcatOfCat,
   updateCategory,
 } from "../Controllers/categoryControllers.js";
 
@@ -36,6 +37,7 @@ categoryRouter.get("/", getAllCategories);
 categoryRouter.get("/search", getSearchedCategories);
 
 // Get a specific category using id
+categoryRouter.get("/category_subcategory/:category_id", showSubcatOfCat);
 
 categoryRouter.get("/:id", getCategoryById);
 

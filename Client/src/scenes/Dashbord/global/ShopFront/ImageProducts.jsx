@@ -142,3 +142,4 @@ const ImageProducts = () => {
 };
 
 export default ImageProducts;
+export { ProductCard };
