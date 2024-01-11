@@ -15,29 +15,27 @@ const signin = (req, res, next) => {
       }
       res
         .status(200)
-        .cookie(
-          {
-            access_token: generatedAccessToken,
-            path: "/",
-            domaine: "localhost",
-            httpOnly: true,
-            secure: false,
-          },
-          {
-            refresh_token: generatedRefreshToken,
-            path: "/",
-            domaine: "localhost",
-            httpOnly: true,
-            secure: false,
-          }
-        )
+        .cookie("access_token", generatedAccessToken, {
+          // path: "/",
+          domaine: "localhost",
+          // httpOnly: true,
+          secure: false,
+        })
+        .cookie("refresh_token", generatedRefreshToken, {
+          // path: "/",
+          domaine: "localhost",
+          // httpOnly: true,
+          secure: false,
+        })
         .send({
+          message: "Successfull authentication",
           access_token: generatedAccessToken,
           refresh_token: generatedRefreshToken,
           user: data,
         });
     })
     .catch((err) => {
+      console.log("In updating err: ", err);
       res.status(500).send({ message: " Internal Server Error", ...err });
     });
 };
@@ -179,6 +177,15 @@ const getCustomerData = (req, res, next) => {
   res.status(200).send(req.data);
 };
 
+// Logout a customer
+const logoutCustomer = (req, res, next) => {
+  console.log("Hey");
+  res.cookie("access_token", "", { expires: new Date(0) });
+  res.cookie("refresh_token", "", { expires: new Date(0) });
+
+  res.json({ success: true, message: "Logged out" });
+};
+
 export {
   signin,
   createNewCustomer,
@@ -189,4 +196,5 @@ export {
   deleteCustomer,
   getCustomerData,
   updateCustomerDataByCustomer,
+  logoutCustomer,
 };

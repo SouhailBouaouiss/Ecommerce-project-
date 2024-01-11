@@ -1,4 +1,5 @@
 import LandingPage from "../src/Pages/LandingPage";
+import SignInSignUp from "../src/Pages/SignInSignUp";
 import ProductsPage from "../src/Pages/ProductsPage";
 import SinglePage from "../src/Pages/SinglePage";
 
@@ -36,6 +37,11 @@ const PublicRoutes = [
     id: 7,
     path: "/product/:slug",
     element: <SinglePage />,
+  },
+  {
+    id: 9,
+    path: "/authentication",
+    element: <SignInSignUp />,
   },
   {
     id: 8,
