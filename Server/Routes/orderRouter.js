@@ -21,14 +21,7 @@ const orderRouter = express.Router();
 
 // Add new order
 
-orderRouter.post(
-  "/",
-  verifyAuth,
-  verifyRefreshToken,
-  verifyCustomer,
-  checkValidation,
-  addOrder
-);
+orderRouter.post("/", verifyAuth, verifyRefreshToken, addOrder);
 
 // List all orders
 

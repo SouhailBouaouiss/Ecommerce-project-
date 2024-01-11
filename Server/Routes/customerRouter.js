@@ -23,6 +23,7 @@ import {
   deleteCustomer,
   getCustomerData,
   updateCustomerDataByCustomer,
+  logoutCustomer,
 } from "../Controllers/customersControllers.js";
 
 import { validateEmail } from "../Middelwares/validateEmail.js";
@@ -38,10 +39,7 @@ customerRouter.post(
     .isEmail()
     .withMessage("Invalid email adress")
     .normalizeEmail(),
-  validate
-    .body("pwd")
-    .isStrongPassword()
-    .withMessage("Password must be at least 6 characters long"),
+
   expressValidatorCheck,
   tokenGenration,
   signin
@@ -102,6 +100,8 @@ customerRouter.get(
   verifyCustomer,
   getCustomerData
 ); // controller
+
+customerRouter.get("/logout", logoutCustomer);
 
 // Get a specific customer data
 customerRouter.get(

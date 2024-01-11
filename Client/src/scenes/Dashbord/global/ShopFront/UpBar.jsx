@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useMemo, useState } from "react";
 import { Popover, Disclosure, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
@@ -16,6 +16,10 @@ import {
 import { ButtonBase } from "@mui/material";
 import "../style/upBar.css";
 import { CartContext } from "../../../../contexts/CartContext";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { axiosInstance } from "../../../../api";
+import { toast } from "react-toastify";
+import { UserContext } from "../../../../contexts/AuthContext";
 
 const solutions = [
   // ... (unchanged)
@@ -45,27 +49,59 @@ const callsToAction = [
 ];
 
 function UpBar() {
+  const loc = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
     setScrolled(scrollPosition > 0);
   };
   const { openCart, setOpenCart } = useContext(CartContext);
+
+  const customer = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const isInLandingPage = useMemo(
+    () => loc.pathname.endsWith("/ld"),
+    [loc.pathname]
+  );
+
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    if (loc.pathname.endsWith("/ld")) {
+      window.addEventListener("scroll", handleScroll);
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }
   }, []);
   const handleClick = () => {
     setOpenCart(true);
     console.log("setOpenCart after:", setOpenCart);
   };
+
+  const handleLogOut = () => {
+    axiosInstance
+      .get("/v1/customers/logout")
+      .then((resp) => {
+        console.log(resp);
+        toast.warning(resp.data.message);
+        customer.setUser({
+          isConnected: false,
+          data: null,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div
       id="up-bar"
       className={`transition-all ease-in-out duration-300 fixed top-0 left-0 right-0 z-50 ${
-        scrolled ? "bg-gray-950" : "bg-transparent"
+        !isInLandingPage
+          ? "bg-gray-950"
+          : scrolled
+          ? "bg-gray-950"
+          : "bg-transparent"
       }`}
     >
       <Disclosure as="nav">
@@ -76,7 +112,7 @@ function UpBar() {
                 <div className="relative  flex h-16  ">
                   <div className="flex justify-start gap-20">
                     <div className="flex ">
-                      <ButtonBase>
+                      <ButtonBase onClick={() => navigate("/ld")}>
                         <span>HOME</span>
                       </ButtonBase>
                     </div>
@@ -159,7 +195,7 @@ function UpBar() {
                   </div>
                 </div>
                 <div className="flex  me-40">
-                  <ButtonBase>
+                  <ButtonBase onClick={() => navigate("/ld")}>
                     <strong>
                       <h1
                         style={{
@@ -183,7 +219,11 @@ function UpBar() {
                     onClick={handleClick}
                   />
                   <SearchIcon className="h-6 w-6 mt-5" aria-hidden="true" />
-                  <LoginIcon className="h-6 w-6 mt-5" aria-hidden="true" />
+                  <LoginIcon
+                    className="h-6 w-6 mt-5"
+                    aria-hidden="true"
+                    onClick={handleLogOut}
+                  />
                 </div>
               </div>
             </div>

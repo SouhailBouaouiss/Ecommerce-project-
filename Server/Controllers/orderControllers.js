@@ -4,8 +4,8 @@ import { Order } from "../Models/Order.js";
 // Add new order
 
 const addOrder = (req, res, next) => {
-  const { customer_id } = req.data;
-  Products.create(req.body).then((data) => {
+  console.log("here");
+  Order.create({ ...req.body, customer_id: req.data._id }).then((data) => {
     if (!data) {
       res.status(500).send({ message: "internal server " });
       return;

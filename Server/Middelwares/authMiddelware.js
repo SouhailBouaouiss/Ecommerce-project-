@@ -47,6 +47,7 @@ const expressValidatorCheck = (req, res, next) => {
 const verifyAuth = async (req, res, next) => {
   console.log("hona");
   const token = req.cookies.access_token;
+  console.log(token);
   // req.headers.authorization?.split(" ")[1] ?? // Grab it from Cookies
   if (!token) return res.status(401).send({ message: "Invalid JWT token" });
   try {

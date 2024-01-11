@@ -1,4 +1,5 @@
 import LandingPage from "../src/Pages/LandingPage";
+import SignInSignUp from "../src/Pages/SignInSignUp";
 import SinglePage from "../src/Pages/SinglePage";
 
 import BackgroundVideo from "../src/scenes/Dashbord/global/ShopFront/BackgroundVideo";
@@ -35,6 +36,11 @@ const PublicRoutes = [
     id: 7,
     path: "/product/:slug",
     element: <SinglePage />,
+  },
+  {
+    id: 9,
+    path: "/authentication",
+    element: <SignInSignUp />,
   },
 ];
 
