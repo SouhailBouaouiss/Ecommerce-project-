@@ -8,38 +8,44 @@ import { ProductCard } from "../scenes/Dashbord/global/ShopFront/ImageProducts.j
 function ProductsPage() {
   const [subProducts, setSubProducts] = useState([]);
 
-  const [selectedSubcategory, setSelectedSubcategory] = useState(
-    subProducts.length > 0 ? subProducts[0].sub.subcategory_name : ""
-  );
-  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(
-    subProducts.length > 0 ? subProducts[0].sub._id : ""
-  );
-  const handleChange = (value, id) => {
-    setSelectedSubcategory(value);
+  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState("");
+  const handleChange = (id) => {
     setSelectedSubcategoryId(id);
   };
 
   useEffect(() => {
     axiosInstance
-      .get("/v1/categories/category_subcategory/659bf43f1ef65659bf7fc82f")
+      .get(`/v1/categories/category_subcategory/${categoryId}`)
       .then((resp) => {
         const data = resp.data.data;
         console.log(data);
         setSubProducts(data);
+        setSelectedSubcategoryId(data[0].sub._id);
       });
   }, []);
 
+  // IT should return an array of products or an empty array !! AN ARRAY ANYWAY
+
   const currentSubProducts = useMemo(() => {
-    return subProducts.filter(
+    const currentSubcategory = subProducts.find(
       (subProduct) => subProduct.sub._id === selectedSubcategoryId
     );
+    console.log(currentSubcategory);
+    if (!currentSubcategory) {
+      return [];
+    }
+    const products = currentSubcategory.products;
+    if (!products) {
+      return [];
+    }
+    return products;
   }, [subProducts, selectedSubcategoryId]);
 
   return (
     <Box style={{ backgroundColor: "rgba(242, 242, 242, 0.95)" }}>
       <ToggleButtonGroup
         color="primary"
-        value={selectedSubcategory}
+        value={selectedSubcategoryId} //SOLAR protection
         key={selectedSubcategoryId}
         exclusive
         onChange={handleChange}
@@ -52,15 +58,8 @@ function ProductsPage() {
               <ToggleButton
                 key={subProduct.sub._id}
                 value={subProduct.sub.subcategory_name}
-                onChange={() =>
-                  handleChange(
-                    subProduct.sub.subcategory_name,
-                    subProduct.sub._id
-                  )
-                }
-                selected={
-                  selectedSubcategory === subProduct.sub.subcategory_name
-                }
+                onChange={() => handleChange(subProduct.sub._id)}
+                selected={selectedSubcategoryId === subProduct.sub._id}
               >
                 {subProduct.sub.subcategory_name}
               </ToggleButton>
@@ -70,10 +69,10 @@ function ProductsPage() {
       </ToggleButtonGroup>
 
       <Stack direction={"row"} sx={{ paddingY: 20 }}>
-        {currentSubProducts.length > 0 &&
-          currentSubProducts[0].products.map((product) => (
+        {currentSubProducts.length > 0 && // Handle the worst case ([])
+          currentSubProducts.map((product) => (
             <ProductCard
-              key={product.id}
+              key={product._id}
               name={product.product_name}
               price={product.price}
               id={product._id}
