@@ -85,7 +85,7 @@ function ProductsPage() {
         width={"100%"}
       >
         {currentSubProducts.length > 0 &&
-          currentSubProducts[0].products.map((product) => (
+          currentSubProducts.map((product) => (
             <ProductCard
               key={product._id}
               name={product.product_name}
