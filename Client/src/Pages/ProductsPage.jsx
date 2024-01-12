@@ -1,9 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Footer from "../scenes/Dashbord/global/ShopFront/Footer.jsx";
-import { Box, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Stack,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 
 import { axiosInstance } from "../api";
 import { ProductCard } from "../scenes/Dashbord/global/ShopFront/ImageProducts.jsx";
+import { useParams } from "react-router-dom";
 
 function ProductsPage() {
   const [subProducts, setSubProducts] = useState([]);
@@ -18,22 +25,24 @@ function ProductsPage() {
     setSelectedSubcategory(value);
     setSelectedSubcategoryId(id);
   };
-
+  const { id } = useParams();
+  console.log(id);
   useEffect(() => {
     axiosInstance
-      .get("/v1/categories/category_subcategory/659bf43f1ef65659bf7fc82f")
+      .get(`/v1/categories/category_subcategory/${id}`)
       .then((resp) => {
         const data = resp.data.data;
         console.log(data);
         setSubProducts(data);
+        setSelectedSubcategory(data[0].sub.subcategory_name);
       });
   }, []);
 
   const currentSubProducts = useMemo(() => {
     return subProducts.filter(
-      (subProduct) => subProduct.sub._id === selectedSubcategoryId
+      (subProduct) => subProduct.sub.subcategory_name === selectedSubcategory
     );
-  }, [subProducts, selectedSubcategoryId]);
+  }, [subProducts, selectedSubcategory]);
 
   return (
     <Box style={{ backgroundColor: "rgba(242, 242, 242, 0.95)" }}>
@@ -69,11 +78,18 @@ function ProductsPage() {
         )}
       </ToggleButtonGroup>
 
-      <Stack direction={"row"} sx={{ paddingY: 20 }}>
+      <Grid
+        display={"flex"}
+        sx={{ paddingY: 20 }}
+        justifyContent={"center"}
+        gap={"20px"}
+        flexWrap={"wrap"}
+        width={"100%"}
+      >
         {currentSubProducts.length > 0 &&
           currentSubProducts[0].products.map((product) => (
             <ProductCard
-              key={product.id}
+              key={product._id}
               name={product.product_name}
               price={product.price}
               id={product._id}
@@ -81,7 +97,7 @@ function ProductsPage() {
               hoverImage={product.product_image}
             />
           ))}
-      </Stack>
+      </Grid>
       <div className=" w-full" style={{ backgroundColor: "#F2F2F2F2" }}>
         <Footer />
       </div>

@@ -45,7 +45,7 @@ const PublicRoutes = [
   },
   {
     id: 8,
-    path: "/productspage",
+    path: "/productspage/:id",
     element: <ProductsPage />,
   },
 ];

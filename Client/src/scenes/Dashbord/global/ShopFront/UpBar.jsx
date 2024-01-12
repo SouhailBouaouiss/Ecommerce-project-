@@ -26,19 +26,19 @@ const solutions = [
   {
     name: "MEN",
     description: "Get a better understanding of your traffic",
-    href: "#",
+    href: `http://localhost:5173/productspage/659bf4071ef65659bf7fc82d`,
     icon: ChartPieIcon,
   },
   {
     name: "WOMEN",
     description: "Speak directly to your customers",
-    href: "#",
+    href: `http://localhost:5173/productspage/659bf4311ef65659bf7fc82e`,
     icon: CursorClickIcon,
   },
   {
     name: "KIDS",
     description: "Your customers' data will be safe and secure",
-    href: "#",
+    href: `http://localhost:5173/productspage/659bf43f1ef65659bf7fc82f`,
     icon: FingerPrintIcon,
   },
 ];

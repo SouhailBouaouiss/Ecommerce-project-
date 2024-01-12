@@ -17,32 +17,34 @@ function CheckoutButton({ cartProducts }) {
     fontWeight: 400,
     letterSpacing: "0.25em",
   };
+
   const navigate = useNavigate();
   const customer = useContext(UserContext);
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     const { isConnected } = customer.user;
     if (!isConnected) {
-      axiosInstance
-        .post("/verify")
-        .then((resp) => {
-          console.log("Resp", resp);
-          const data = resp.data;
-
-          customer.setUser({
-            isConnected: true,
-            data: data.user,
-          });
-
-          toast.success(data.message);
-          return;
-        })
-        .catch((error) => {
-          console.log(error);
-
-          navigate("/authentication");
+      try {
+        const resp = await axiosInstance.post("/verify");
+        console.log("Resp", resp);
+        const data = resp.data;
+        customer.setUser({
+          isConnected: true,
+          data: data.user,
         });
+
+        toast.success(data.message);
+        stripeNavigation(data.user._id);
+      } catch (error) {
+        console.log(error);
+        navigate("/authentication");
+      }
+    } else {
+      console.log(isConnected);
+      const customer_id = customer.user._id;
+      stripeNavigation(customer_id);
     }
-    const customer_id = customer.user.data._id;
+  };
+  const stripeNavigation = (customer_id) => {
     axiosInstance
       .post("/v1/stripe/create-checkout-session", {
         cartProducts,
