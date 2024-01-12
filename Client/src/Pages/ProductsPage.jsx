@@ -1,9 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Footer from "../scenes/Dashbord/global/ShopFront/Footer.jsx";
-import { Box, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Stack,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 
 import { axiosInstance } from "../api";
 import { ProductCard } from "../scenes/Dashbord/global/ShopFront/ImageProducts.jsx";
+import { useParams } from "react-router-dom";
 
 function ProductsPage() {
   const [subProducts, setSubProducts] = useState([]);
@@ -12,10 +19,11 @@ function ProductsPage() {
   const handleChange = (id) => {
     setSelectedSubcategoryId(id);
   };
-
+  const { id } = useParams();
+  console.log(id);
   useEffect(() => {
     axiosInstance
-      .get(`/v1/categories/category_subcategory/${categoryId}`)
+      .get(`/v1/categories/category_subcategory/${id}`)
       .then((resp) => {
         const data = resp.data.data;
         console.log(data);
@@ -68,9 +76,16 @@ function ProductsPage() {
         )}
       </ToggleButtonGroup>
 
-      <Stack direction={"row"} sx={{ paddingY: 20 }}>
-        {currentSubProducts.length > 0 && // Handle the worst case ([])
-          currentSubProducts.map((product) => (
+      <Grid
+        display={"flex"}
+        sx={{ paddingY: 20 }}
+        justifyContent={"center"}
+        gap={"20px"}
+        flexWrap={"wrap"}
+        width={"100%"}
+      >
+        {currentSubProducts.length > 0 &&
+          currentSubProducts[0].products.map((product) => (
             <ProductCard
               key={product._id}
               name={product.product_name}
@@ -80,7 +95,7 @@ function ProductsPage() {
               hoverImage={product.product_image}
             />
           ))}
-      </Stack>
+      </Grid>
       <div className=" w-full" style={{ backgroundColor: "#F2F2F2F2" }}>
         <Footer />
       </div>
