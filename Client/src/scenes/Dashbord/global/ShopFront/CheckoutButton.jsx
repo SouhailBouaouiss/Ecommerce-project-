@@ -4,6 +4,7 @@ import { axiosInstance } from "../../../../api";
 import { UserContext } from "../../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { CartContext } from "../../../../contexts/CartContext";
 
 function CheckoutButton({ cartProducts }) {
   const btnstyle = {
@@ -17,6 +18,8 @@ function CheckoutButton({ cartProducts }) {
     fontWeight: 400,
     letterSpacing: "0.25em",
   };
+
+  const { openCart, setOpenCart } = useContext(CartContext);
 
   const navigate = useNavigate();
   const customer = useContext(UserContext);
@@ -37,6 +40,7 @@ function CheckoutButton({ cartProducts }) {
       } catch (error) {
         console.log(error);
         navigate("/authentication");
+        setOpenCart(false);
       }
     } else {
       console.log(isConnected);

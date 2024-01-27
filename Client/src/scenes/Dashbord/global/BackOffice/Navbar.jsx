@@ -27,7 +27,7 @@ function Header({ OpenSidebar }) {
 
       <div className="header-left">
         <div className="sidebar-brand flex">
-          <BsCart3 className="icon_header" /> SHOP
+          <BsCart3 className="icon_header" /> SUNSTYLE
         </div>
       </div>
       <div>

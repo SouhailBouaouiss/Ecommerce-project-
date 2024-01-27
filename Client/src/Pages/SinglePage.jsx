@@ -19,6 +19,7 @@ const accordionStyle = {
 function SinglePage() {
   const params = useParams();
   const Productpath = `/v1/products/${params.slug}`;
+  console.log(params.slug);
 
   const [product, setProduct] = useState();
 

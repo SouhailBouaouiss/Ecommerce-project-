@@ -2,10 +2,12 @@ import React, { useContext, useState } from "react";
 import { CartContext } from "../../../../contexts/CartContext";
 import { useDispatch } from "react-redux";
 import { addProductToCart } from "../../../../features/cart/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ name, price, initialImage, hoverImage, id }) => {
   const [image, setImage] = useState(initialImage);
   const { openCart, setOpenCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   const cardStyle = {
     position: "relative",
@@ -62,6 +64,9 @@ const ProductCard = ({ name, price, initialImage, hoverImage, id }) => {
         style={imageStyle}
         onMouseEnter={handleHover}
         onMouseLeave={handleLeave}
+        onClick={() => {
+          navigate(`/product/${id}`);
+        }}
       />
       <button style={buttonStyle} onClick={handleAddProduct}>
         +

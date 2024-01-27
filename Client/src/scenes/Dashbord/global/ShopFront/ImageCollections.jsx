@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ImageCollection = () => {
   const containerStyle = {
@@ -31,7 +32,7 @@ const ImageCollection = () => {
     fontWeight: 700,
     color: "white",
   };
-
+  const navigate = useNavigate();
   const [button1Style, setButton1Style] = useState(initialButtonStyle);
   const [button2Style, setButton2Style] = useState(initialButtonStyle);
   const [button3Style, setButton3Style] = useState(initialButtonStyle);
@@ -127,6 +128,11 @@ const ImageCollection = () => {
             style={button1Style}
             onMouseEnter={handleHover1}
             onMouseLeave={handleLeave1}
+            onClick={() =>
+              navigate(
+                "/productspage/659bf4071ef65659bf7fc82d?category_name=MEN"
+              )
+            }
           >
             MEN
           </button>
@@ -148,6 +154,11 @@ const ImageCollection = () => {
             style={button2Style}
             onMouseEnter={handleHover2}
             onMouseLeave={handleLeave2}
+            onClick={() =>
+              navigate(
+                "/productspage/659bf4311ef65659bf7fc82e?category_name=WOMEN"
+              )
+            }
           >
             WOMEN
           </button>
@@ -169,6 +180,11 @@ const ImageCollection = () => {
             style={button3Style}
             onMouseEnter={handleHover3}
             onMouseLeave={handleLeave3}
+            onClick={() =>
+              navigate(
+                "/productspage/659bf43f1ef65659bf7fc82f?category_name=KIDS"
+              )
+            }
           >
             KIDS
           </button>

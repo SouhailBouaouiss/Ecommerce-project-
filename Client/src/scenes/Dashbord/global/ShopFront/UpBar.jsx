@@ -6,12 +6,10 @@ import {
   PlayIcon,
 } from "@heroicons/react/solid";
 import {
-  ChartPieIcon,
-  CursorClickIcon,
-  FingerPrintIcon,
   ShoppingCartIcon,
   SearchIcon,
   LoginIcon,
+  UserCircleIcon,
 } from "@heroicons/react/outline";
 import { ButtonBase } from "@mui/material";
 import "../style/upBar.css";
@@ -26,20 +24,20 @@ const solutions = [
   {
     name: "MEN",
     description: "Get a better understanding of your traffic",
-    href: `http://localhost:5173/productspage/659bf4071ef65659bf7fc82d`,
-    icon: ChartPieIcon,
+    href: `http://localhost:5173/productspage/659bf4071ef65659bf7fc82d?category_name=MEN`,
+    icon: UserCircleIcon,
   },
   {
     name: "WOMEN",
     description: "Speak directly to your customers",
-    href: `http://localhost:5173/productspage/659bf4311ef65659bf7fc82e`,
-    icon: CursorClickIcon,
+    href: `http://localhost:5173/productspage/659bf4311ef65659bf7fc82e?category_name=WOMEN`,
+    icon: UserCircleIcon,
   },
   {
     name: "KIDS",
     description: "Your customers' data will be safe and secure",
-    href: `http://localhost:5173/productspage/659bf43f1ef65659bf7fc82f`,
-    icon: FingerPrintIcon,
+    href: `http://localhost:5173/productspage/659bf43f1ef65659bf7fc82f?category_name=KIDS`,
+    icon: UserCircleIcon,
   },
 ];
 const callsToAction = [

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../api";
 import { UserContext } from "../contexts/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
+import { CartContext } from "../contexts/CartContext";
 
 const SignInSignUp = () => {
   const {
@@ -15,6 +16,7 @@ const SignInSignUp = () => {
     getValues,
   } = useForm();
   const navigate = useNavigate();
+  const { openCart, setOpenCart } = useContext(CartContext);
 
   const [isSignIn, setIsSignIn] = useState(true);
   const customer = useContext(UserContext);
@@ -38,6 +40,7 @@ const SignInSignUp = () => {
 
         toast.success(data.message);
         navigate("/ld");
+        setOpenCart(true);
 
         return;
       })
