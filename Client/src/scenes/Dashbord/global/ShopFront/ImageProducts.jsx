@@ -13,6 +13,8 @@ const ProductCard = ({ name, price, initialImage, hoverImage, id }) => {
     position: "relative",
     width: "340px",
     margin: "16px",
+    color: "black",
+    fontFamily: "Karla, sans-serif",
   };
 
   const imageStyle = {
@@ -72,7 +74,7 @@ const ProductCard = ({ name, price, initialImage, hoverImage, id }) => {
         +
       </button>
       <h3>{name}</h3>
-      <span>{`$${price}`}</span>
+      <span style={{ color: "green" }}>{`$${price}`}</span>
     </div>
   );
 };
@@ -81,6 +83,8 @@ const ImageProducts = () => {
   const productListStyle = {
     display: "flex",
     justifyContent: "center",
+    color: "black",
+    fontFamily: "Karla, sans-serif",
   };
 
   return (
@@ -102,32 +106,32 @@ const ImageProducts = () => {
 
       <div style={productListStyle}>
         <ProductCard
-          name="Product 1"
-          price={19.99}
-          id="659bf87537cc4d4c14a39b14"
-          initialImage="https://lnkobrand.com/cdn/shop/files/cristal-palace-lunettes-de-vue-et-lunettes-de-soleil-au-39717306302720.jpg?v=1702638268&width=1080"
-          hoverImage="https://lnkobrand.com/cdn/shop/files/cristal-palace-lunettes-de-vue-et-lunettes-de-soleil-au-39717306433792.jpg?v=1702638272&width=1080"
-        />
-        <ProductCard
-          name="Product 2"
-          price={29.99}
-          id="659bf87537cc4d4c14a39b10"
-          initialImage="https://lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298503936.jpg?v=1702638087&width=1080"
-          hoverImage="https://lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298438400.jpg?v=1702638091&width=1080"
-        />
-        <ProductCard
-          name="Product 3"
-          price={39.99}
-          id="659bf87537cc4d4c14a39b1f"
+          name="Unbranded Plastic Sausages"
+          price={57.0}
+          id="659ffdad1b7ac08fbb8ea62f"
           initialImage="https://lnkobrand.com/cdn/shop/files/seameet-lunettes-de-vue-et-lunettes-de-soleil-au-39500005441792.jpg?v=1699435529&width=1080"
-          hoverImage="https://lnkobrand.com/cdn/shop/files/seameet-lunettes-de-vue-et-lunettes-de-soleil-au-39500005769472.jpg?v=1699435543&width=1080"
+          hoverImage="https://lnkobrand.com/cdn/shop/files/seameet-lunettes-de-vue-et-lunettes-de-soleil-au-39500005441792.jpg?v=1699435529&width=1080"
         />
         <ProductCard
-          name="Product 4"
-          price={49.99}
-          id="659bf87537cc4d4c14a39b18"
-          initialImage="https://lnkobrand.com/cdn/shop/files/celeste-lunettes-de-vue-et-lunettes-de-soleil-au-39400802222336.jpg?v=1697751813&width=1080"
-          hoverImage="https://lnkobrand.com/cdn/shop/files/celeste-lunettes-de-vue-et-lunettes-de-soleil-au-39400802353408.jpg?v=1697751810&width=1080"
+          name="Practical Concrete Pants"
+          price={44.0}
+          id="659ffdad1b7ac08fbb8ea637"
+          initialImage="https://lnkobrand.com/cdn/shop/files/sleekcoast-lunettes-de-vue-et-lunettes-de-soleil-au-39753067168000.jpg?v=1703155408&width=1080"
+          hoverImage="https://lnkobrand.com/cdn/shop/files/sleekcoast-lunettes-de-vue-et-lunettes-de-soleil-au-39753067168000.jpg?v=1703155408&width=1080"
+        />
+        <ProductCard
+          name="Awesome Wooden Bike"
+          price={75.0}
+          id="659ffdad1b7ac08fbb8ea632"
+          initialImage="https://lnkobrand.com/cdn/shop/files/cristal-palace-lunettes-de-vue-et-lunettes-de-soleil-au-39717306302720.jpg?v=1702638268&width=1080"
+          hoverImage="https://lnkobrand.com/cdn/shop/files/cristal-palace-lunettes-de-vue-et-lunettes-de-soleil-au-39717306302720.jpg?v=1702638268&width=1080"
+        />
+        <ProductCard
+          name="Incredible Cotton Car"
+          price={19.0}
+          id="659ffdad1b7ac08fbb8ea63b"
+          initialImage="https://lnkobrand.com/cdn/shop/files/tarnstead-lunettes-de-vue-et-lunettes-de-soleil-au-39752887271680.jpg?v=1703153434&width=1080"
+          hoverImage="https://lnkobrand.com/cdn/shop/files/tarnstead-lunettes-de-vue-et-lunettes-de-soleil-au-39752887271680.jpg?v=1703153434&width=1080"
         />
       </div>
       <div

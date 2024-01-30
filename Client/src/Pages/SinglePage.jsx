@@ -51,32 +51,7 @@ function SinglePage() {
                     container
                     justifyContent={"flex-start"}
                     gap={2}
-                  >
-                    <Grid item xs={12}>
-                      <img
-                        style={{ height: "80px" }}
-                        src="//lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298503936.jpg?v=1702638087&width=200 200w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298503936.jpg?v=1702638087&width=400 400w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298503936.jpg?v=1702638087&width=600 600w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298503936.jpg?v=1702638087&width=700 700w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298503936.jpg?v=1702638087&width=800 800w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298503936.jpg?v=1702638087&width=900 900w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298503936.jpg?v=1702638087&width=1000 1000w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298503936.jpg?v=1702638087&width=1080 1080w"
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <img
-                        style={{ height: "80px" }}
-                        src="//lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298602240.jpg?v=1702638100&width=200 200w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298602240.jpg?v=1702638100&width=400 400w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298602240.jpg?v=1702638100&width=600 600w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298602240.jpg?v=1702638100&width=700 700w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298602240.jpg?v=1702638100&width=800 800w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298602240.jpg?v=1702638100&width=900 900w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298602240.jpg?v=1702638100&width=1000 1000w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298602240.jpg?v=1702638100&width=1080 1080w"
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <img
-                        style={{ height: "80px" }}
-                        src="//lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=200 200w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=400 400w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=600 600w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=700 700w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=800 800w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=900 900w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=1000 1000w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=1080 1080w"
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <img
-                        style={{ height: "80px" }}
-                        src="//lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=200 200w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=400 400w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=600 600w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=700 700w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=800 800w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=900 900w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=1000 1000w, //lnkobrand.com/cdn/shop/files/everton-lunettes-de-vue-et-lunettes-de-soleil-au-39717298340096.jpg?v=1702638093&width=1080 1080w"
-                      />
-                    </Grid>
-                  </Grid>
+                  ></Grid>
                   <Grid item xs={10}>
                     <img style={{ width: "80%" }} src={product.product_image} />
                   </Grid>
