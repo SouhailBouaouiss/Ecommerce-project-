@@ -7,10 +7,9 @@ import PrivateRouteAccess from "../Routes/PrivateRouteAccess";
 import { PrivateRoutes } from "../Routes/PrivateRoutes";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
-import ShoppingCart from "./scenes/Dashbord/global/ShopFront/ShoppingCart";
 import CustomerPublicRoutes from "../Routes/CustomerPublicRoutes";
-import AuthServices from "./Pages/authServices";
-import SignInSignUp from "./Pages/SignInSignUp";
+
+import AuthServices from "./Pages/AuthServices";
 
 function App() {
   const [user, setUser] = useState({ isConnected: false, data: null });
