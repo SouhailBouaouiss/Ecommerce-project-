@@ -42,7 +42,7 @@ function LandingPage() {
             toast.success(data.message);
             dispatch(dropCart());
             localStorage.removeItem("productsCart");
-            navigate("/ld");
+            navigate("/landingpage");
           })
           .catch((err) => {
             console.log(err);

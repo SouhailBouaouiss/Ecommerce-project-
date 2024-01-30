@@ -37,7 +37,11 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
 
       <ul className="sidebar-list">
         <li className="sidebar-list-item">
-          <NavLink to={"/home"} href="" className="flex items-center gap-1">
+          <NavLink
+            to={"backoffice/dashboard"}
+            href=""
+            className="flex items-center gap-1"
+          >
             <BsGrid1X2Fill
               className="icon"
               style={{ fontSize: 14, color: "#8f5fe8" }}
@@ -46,7 +50,11 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
           </NavLink>
         </li>
         <li className="sidebar-list-item">
-          <NavLink to={"/user"} href="" className="flex items-center gap-1">
+          <NavLink
+            to={"backoffice/user"}
+            href=""
+            className="flex items-center gap-1"
+          >
             <BsGrid1X2Fill
               className="icon"
               style={{ fontSize: 14, color: "orange" }}
@@ -55,7 +63,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
           </NavLink>
         </li>
         <li className="sidebar-list-item">
-          <NavLink to="/product" className="flex items-center gap-1">
+          <NavLink to="backoffice/product" className="flex items-center gap-1">
             <BsFillArchiveFill
               className="icon"
               style={{ fontSize: 14, color: "#0090e7" }}
@@ -65,7 +73,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
         </li>
 
         <li className="sidebar-list-item">
-          <NavLink to="/customer" className="flex items-center gap-1">
+          <NavLink to="backoffice/customer" className="flex items-center gap-1">
             <BsPeopleFill
               className="icon"
               style={{ fontSize: 14, color: "#00d25b" }}
@@ -74,7 +82,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
           </NavLink>
         </li>
         <li className="sidebar-list-item">
-          <NavLink to="/order" className="flex items-center gap-1">
+          <NavLink to="backoffice/order" className="flex items-center gap-1">
             <BsListCheck
               className="icon"
               style={{ fontSize: 14, color: "#fc424a" }}

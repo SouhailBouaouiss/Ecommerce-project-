@@ -39,7 +39,7 @@ const SignInSignUp = () => {
         });
 
         toast.success(data.message);
-        navigate("/ld");
+        navigate("/landingpage");
         setOpenCart(true);
 
         return;

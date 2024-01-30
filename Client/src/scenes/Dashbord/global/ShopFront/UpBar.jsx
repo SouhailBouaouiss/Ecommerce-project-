@@ -59,12 +59,12 @@ function UpBar() {
   const navigate = useNavigate();
 
   const isInLandingPage = useMemo(
-    () => loc.pathname.endsWith("/ld"),
+    () => loc.pathname.endsWith("/landingpage"),
     [loc.pathname]
   );
 
   useEffect(() => {
-    if (loc.pathname.endsWith("/ld")) {
+    if (loc.pathname.endsWith("/landingpage")) {
       window.addEventListener("scroll", handleScroll);
       return () => {
         window.removeEventListener("scroll", handleScroll);
@@ -110,7 +110,7 @@ function UpBar() {
                 <div className="relative  flex h-16  ">
                   <div className="flex justify-start gap-20">
                     <div className="flex ">
-                      <ButtonBase onClick={() => navigate("/ld")}>
+                      <ButtonBase onClick={() => navigate("/landingpage")}>
                         <span>HOME</span>
                       </ButtonBase>
                     </div>
@@ -199,7 +199,7 @@ function UpBar() {
                   </div>
                 </div>
                 <div className="flex  me-40">
-                  <ButtonBase onClick={() => navigate("/ld")}>
+                  <ButtonBase onClick={() => navigate("/landingpage")}>
                     <strong>
                       <h1
                         style={{

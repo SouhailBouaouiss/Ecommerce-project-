@@ -1,5 +1,6 @@
 import Customer from "../src/Pages/Customer";
 import Home from "../src/Pages/Home";
+
 import Order from "../src/Pages/Order";
 import Product from "../src/Pages/Product";
 import User from "../src/Pages/user";
@@ -7,27 +8,27 @@ import User from "../src/Pages/user";
 const PrivateRoutes = [
   {
     id: 1,
-    path: "/home",
+    path: "backoffice/dashboard",
     element: <Home />,
   },
   {
     id: 2,
-    path: "/product",
+    path: "backoffice/product",
     element: <Product />,
   },
   {
     id: 3,
-    path: "/customer",
+    path: "backoffice/customer",
     element: <Customer />,
   },
   {
     id: 5,
-    path: "/order",
+    path: "backoffice/order",
     element: <Order />,
   },
   {
     id: 4,
-    path: "/user",
+    path: "backoffice/user",
     element: <User />,
   },
 ];

@@ -70,11 +70,11 @@ function AuthServices() {
           // Context
           user.setUser({
             isConnected: true,
-            data: data.user
+            data: data.user,
           });
 
           toast.success(data.message);
-          navigate("/home");
+          navigate("backoffice/dashboard");
 
           return;
         })
