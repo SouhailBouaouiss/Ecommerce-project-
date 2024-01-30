@@ -77,7 +77,10 @@ const Footer = () => {
             <a href="#" style={linkStyle}>
               Contact us
             </a>
-            <a href="#" style={linkStyle}>
+            <a
+              href="https://www.aao.org/eye-health/glasses-contacts/sunglasses-3"
+              style={linkStyle}
+            >
               How to choose the prefect sunglasses for you!
             </a>
           </div>

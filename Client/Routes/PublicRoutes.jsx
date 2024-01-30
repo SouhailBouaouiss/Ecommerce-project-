@@ -6,6 +6,7 @@ import SinglePage from "../src/Pages/SinglePage";
 import BackgroundVideo from "../src/scenes/Dashbord/global/ShopFront/BackgroundVideo";
 import ShoppingCart from "../src/scenes/Dashbord/global/ShopFront/ShoppingCart";
 import UpBar from "../src/scenes/Dashbord/global/ShopFront/UpBar";
+import CustomerEditPage from "../src/Pages/CustomerEditPage";
 
 const PublicRoutes = [
   // {
@@ -47,6 +48,11 @@ const PublicRoutes = [
     id: 8,
     path: "/productspage/:id",
     element: <ProductsPage />,
+  },
+  {
+    id: 8,
+    path: "/customer/edit",
+    element: <CustomerEditPage />,
   },
 ];
 

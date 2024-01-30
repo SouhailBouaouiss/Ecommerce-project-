@@ -144,7 +144,9 @@ const ImageProducts = () => {
           wordSpacing: "0.3rem",
         }}
       >
-        <a href="">SEE ALL COLLECTIONS</a>
+        <a href="/productspage/659bf4071ef65659bf7fc82d?category_name=MEN">
+          SEE ALL COLLECTIONS
+        </a>
       </div>
     </>
   );

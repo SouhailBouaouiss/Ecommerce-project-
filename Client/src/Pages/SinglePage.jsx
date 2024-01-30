@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UpBar from "../scenes/Dashbord/global/ShopFront/UpBar";
 import Footer from "../scenes/Dashbord/global/ShopFront/Footer";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
@@ -8,6 +8,9 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { CartContext } from "../contexts/CartContext";
+import { useDispatch } from "react-redux";
+import { addProductToCart } from "../features/cart/cartSlice";
 
 const accordionStyle = {
   backgroundColor: "transparent",
@@ -23,6 +26,9 @@ function SinglePage() {
 
   const [product, setProduct] = useState();
 
+  const { openCart, setOpenCart } = useContext(CartContext);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     axiosInstance.get(Productpath).then((resp) => {
       const data = resp.data.data;
@@ -31,6 +37,11 @@ function SinglePage() {
       setProduct(data);
     });
   }, []);
+
+  const handleAddProduct = (name, price, imgUrl, id) => {
+    dispatch(addProductToCart({ name, price, imgUrl, id }));
+    setOpenCart(true);
+  };
 
   return (
     <Box style={{ backgroundColor: "rgba(242, 242, 242, 0.95)" }}>
@@ -82,6 +93,14 @@ function SinglePage() {
                     border: "2px solid black",
                     marginTop: 25,
                   }}
+                  onClick={() =>
+                    handleAddProduct(
+                      product.product_name,
+                      product.price,
+                      product.product_image,
+                      product._id
+                    )
+                  }
                 >
                   ADD TO CART
                 </Button>
@@ -95,6 +114,14 @@ function SinglePage() {
                     border: "2px solid black",
                     marginTop: 10,
                   }}
+                  onClick={() =>
+                    handleAddProduct(
+                      product.product_name,
+                      product.price,
+                      product.product_image,
+                      product._id
+                    )
+                  }
                 >
                   BUY IT NOW
                 </Button>

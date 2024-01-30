@@ -115,7 +115,13 @@ function UpBar() {
                       </ButtonBase>
                     </div>
                     <div className="flex ">
-                      <ButtonBase>
+                      <ButtonBase
+                        onClick={() =>
+                          navigate(
+                            "/productspage/659bf4071ef65659bf7fc82d?category_name=MEN"
+                          )
+                        }
+                      >
                         <span>SHOP</span>
                       </ButtonBase>
                     </div>
@@ -216,7 +222,11 @@ function UpBar() {
                     className="h-6 w-6 mt-5"
                     onClick={handleClick}
                   />
-                  <SearchIcon className="h-6 w-6 mt-5" aria-hidden="true" />
+                  <UserCircleIcon
+                    className="h-6 w-6 mt-5"
+                    aria-hidden="true"
+                    onClick={() => navigate("/customer/edit")}
+                  />
                   <LoginIcon
                     className="h-6 w-6 mt-5"
                     aria-hidden="true"

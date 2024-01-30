@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "../style/signUp.css"; // Create a CSS file for styling
+import { CartContext } from "../../../../contexts/CartContext";
 
 const ImageSignup = () => {
+  const { openCart, setOpenCart } = useContext(CartContext);
   const initialButtonStyle = {
     position: "absolute",
     bottom: "90px",
@@ -46,6 +48,7 @@ const ImageSignup = () => {
             style={button1Style}
             onMouseEnter={handleHover1}
             onMouseLeave={handleLeave1}
+            onClick={() => setOpenCart(true)}
           >
             Order Now
           </button>
