@@ -110,7 +110,7 @@ const ImageProducts = () => {
           price={57.0}
           id="659ffdad1b7ac08fbb8ea62f"
           initialImage="https://lnkobrand.com/cdn/shop/files/seameet-lunettes-de-vue-et-lunettes-de-soleil-au-39500005441792.jpg?v=1699435529&width=1080"
-          hoverImage="https://lnkobrand.com/cdn/shop/files/seameet-lunettes-de-vue-et-lunettes-de-soleil-au-39500005441792.jpg?v=1699435529&width=1080"
+          hoverImage="https://lnkobrand.com/cdn/shop/files/seameet-lunettes-de-vue-et-lunettes-de-soleil-au-39500005769472.jpg?v=1699435543&width=1080"
         />
         <ProductCard
           name="Practical Concrete Pants"
@@ -131,7 +131,7 @@ const ImageProducts = () => {
           price={19.0}
           id="659ffdad1b7ac08fbb8ea63b"
           initialImage="https://lnkobrand.com/cdn/shop/files/tarnstead-lunettes-de-vue-et-lunettes-de-soleil-au-39752887271680.jpg?v=1703153434&width=1080"
-          hoverImage="https://lnkobrand.com/cdn/shop/files/tarnstead-lunettes-de-vue-et-lunettes-de-soleil-au-39752887271680.jpg?v=1703153434&width=1080"
+          hoverImage="https://lnkobrand.com/cdn/shop/files/tarnstead-lunettes-de-vue-et-lunettes-de-soleil-au-39752887140608.jpg?v=1703153437&width=1080"
         />
       </div>
       <div
